@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lista visual arrastrable - Mudae Arranger</title>
@@ -642,7 +643,7 @@ function escapeHTML(value) {
       <article class="item ${item.selected ? 'selected' : ''} ${tierOf(item)} rk-${rankTier(item)}" draggable="true" data-id="${item.id}">
         <div class="image-wrap">
           ${item.image
-            ? `<img src="${escapeHTML(item.image)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            ? `<img referrerpolicy="no-referrer" src="${escapeHTML(item.image)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
                <div class="image-placeholder" style="display:none">Imagen rota</div>`
             : `<div class="image-placeholder">Sin imagen</div>`}
           <div class="badges">
@@ -1115,7 +1116,7 @@ function escapeHTML(value) {
   function miniCard(item, listId) {
     return `<article class="item mini ${listId ? tierOf(item) : ''} rk-${rankTier(item)}${listId && lSel.has(listId + ':' + item.id) ? ' selected' : ''}" draggable="true" data-id="${item.id}" data-src="${listId}">
       <div class="image-wrap">
-        ${item.image ? `<img src="${escapeHTML(item.image)}" loading="lazy" onerror="this.style.display='none'">` : `<div class="image-placeholder">Sin imagen</div>`}
+        ${item.image ? `<img referrerpolicy="no-referrer" src="${escapeHTML(item.image)}" loading="lazy" onerror="this.style.display='none'">` : `<div class="image-placeholder">Sin imagen</div>`}
         <div class="badges">${item.rank ? `<span class="badge rank" title="${escapeHTML(rankTitle(item))}">#${escapeHTML(item.rank)}</span>` : ''}${item.kakera ? `<span class="badge kakera">💎 ${escapeHTML(item.kakera)}</span>` : ''}</div>
         <div class="card-actions">
           <button class="card-btn" data-act="copy" data-id="${item.id}" title="Copiar nombre">📋</button>
@@ -1626,7 +1627,7 @@ function escapeHTML(value) {
     if (!items.length) return toast('Aún no hay personajes.');
     let it; do { it = items[Math.floor(Math.random() * items.length)]; } while (items.length > 1 && it.id === spotId);
     spotId = it.id;
-    $('spotCard').innerHTML = `${it.image ? `<img src="${escapeHTML(it.image)}" alt="">` : ''}<h3>${escapeHTML(it.text)}</h3>
+    $('spotCard').innerHTML = `${it.image ? `<img referrerpolicy="no-referrer" src="${escapeHTML(it.image)}" alt="">` : ''}<h3>${escapeHTML(it.text)}</h3>
       <div class="hint">${it.rank ? '🏆 #' + escapeHTML(it.rank) + ' · ' + escapeHTML(rankTitle(it)) + '  ' : ''}${it.kakera ? '💎 ' + escapeHTML(it.kakera) : ''}</div>`;
     $('spotBackdrop').classList.add('open');
   }
