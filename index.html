@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lista visual arrastrable - Mudae Arranger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#15131f;--panel:#1e1b2e;--panel2:#262239;--ink:#efecfa;--muted:#9d98b8;--line:#332e4d;--accent:#ff6f9c;--accent-ink:#2a0d19;--ka:#6fe0ff;--rank:#ffcb5c;--danger:#ff8494}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font:14px/1.45 'Nunito','Segoe UI',system-ui,sans-serif;background:radial-gradient(900px 420px at 90% -8%,#43205a66,transparent),radial-gradient(700px 360px at -5% 0,color-mix(in srgb,var(--accent) 9%,transparent),transparent),var(--bg);min-height:100vh}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:1400px;margin:auto;padding:24px 20px 56px}
+header{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:20px}
+h1{font-size:clamp(26px,4vw,38px);font-weight:900;letter-spacing:-.03em;margin:0 0 4px}
+.sub{margin:0;color:var(--muted);max-width:60ch}
+.count{background:var(--panel2);border:1px solid var(--line);padding:8px 16px;border-radius:999px;white-space:nowrap;color:var(--ink);font-weight:800}
+.toolbar{display:flex;flex-direction:column;gap:16px;margin-bottom:18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+.section-title{font-weight:800;margin-bottom:10px;font-size:15px}
+textarea{display:block;width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:#14111f;color:var(--ink);font-size:13px}
+textarea:focus,input:focus,select:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+::placeholder{color:#6f6a8d}
+.import-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.hint{color:var(--muted);font-size:12px}
+.actions-grid{display:flex;flex-wrap:wrap;gap:8px}
+.actions-grid .btn{padding:11px 14px;flex:1 1 150px}
+.btn{border:1px solid var(--line);border-radius:10px;padding:9px 14px;background:var(--panel2);color:var(--ink);font-weight:700;transition:.15s;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:hover{border-color:var(--accent);background:#2f2a47}
+.btn.primary{color:var(--accent-ink);background:var(--accent);border-color:var(--accent);font-weight:800}
+.btn.primary:hover{background:var(--accent);filter:brightness(1.15)}
+.btn.danger{color:var(--danger);border-color:#5a2c3b;background:#2c1823}
+.btn.danger:hover{background:#3a1d2c;border-color:var(--danger)}
+.btn.small{font-size:12px;padding:7px 11px}
+.mudae-commands{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
+.list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 14px;flex-wrap:wrap}
+.list-head h2{margin:0;font-size:20px;font-weight:900}
+.list-head-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.sort-select{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-weight:700;color:var(--ink);background:var(--panel2)}
+#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--cw,140px),1fr));gap:14px;align-items:start}
+.item{position:relative;border-radius:14px;overflow:hidden;background:var(--panel);border:1px solid var(--line);cursor:grab;user-select:none;transition:transform .18s,box-shadow .18s,border-color .18s}
+.item:active{cursor:grabbing}
+.item:hover{transform:translateY(-3px);border-color:#4b4470}
+.item.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.item.over{box-shadow:0 0 0 2px var(--ka),0 12px 28px #6fe0ff30}
+.item.dragging{opacity:.55;transform:scale(.95) rotate(-2deg)}
+.image-wrap{position:relative;width:100%;aspect-ratio:9/14;background:linear-gradient(160deg,#2a2542,#1c1930)}
+.image-wrap img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.image-placeholder{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;color:#6f6a8d;font-size:12px;pointer-events:none}
+.item-name{position:absolute;left:0;right:0;bottom:0;padding:30px 8px 9px;background:linear-gradient(transparent,#0c0a16f2);font-weight:800;font-size:12px;line-height:1.2;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;word-break:break-word;pointer-events:none}
+.item.selected .item-name{background:linear-gradient(transparent,var(--accent) 125%);background:linear-gradient(transparent,color-mix(in srgb,var(--accent) 88%,transparent) 125%);color:var(--accent-ink);text-shadow:none}
+.item.selected .item-name::before{content:'✓ '}
+.badges{position:absolute;top:6px;left:6px;display:flex;flex-direction:column;gap:3px;align-items:flex-start;z-index:1;pointer-events:none}
+.badge{background:#0c0a16c4;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:800;white-space:nowrap}
+.badge.rank{color:var(--rank)}.badge.kakera{color:var(--ka)}
+.card-actions{position:absolute;top:6px;right:6px;display:flex;flex-direction:column;gap:4px;z-index:2}
+@media(hover:hover){.card-actions{opacity:0;transition:.15s}.item:hover .card-actions{opacity:1}}
+.card-btn{background:#0c0a16d9;border:1px solid #ffffff22;border-radius:8px;padding:5px 6px;font-size:13px;transition:.15s;display:flex;align-items:center;justify-content:center}
+.card-btn:hover{border-color:var(--accent);transform:scale(1.1)}
+.empty{grid-column:1/-1;border:2px dashed var(--line);border-radius:18px;padding:56px 20px;text-align:center;color:var(--muted)}
+.empty strong{display:block;color:var(--ink);font-size:18px;margin-bottom:4px}
+.modal-backdrop{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:15px;background:#08060fcc;backdrop-filter:blur(3px)}
+.modal-backdrop.open{display:flex}
+.modal{width:min(100%,480px);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 24px 70px #000a;max-height:90vh;overflow-y:auto}
+.modal h2{margin:0 0 14px;font-size:21px;font-weight:900}
+.modal label{display:block;margin:12px 0 5px;font-size:12px;color:var(--muted);font-weight:800}
+.modal input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#14111f;color:var(--ink)}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.url-row-modal{display:flex;gap:8px}
+.modal-actions{display:flex;justify-content:space-between;align-items:center;margin-top:22px;flex-wrap:wrap;gap:10px;padding-top:16px;border-top:1px solid var(--line)}
+.modal-actions-right{display:flex;gap:8px}
+.export-editor{display:none;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:0 0 20px}
+.export-editor.open{display:block}
+.part{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.part-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.part-head strong{font-size:14px}.part-head span{color:var(--muted);font-size:12px}
+.part textarea{min-height:84px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.export-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+footer{margin-top:28px;color:var(--muted);font-size:12px;text-align:center}
+#fileInput,#projectInput{display:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:#1a1626;padding:10px 18px;border-radius:12px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 30px #0008;z-index:100;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:860px){.toolbar{grid-template-columns:1fr}}
+@media(max-width:700px){#list{--cw:108px;gap:9px}.list-head-actions{width:100%;justify-content:space-between}header{flex-direction:column;align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+[hidden]{display:none!important}
+.tabs{display:flex;gap:6px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.tab{background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);font-weight:800;font-size:15px;padding:10px 18px;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}.tab.active{color:var(--ink);border-bottom-color:var(--accent)}
+.lists-layout{display:grid;grid-template-columns:clamp(360px,36vw,480px) 1fr;gap:16px;align-items:start}
+.pool{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto}
+.pool.over{border-color:var(--accent)}
+.pool input,.newlist input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#14111f;color:var(--ink);margin:6px 0 10px}
+.newlist{display:flex;gap:10px;align-items:center;margin-bottom:16px}.newlist input{margin:0}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px;align-items:start}
+.mini .item-name{font-size:11px;padding:24px 6px 7px}
+.mini .badge{font-size:10px;padding:2px 5px}.mini .badges{top:4px;left:4px;gap:2px}
+.lcard{margin-bottom:16px}
+.lhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.lhead h3{margin:0;font-size:18px;font-weight:900}.lhead-actions{display:flex;gap:6px;flex-wrap:wrap}
+.dropzone{min-height:130px;border:2px dashed var(--line);border-radius:12px;padding:10px;transition:.15s}
+.dropzone.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.dz-empty{grid-column:1/-1;text-align:center;align-self:center;padding:30px 0}
+.modal.wide{width:min(100%,780px)}
+.vcols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.vbox{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px}
+.vbox h3{margin:0 0 8px;font-size:14px}
+.vlist{max-height:240px;overflow-y:auto;margin:8px 0;display:flex;flex-direction:column;gap:2px}
+.vlist label{display:flex;gap:8px;align-items:center;padding:3px 4px;border-radius:6px;font-size:13px}
+.vlist label:hover{background:#ffffff0d}
+.vok{margin-top:16px;padding:14px;border-radius:12px;background:#12281f;color:#7ee2a8;font-weight:800;text-align:center}
+@media(max-width:860px){.lists-layout,.vcols{grid-template-columns:1fr}.pool{position:static;max-height:min(60vh,460px)}#poolGrid{max-width:460px;margin-inline:auto}}
+
+*{scrollbar-width:thin;scrollbar-color:#5a5280 transparent}
+::-webkit-scrollbar{width:12px;height:12px}
+::-webkit-scrollbar-track{background:#110f1a}
+.pool::-webkit-scrollbar-track,.vlist::-webkit-scrollbar-track,.modal::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#6a5f9c,#4b4470);border-radius:999px;border:3px solid #110f1a}
+.pool::-webkit-scrollbar-thumb,.vlist::-webkit-scrollbar-thumb,.modal::-webkit-scrollbar-thumb{border-color:transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 70%,#fff),var(--accent))}
+::-webkit-scrollbar-corner{background:transparent}
+#poolGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.newlist .btn{flex:none;white-space:nowrap;padding:10px 26px}
+.newlist input{flex:1;min-width:0}
+.newlist{flex-wrap:wrap}.newlist input[type=text]{flex:1 1 220px}
+
+.stats{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-weight:800;font-size:13px}
+button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
+.toolrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
+.toolrow input[type=search]{flex:1 1 200px;max-width:320px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#14111f;color:var(--ink)}
+.toolrow input[type=range]{width:110px;accent-color:var(--accent)}
+.dots{display:flex;gap:6px;margin-left:auto;align-items:center}
+.dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--panel);box-shadow:0 0 0 1px var(--line);padding:0}
+.dot:hover{transform:scale(1.2)}
+.item.tier-1{--tc:#cfd8ff}.item.tier-2{--tc:#6fe0ff}.item.tier-3{--tc:#5fe3a1}.item.tier-4{--tc:#b98cff}.item.tier-5{--tc:#c6f56a}.item.tier-6{--tc:#ff7ad9}.item.tier-7{--tc:#ff9f43}.item.tier-8{--tc:#ffcb5c}.item.tier-9{--tc:#ff6b5c}
+.item[class*=tier-]{border-color:var(--tc);box-shadow:0 0 0 1px var(--tc),0 0 14px var(--tc);box-shadow:0 0 0 1px var(--tc),0 0 14px color-mix(in srgb,var(--tc) 60%,transparent)}
+.item[class*=tier-] .badge.kakera{background:var(--tc);color:#16121f}
+@keyframes glow{50%{box-shadow:0 0 0 1px var(--tc),0 0 22px var(--tc)}}
+.item.selected[class*=tier-]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent);animation:none}
+.spot img{max-width:100%;max-height:360px;border-radius:14px;display:block;margin:0 auto 12px}
+.spot h3{margin:0 0 4px;font-size:20px;font-weight:900}
+
+.tabs{overflow-x:auto;white-space:nowrap}
+@media(pointer:coarse){.btn{min-height:42px}.btn.small{min-height:38px}.card-btn{padding:8px 9px}.tab{padding:12px 18px}.dot{width:28px;height:28px}}
+@media(hover:none){.item:hover{transform:none}}
+@media(max-width:700px){
+  .app{padding:14px 12px calc(40px + env(safe-area-inset-bottom,0px))}
+  input,textarea,select{font-size:16px!important}
+  .panel,.export-editor{padding:14px}
+  .count{align-self:flex-start}
+  .toolrow input[type=search]{flex:1 1 100%;max-width:none}
+  .toolrow .btn{flex:1 1 calc(50% - 8px)}
+  .toolrow label{flex:1 1 100%;display:flex;align-items:center;gap:10px}.toolrow input[type=range]{flex:1;width:auto}
+  .dots{margin-left:0;width:100%;justify-content:center;gap:12px}
+  .actions-grid .btn{flex:1 1 calc(50% - 8px);padding:11px 8px}
+  .list-head h2{width:100%}.list-head-actions>*{flex:1 1 auto}.sort-select{width:100%}
+  .newlist .btn{flex:1 1 calc(50% - 8px)}.newlist #newListBtn{flex:1 1 100%}
+  .lhead-actions .btn{flex:1}
+  .mgrid{grid-template-columns:repeat(auto-fill,minmax(88px,1fr))}
+  .modal{padding:18px;border-radius:16px}.modal-row{grid-template-columns:1fr}
+  .part-head .btn{min-width:90px}
+  .toast{width:calc(100% - 32px);bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+}
+@media(min-width:701px) and (max-width:1024px){#list{--cw:128px}.actions-grid .btn{flex:1 1 130px}}
+
+.item{-webkit-touch-callout:none;-webkit-user-select:none}
+.touch-only{display:none}
+@media(pointer:coarse){.touch-only{display:block;margin:8px 0 0}}
+.selbar{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--panel2);border:1px solid var(--accent);border-radius:16px;padding:8px 10px;gap:6px;align-items:center;box-shadow:0 10px 40px #000a;max-width:calc(100% - 24px)}
+@media(max-width:1024px){.selbar.on{display:flex}}
+
+/* ===== Filtro de brillo y rank ===== */
+.tierbar{margin:12px 0 4px}
+.fpanel{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.fhead{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;min-height:50px;background:none;border:0;color:var(--ink);font-weight:800;font-size:14px;text-align:left}
+.fhead .fsum{margin-left:auto;color:var(--muted);font-size:12px;font-weight:700;text-align:right}
+.fhead .fsum b{color:var(--accent)}
+.fhead .chev{flex:none;transition:transform .2s;color:var(--muted)}
+.fpanel.open .chev{transform:rotate(180deg)}
+.fbody{padding:2px 14px 14px;display:grid;gap:16px;border-top:1px solid var(--line);padding-top:14px}
+.fgroup-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.fgroup-head h3{margin:0;font-size:13px;font-weight:900}
+.fgroup-head small{color:var(--muted);font-weight:700;font-size:12px;margin-left:6px}
+.fmini{display:flex;gap:6px}
+.fl{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;min-height:32px;font-size:12px;font-weight:800;color:var(--muted)}
+.fl:hover{color:var(--ink);border-color:var(--accent)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.tchip{--tc:var(--accent);display:flex;align-items:center;gap:10px;text-align:left;padding:8px 10px 8px 12px;min-height:54px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);transition:background .15s,border-color .15s,opacity .15s}
+.tchip.on{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 15%,var(--panel2))}
+.tchip.off{opacity:.5;border-style:dashed}
+.tchip.off .tsw{filter:grayscale(1) brightness(.8);box-shadow:none}
+.tchip.empty-tier:not(.off){opacity:.6}
+.tchip:hover{border-color:var(--tc)}
+.tsw{flex:none;width:22px;height:22px;background:var(--tc);box-shadow:0 0 12px color-mix(in srgb,var(--tc) 70%,transparent)}
+.tsw.gem{clip-path:polygon(50% 0,100% 38%,50% 100%,0 38%);box-shadow:none;filter:drop-shadow(0 0 5px var(--tc))}
+.tsw.dot2{border-radius:50%;width:20px;height:20px}
+.tx{min-width:0;flex:1}
+.tx b{display:block;font-size:13px;line-height:1.2;font-weight:800}
+.tx small{display:block;color:var(--muted);font-size:11px;font-weight:700;line-height:1.25;margin-top:1px}
+.tn{flex:none;font-weight:900;font-size:13px;background:#0c0a1699;border-radius:8px;padding:2px 8px;min-width:30px;text-align:center}
+.tchk{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:11px;color:transparent;font-weight:900}
+.tchip.on .tchk{background:var(--tc);border-color:var(--tc);color:#16121f}
+@media(pointer:coarse){.tchip{min-height:58px}.fl{min-height:38px;padding:7px 14px}}
+@media(max-width:700px){
+  .tgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .tchip{padding:8px 7px 8px 9px;gap:6px}
+  .tchip .tchk{display:none}
+  .tsw{width:17px;height:17px}.tsw.dot2{width:16px;height:16px}
+  .tx b{font-size:12px;letter-spacing:-.01em;overflow-wrap:normal}
+  .tn{padding:2px 6px;min-width:26px;font-size:12px}
+  .tx small{font-size:10.5px}
+  .fhead{padding:12px}
+  .fbody{padding:12px 12px 14px}
+  .fhead .fsum .lbl{display:none}
+}
+.item.rk-1{--rc:#fff0a0}.item.rk-2{--rc:#ffd24d}.item.rk-3{--rc:#ffa94d}.item.rk-4{--rc:#ff7f6b}.item.rk-5{--rc:#ff8fab}.item.rk-6{--rc:#9ad0ff}.item.rk-7{--rc:#6fe0e0}.item.rk-8{--rc:#c4c0e0}.item.rk-9{--rc:#a9d8b8}.item.rk-10{--rc:#7ee2a8}
+.badge.rank{color:var(--rc,var(--rank))}
+/* ===== Brillo de kakera animado: mejora gradualmente desde >200 (Zafiro) hasta >900 (Rubí) ===== */
+@keyframes kbreathe{0%,100%{opacity:.15}50%{opacity:1}}
+@keyframes kstreak{0%,55%{transform:translateX(0) skewX(-20deg)}100%{transform:translateX(520%) skewX(-20deg)}}
+@keyframes ktwinkle{0%,100%{opacity:0}35%,55%{opacity:1}}
+@keyframes kshine{0%{background-position:200% 0}100%{background-position:-100% 0}}
+#list .item.tier-2{--ga:18px;--gs:5s}
+#list .item.tier-3{--ga:22px;--gs:4.4s}
+#list .item.tier-4{--ga:26px;--gs:3.8s;--ss:7.5s;--sa:.16}
+#list .item.tier-5{--ga:30px;--gs:3.3s;--ss:6.5s;--sa:.2}
+#list .item.tier-6{--ga:34px;--gs:2.9s;--ss:5.5s;--sa:.24;--bs:4s}
+#list .item.tier-7{--ga:38px;--gs:2.5s;--ss:4.6s;--sa:.28;--bs:3.4s;--ts:3.6s}
+#list .item.tier-8{--ga:43px;--gs:2.1s;--ss:3.8s;--sa:.34;--bs:2.8s;--ts:2.8s}
+#list .item.tier-9{--ga:48px;--gs:1.7s;--ss:3s;--sa:.42;--bs:2.2s;--ts:2.2s}
+/* 1) aura que respira (tier 2+): cada nivel más ancha y rápida */
+#list .item.tier-2:not(.selected),#list .item.tier-3:not(.selected),#list .item.tier-4:not(.selected),#list .item.tier-5:not(.selected),#list .item.tier-6:not(.selected),#list .item.tier-7:not(.selected),#list .item.tier-8:not(.selected),#list .item.tier-9:not(.selected){overflow:visible}
+#list .item.tier-2 .image-wrap,#list .item.tier-3 .image-wrap,#list .item.tier-4 .image-wrap,#list .item.tier-5 .image-wrap,#list .item.tier-6 .image-wrap,#list .item.tier-7 .image-wrap,#list .item.tier-8 .image-wrap,#list .item.tier-9 .image-wrap{overflow:hidden;border-radius:13px}
+#list .item.tier-2 .item-name,#list .item.tier-3 .item-name,#list .item.tier-4 .item-name,#list .item.tier-5 .item-name,#list .item.tier-6 .item-name,#list .item.tier-7 .item-name,#list .item.tier-8 .item-name,#list .item.tier-9 .item-name{z-index:1}
+#list .item.tier-2::before,#list .item.tier-3::before,#list .item.tier-4::before,#list .item.tier-5::before,#list .item.tier-6::before,#list .item.tier-7::before,#list .item.tier-8::before,#list .item.tier-9::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 var(--ga) var(--tc),0 0 calc(var(--ga) * .4) 1px var(--tc);opacity:.15;animation:kbreathe var(--gs) ease-in-out infinite}
+#list .item.selected[class*=tier-]::before{display:none}
+/* 2) destello diagonal que cruza la tarjeta (tier 4+) */
+#list .item.tier-4 .image-wrap::after,#list .item.tier-5 .image-wrap::after,#list .item.tier-6 .image-wrap::after,#list .item.tier-7 .image-wrap::after,#list .item.tier-8 .image-wrap::after,#list .item.tier-9 .image-wrap::after{content:'';position:absolute;top:0;bottom:0;left:-100%;width:55%;z-index:0;pointer-events:none;background:linear-gradient(105deg,transparent,rgba(255,255,255,var(--sa)),transparent);transform:skewX(-20deg);animation:kstreak var(--ss) ease-in-out infinite}
+/* 3) brillo corriendo por la insignia de kakera (tier 6+) */
+#list .item.tier-6 .badge.kakera,#list .item.tier-7 .badge.kakera,#list .item.tier-8 .badge.kakera,#list .item.tier-9 .badge.kakera{background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.75) 48%,transparent 66%);background-size:300% 100%;animation:kshine var(--bs) linear infinite}
+/* 4) chispas titilando (tier 7+) */
+#list .item.tier-7 .image-wrap::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;animation:ktwinkle var(--ts) ease-in-out infinite;--sp:color-mix(in srgb,var(--tc) 35%,#fff);background:radial-gradient(circle at 18% 22%,var(--sp) 0,var(--sp) 1.5px,transparent 3.2px),radial-gradient(circle at 78% 15%,var(--sp) 0,var(--sp) 1.3px,transparent 3px),radial-gradient(circle at 62% 48%,var(--sp) 0,var(--sp) 1.6px,transparent 3.4px),radial-gradient(circle at 25% 66%,var(--sp) 0,var(--sp) 1.2px,transparent 2.8px),radial-gradient(circle at 85% 72%,var(--sp) 0,var(--sp) 1.5px,transparent 3.2px),radial-gradient(circle at 48% 33%,var(--sp) 0,var(--sp) 1.2px,transparent 2.8px)}
+#list .item.selected .image-wrap::after,#list .item.selected .image-wrap::before{display:none}
+/* ===== Chispas (partículas): Topacio/Rubí en kakera y Mítico (rank 1 a 10) ===== */
+@keyframes ember{0%{transform:translate(0,0) scale(1);opacity:0}12%{opacity:1}70%{opacity:.9}100%{transform:translate(var(--dx),var(--dy)) scale(.25);opacity:0}}
+@keyframes starflash{0%,100%{transform:scale(0) rotate(0);opacity:0}45%,55%{transform:scale(1) rotate(90deg);opacity:1}}
+@keyframes rspark{0%{transform:translate(-50%,-50%) scale(0);opacity:0}10%{transform:translate(-50%,-50%) scale(1.2);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.15);opacity:0}}
+#list .sparks{position:absolute;inset:0;pointer-events:none;z-index:3}
+#list .sparks i{position:absolute;bottom:3%;left:var(--x);width:var(--s);height:var(--s);border-radius:50%;background:var(--c);box-shadow:0 0 8px 2px var(--c);opacity:0;animation:ember var(--d) ease-out var(--dl) infinite}
+#list .sparks i.star{bottom:auto;left:var(--x);top:var(--y);border-radius:0;background:var(--c);box-shadow:none;filter:drop-shadow(0 0 4px var(--c));clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);animation:starflash var(--d) ease-in-out var(--dl) infinite}
+#list .item.selected .sparks{display:none}
+#list .badge.rank{position:relative}
+#list .badge.rank .rs{position:absolute;left:50%;top:50%;width:var(--s);height:var(--s);border-radius:50%;background:#fff6c8;box-shadow:0 0 8px 3px #ffd24d;opacity:0;pointer-events:none;animation:rspark var(--d) ease-out var(--dl) infinite}
+@media(prefers-reduced-motion:reduce){#list .sparks,#list .badge.rank .rs{display:none}}
+/* Brillo del rank: solo en la lista principal, crece con el rank */
+@keyframes rkpulse{50%{box-shadow:0 0 0 1px var(--rc),0 0 18px var(--rc)}}
+@keyframes rkshine{0%{background-position:200% 0}100%{background-position:-200% 0}}
+#list .item[class*=rk-] .badge.rank{border:1px solid color-mix(in srgb,var(--rc) 35%,transparent)}
+#list .item.rk-5 .badge.rank{background:color-mix(in srgb,var(--rc) 16%,#0c0a16);border-color:color-mix(in srgb,var(--rc) 55%,transparent)}
+#list .item.rk-4 .badge.rank{background:color-mix(in srgb,var(--rc) 20%,#0c0a16);border-color:var(--rc);box-shadow:0 0 8px color-mix(in srgb,var(--rc) 55%,transparent);font-size:11.5px}
+#list .item.rk-3 .badge.rank{background:color-mix(in srgb,var(--rc) 24%,#0c0a16);border-color:var(--rc);box-shadow:0 0 0 1px var(--rc),0 0 12px color-mix(in srgb,var(--rc) 70%,transparent);font-size:12px;text-shadow:0 0 8px var(--rc)}
+#list .item.rk-2 .badge.rank{background:color-mix(in srgb,var(--rc) 28%,#0c0a16);border-color:var(--rc);font-size:12.5px;text-shadow:0 0 8px var(--rc);animation:rkpulse 2.4s ease-in-out infinite}
+@keyframes rorbit{0%{left:0;top:0}25%{left:100%;top:0}50%{left:100%;top:100%}75%{left:0;top:100%}100%{left:0;top:0}}
+#list .item.rk-2 .badge.rank::after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;background:#fff6c8;box-shadow:0 0 6px 2px var(--rc),0 0 12px 3px var(--rc);transform:translate(-50%,-50%);pointer-events:none;animation:rorbit 2.6s linear infinite}
+@media(prefers-reduced-motion:reduce){#list .item.rk-2 .badge.rank::after{display:none}}
+#list .item.rk-1 .badge.rank{color:#2a1c00;font-size:13px;font-weight:900;border-color:#fff6c8;text-shadow:none;background:linear-gradient(110deg,#ffd24d 30%,#fffbe0 48%,#ffd24d 66%) 0 0/300% 100%;animation:rkpulse 1.8s ease-in-out infinite,rkshine 3s linear infinite}
+@media(prefers-reduced-motion:reduce){#list .item .badge,.item[class*=tier-],#list .item::before,#list .item .image-wrap::before,#list .item .image-wrap::after{animation:none!important}#list .item[class*=tier-]::before{opacity:.5}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <h1>Mudae Arranger</h1>
+      <p class="sub">Importa tu lista, selecciona con un clic, arrastra para ordenar y copia los comandos listos para Discord.</p>
+    </div>
+    <div class="count" id="count">0 personajes</div>
+  </header>
+
+  <nav class="tabs"><button class="tab active" data-tab="main">Principal</button><button class="tab" data-tab="lists">Listas</button></nav>
+
+  <div id="viewMain">
+  <section class="toolbar">
+    <div class="panel">
+      <div class="section-title">Importar o actualizar personajes</div>
+      <textarea id="bulkText" placeholder="Pega aquí el resultado de Mudae o tus comandos $sm...&#10;Ej 1: #1,072 - Ghostface 268 ka - https://...&#10;Ej 2: $sm Wallace Wells $Matt $Rigby"></textarea>
+      <div class="import-row">
+        <div class="hint">Detecta listas completas, actualizaciones y uno o varios comandos $sm.</div>
+        <button class="btn primary" id="importBtn">Importar</button>
+      </div>
+      <div class="mudae-commands">
+        <div class="section-title" style="margin-bottom:4px;">Comandos para ver tu harem</div>
+        <div class="hint" style="margin-bottom:10px;">Cópialos y pégalos en Discord para que Mudae muestre todos tus personajes.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn small" onclick="copyText('$mmsii-k')">$mmsii-k · Kakera</button>
+          <button class="btn small" onclick="copyText('$mmsii-kr')">$mmsii-kr · Rank + Ka</button>
+          <button class="btn small" onclick="copyText('$mmsii')">$mmsii · Normal</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">Proyecto</div>
+      <div class="actions-grid">
+        <button class="btn" id="addBtn">➕ Añadir manual</button>
+        <button class="btn primary" id="toggleExportBtn">📝 Comandos $sm</button>
+        <button class="btn" id="verifyBtn">🔍 Verificar lista</button>
+        <button class="btn" id="importProjectBtn">📂 Cargar proyecto</button>
+        <button class="btn" id="exportProjectBtn">💾 Guardar proyecto</button>
+        <button class="btn danger" id="clearBtn">🗑️ Borrar todo</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="export-editor" id="exportEditorSection">
+    <div class="section-title">Comandos de orden ($sm)</div>
+    <div class="hint">Mudae pone cada $sm al principio de tu lista, así que el último que pegues queda arriba. Pega las partes en el orden en que aparecen aquí, una por mensaje (máx. 1900 caracteres).</div>
+    <div id="exportParts"></div>
+    <div class="export-actions">
+      <button class="btn" id="exportFormattedBtn">Descargar .txt</button>
+    </div>
+  </section>
+
+  <div class="stats" id="stats"></div>
+  <div class="tierbar" id="tierBar"></div>
+  <div class="hint touch-only">Mantén presionada una tarjeta para arrastrarla.</div>
+  <div class="toolrow">
+    <input type="search" id="filterInput" placeholder="Filtrar por nombre ( / )">
+    <button class="btn small" id="undoBtn" title="Ctrl+Z">↩️ Deshacer</button>
+    <button class="btn small" id="shuffleBtn">🔀 Mezclar</button>
+    <button class="btn small" id="spotBtn">✨ Sorpréndeme</button>
+    <button class="btn small" id="selCopyBtn" hidden>📋 Copiar seleccionados</button>
+    <button class="btn small" id="selTopBtn" hidden>⬆️ Al inicio</button>
+    <button class="btn small" id="selBottomBtn" hidden>⬇️ Al final</button>
+    <label class="hint">Tamaño <input type="range" id="sizeRange" min="100" max="260" value="140"></label>
+    <div class="dots" id="dots" title="Color de acento">
+      <button class="dot" data-a="#ff6f9c" data-i="#2a0d19" style="background:#ff6f9c"></button>
+      <button class="dot" data-a="#6fe0ff" data-i="#06222b" style="background:#6fe0ff"></button>
+      <button class="dot" data-a="#ffcb5c" data-i="#2b1e00" style="background:#ffcb5c"></button>
+      <button class="dot" data-a="#9af0a8" data-i="#0b2412" style="background:#9af0a8"></button>
+      <button class="dot" data-a="#b98cff" data-i="#1d0f35" style="background:#b98cff"></button>
+    </div>
+  </div>
+
+  <div class="list-head">
+    <h2>Tus tarjetas</h2>
+    <div class="list-head-actions">
+      <select id="sortSelect" class="sort-select">
+        <option value="manual">↕️ Orden manual</option>
+        <option value="az">🔤 A - Z</option>
+        <option value="za">🔤 Z - A</option>
+        <option value="kakera-desc">💎 Kakera (mayor a menor)</option>
+        <option value="kakera-asc">💎 Kakera (menor a mayor)</option>
+        <option value="rank-asc">🏆 Rank (mejor a peor)</option>
+        <option value="rank-desc">🏆 Rank (peor a mejor)</option>
+      </select>
+      <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:700;">
+        <input type="checkbox" id="selectAllCb" style="accent-color:var(--accent);"> Seleccionar todo
+      </label>
+      <button class="btn small danger" id="deleteSelectedBtn" style="display:none;">Borrar seleccionados</button>
+    </div>
+  </div>
+
+  <main id="list" aria-live="polite"></main>
+  
+  <div class="selbar" id="selBar">
+    <strong id="selCount" style="padding:0 6px"></strong>
+    <button class="btn small" data-sb="selCopyBtn" title="Copiar nombres">📋</button>
+    <button class="btn small" data-sb="selTopBtn" title="Al inicio">⬆️</button>
+    <button class="btn small" data-sb="selBottomBtn" title="Al final">⬇️</button>
+    <button class="btn small danger" data-sb="deleteSelectedBtn" title="Borrar">🗑️</button>
+    <button class="btn small" id="selClearBtn" title="Quitar selección">✕</button>
+  </div>
+  <footer>Orden, imágenes y datos se guardan automáticamente en tu navegador. Haz clic en una tarjeta para seleccionarla, arrástrala para moverla.</footer>
+  </div>
+
+  <div id="viewLists" hidden>
+    <div class="lists-layout">
+      <aside class="panel pool" id="poolDrop">
+        <div class="section-title">Personajes</div>
+        <input id="poolSearch" type="search" placeholder="Buscar personaje...">
+        <select id="targetList" class="sort-select" style="width:100%;margin-bottom:8px"></select>
+        <div class="hint" style="margin-bottom:10px">Arrastra una tarjeta a una lista, o toca ➕ para añadirla a la lista elegida arriba. Suéltala aquí para quitarla de una lista.</div>
+        <div id="poolGrid" class="mgrid"></div>
+      </aside>
+      <section>
+        <div class="panel newlist">
+          <input id="newListName" type="text" placeholder="Nombre de la lista (Favoritos, Para eliminar...)">
+          <button class="btn primary" id="newListBtn">Crear lista</button>
+          <button class="btn" id="saveListsBtn">💾 Guardar listas</button>
+          <button class="btn" id="loadListsBtn">📂 Cargar listas</button>
+          <input type="file" id="listsInput" accept=".json,application/json" hidden>
+        </div>
+        <div id="listsBox"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept="image/*">
+<input type="file" id="projectInput" accept=".json,application/json">
+<div class="toast" id="toast"></div>
+
+<div class="modal-backdrop" id="spotBackdrop">
+  <div class="modal spot" style="width:min(100%,360px);text-align:center">
+    <div id="spotCard"></div>
+    <div class="modal-actions" style="justify-content:center">
+      <button class="btn" id="spotCloseBtn">Cerrar</button>
+      <button class="btn" id="spotCopyBtn">📋 Copiar</button>
+      <button class="btn primary" id="spotNextBtn">🎲 Otro</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="verifyBackdrop">
+  <div class="modal wide">
+    <h2>Verificar lista</h2>
+    <div class="hint">Pega tu lista de Mudae o comandos $sm y se compara con las tarjetas de esta página.</div>
+    <textarea id="verifyText" style="margin-top:10px" placeholder="#1,072 - Ghostface 268 ka - https://...&#10;o $sm Personaje 1 $Personaje 2"></textarea>
+    <div class="modal-actions" style="margin-top:14px">
+      <button class="btn" id="verifyCloseBtn">Cerrar</button>
+      <button class="btn primary" id="verifyRunBtn">Comparar</button>
+    </div>
+    <div id="verifyResults"></div>
+  </div>
+</div>
+
+<!-- VENTANA MODAL DE EDICIÓN -->
+<div class="modal-backdrop" id="editModalBackdrop">
+  <div class="modal">
+    <h2 id="modalTitle">Editar Elemento</h2>
+    <input type="hidden" id="editId">
+    
+    <label>Nombre del personaje</label>
+    <input id="editName" type="text" placeholder="Ej: Wallace Wells">
+    
+    <div class="modal-row">
+        <div>
+            <label>Kakera (💎)</label>
+            <input id="editKakera" type="text" placeholder="Ej: 58">
+        </div>
+        <div>
+            <label>Rank (#)</label>
+            <input id="editRank" type="text" placeholder="Ej: 1,072">
+        </div>
+    </div>
+
+    <label>URL de la Imagen</label>
+    <div class="url-row-modal">
+        <input id="editImage" type="text" placeholder="https://mudae.net/uploads/...">
+        <button class="btn" id="uploadImgBtn" type="button">Subir local</button>
+    </div>
+    
+    <label>Valor identificador (Para comando $changeimg individual)</label>
+    <input id="editValue" type="text" placeholder="Ej: ID del personaje o comando exacto">
+
+    <div class="modal-actions">
+      <button class="btn danger" id="deleteInModalBtn" type="button">Eliminar esta tarjeta</button>
+      <div class="modal-actions-right">
+          <button class="btn" id="cancelEditBtn" type="button">Cancelar</button>
+          <button class="btn primary" id="saveEditBtn" type="button">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Funciones globales útiles
+function toast(message) {
+  const el = document.getElementById('toast');
+  el.textContent = message;
+  el.classList.add('show');
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast(`Copiado al portapapeles`);
+  } catch {
+    const area = document.createElement('textarea');
+    area.value = text; document.body.appendChild(area); area.select();
+    document.execCommand('copy'); area.remove();
+    toast(`Copiado al portapapeles`);
+  }
+}
+
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+(() => {
+  const STORAGE_KEY = 'mudaeArranger.v3';
+  let items = [];
+  let nextId = 1;
+  let draggedIds = [];
+  let hoverTimer = null;
+  let hoverTargetId = null;
+  let lists = [];
+  let nextListId = 1;
+  let undoStack = [];
+  let lastSnap = null;
+  let spotId = null;
+
+  const list = document.getElementById('list');
+  const fileInput = document.getElementById('fileInput');
+  const projectInput = document.getElementById('projectInput');
+  
+  // Base de Datos local
+  const DB_NAME = 'MudaeArrangerDB';
+  const DB_STORE = 'estado';
+  let dbPromise = null;
+  let saveChain = Promise.resolve();
+
+  function openDB() {
+    if (!('indexedDB' in window)) return Promise.reject(new Error('IndexedDB no disponible'));
+    if (!dbPromise) {
+      dbPromise = new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = () => {
+          if (!request.result.objectStoreNames.contains(DB_STORE)) request.result.createObjectStore(DB_STORE);
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+    return dbPromise;
+  }
+
+  function getSavedState() {
+    return openDB().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction(DB_STORE, 'readonly');
+      const request = tx.objectStore(DB_STORE).get(STORAGE_KEY);
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => reject(request.error);
+    }));
+  }
+
+  function putSavedState(state) {
+    return openDB().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction(DB_STORE, 'readwrite');
+      tx.objectStore(DB_STORE).put(state, STORAGE_KEY);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    }));
+  }
+
+  function currentState() {
+    return { items, nextId, lists, nextListId };
+  }
+
+  function saveItems() {
+    const snapshot = currentState();
+    saveChain = saveChain.then(() => putSavedState(snapshot)).catch(() => {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot)); } catch (e) {}
+    });
+    updateExportPreview();
+    updateSelectionUI();
+    if (!document.getElementById('viewLists').hidden) renderLists();
+    pushUndo(); updateStats(); applyFilter();
+    return saveChain;
+  }
+
+  async function loadSavedState() {
+    let saved = null;
+    try { saved = await getSavedState(); } catch (e) {}
+    if (!saved) {
+      try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) {}
+    }
+    if (!saved || !Array.isArray(saved.items)) return false;
+
+    items = saved.items.map((item, i) => ({
+      id: Number(item.id) || i + 1,
+      text: String(item.text ?? ''),
+      image: String(item.image ?? ''),
+      value: String(item.value ?? ''),
+      kakera: String(item.kakera ?? ''),
+      rank: String(item.rank ?? ''),
+      selected: !!item.selected
+    }));
+    nextId = Math.max(Number(saved.nextId) || 1, ...items.map(x => x.id + 1), 1);
+    loadLists(saved);
+    return true;
+  }
+
+  function loadLists(saved) {
+    lists = Array.isArray(saved.lists) ? saved.lists.map((l, i) => ({
+      id: Number(l.id) || i + 1, name: String(l.name || 'Lista'), members: (l.members || []).map(Number)
+    })) : [];
+    nextListId = Math.max(Number(saved.nextListId) || 1, ...lists.map(l => l.id + 1), 1);
+  }
+  function getList(id) { return lists.find(l => l.id === Number(id)); }
+
+  function getItem(id) { return items.find(i => i.id === Number(id)); }
+
+  // PARSER DE LÍNEAS MEJORADO
+  function parseImportLine(line) {
+    let text = line.trim();
+    if (!text) return null;
+    let image = '', kakera = '', rank = '';
+
+    const urlMatch = text.match(/\s*-\s*(https?:\/\/\S+)$/);
+    if (urlMatch) {
+        image = urlMatch[1];
+        text = text.slice(0, urlMatch.index).trim();
+    }
+
+    const kaMatch = text.match(/\s+(\d+)\s*ka$/i);
+    if (kaMatch) {
+        kakera = kaMatch[1];
+        text = text.slice(0, kaMatch.index).trim();
+    }
+
+    const rankMatch = text.match(/^#([\d,]+)\s*-\s*/);
+    if (rankMatch) {
+        rank = rankMatch[1]; 
+        text = text.slice(rankMatch[0].length).trim();
+    }
+
+    return { text, image, kakera, rank, value: '', selected: false };
+  }
+
+  function render() {
+    document.getElementById('count').textContent = `${items.length} personajes`;
+    if (!items.length) {
+      list.innerHTML = '<div class="empty"><strong>Tu lista está vacía</strong>Importa la lista de Mudae para empezar.</div>';
+      saveItems();
+      return;
+    }
+    
+    computeCuts();
+    list.innerHTML = items.map(item => `
+      <article class="item ${item.selected ? 'selected' : ''} ${tierOf(item)} rk-${rankTier(item)}" draggable="true" data-id="${item.id}">
+        <div class="image-wrap">
+          ${item.image
+            ? `<img src="${escapeHTML(item.image)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+               <div class="image-placeholder" style="display:none">Imagen rota</div>`
+            : `<div class="image-placeholder">Sin imagen</div>`}
+          <div class="badges">
+            ${item.rank ? `<span class="badge rank" title="${escapeHTML(rankTitle(item))}">#${escapeHTML(item.rank)}${rankSparks(item)}</span>` : ''}
+            ${item.kakera ? `<span class="badge kakera">💎 ${escapeHTML(item.kakera)}</span>` : ''}
+          </div>
+          <div class="card-actions">
+            <button class="card-btn" data-action="copy-changeimg" data-id="${item.id}" title="Copiar comando $changeimg individual">🎭</button>
+            <button class="card-btn" data-action="open-edit" data-id="${item.id}" title="Editar">✏️</button>
+          </div>
+          <div class="item-name" title="${escapeHTML(item.text)}">${escapeHTML(item.text) || 'Sin nombre'}</div>
+        </div>
+        ${sparksHTML(item)}
+      </article>`).join('');
+      
+    saveItems();
+  }
+
+  // --- SELECCIÓN Y CLICS ---
+  document.getElementById('selectAllCb').addEventListener('change', (e) => {
+    const checked = e.target.checked;
+    items.forEach(i => i.selected = checked);
+    render();
+  });
+
+  list.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-action]');
+    if(btn) {
+        const id = Number(btn.dataset.id);
+        const action = btn.dataset.action;
+        
+        if(action === 'open-edit') {
+            openEditModal(id);
+        } else if (action === 'copy-changeimg') {
+            const item = getItem(id);
+            if(!item) return;
+            if(!String(item.value).trim()) {
+                toast('Agrega un valor identificador primero (✏️)');
+                openEditModal(id);
+                return;
+            }
+            copyText(`$changeimg ${item.text} $${item.value}`);
+        }
+        return; 
+    }
+    
+    const card = e.target.closest('.item');
+    if(card) {
+        const id = Number(card.dataset.id);
+        const item = getItem(id);
+        if(item) {
+            item.selected = !item.selected;
+            if(item.selected) card.classList.add('selected');
+            else card.classList.remove('selected');
+            updateSelectionUI();
+            saveItems();
+        }
+    }
+  });
+
+  function updateSelectionUI() {
+    const selectedCount = items.filter(i => i.selected).length;
+    const btn = document.getElementById('deleteSelectedBtn');
+    const cb = document.getElementById('selectAllCb');
+    
+    if(selectedCount > 0) {
+        btn.style.display = 'inline-flex';
+        btn.textContent = `Borrar Seleccionados (${selectedCount})`;
+    } else {
+        btn.style.display = 'none';
+    }
+    
+    if(items.length > 0 && selectedCount === items.length) {
+        cb.checked = true;
+        cb.indeterminate = false;
+    } else if (selectedCount > 0) {
+        cb.checked = false;
+        cb.indeterminate = true;
+    } else {
+        cb.checked = false;
+        cb.indeterminate = false;
+    }
+  }
+
+  document.getElementById('deleteSelectedBtn').addEventListener('click', () => {
+    const toDelete = items.filter(i => i.selected).length;
+    if(confirm(`¿Eliminar ${toDelete} tarjetas seleccionadas?`)) {
+        items = items.filter(i => !i.selected);
+        document.getElementById('selectAllCb').checked = false;
+        render();
+        toast('Tarjetas eliminadas.');
+    }
+  });
+
+  // --- ORDENAMIENTO AUTOMÁTICO ---
+  document.getElementById('sortSelect').addEventListener('change', (e) => {
+     const criteria = e.target.value;
+     if (criteria === 'manual') return;
+
+     items.sort((a, b) => {
+         const nameA = (a.text || '').toLowerCase();
+         const nameB = (b.text || '').toLowerCase();
+         const kakeraA = parseInt((a.kakera || '').replace(/\D/g, '')) || 0;
+         const kakeraB = parseInt((b.kakera || '').replace(/\D/g, '')) || 0;
+         
+         const rankA = a.rank ? parseInt((a.rank || '').replace(/\D/g, '')) : Infinity;
+         const rankB = b.rank ? parseInt((b.rank || '').replace(/\D/g, '')) : Infinity;
+
+         switch(criteria) {
+             case 'az': return nameA.localeCompare(nameB);
+             case 'za': return nameB.localeCompare(nameA);
+             case 'kakera-desc': return kakeraB - kakeraA;
+             case 'kakera-asc': return kakeraA - kakeraB;
+             case 'rank-asc': return rankA - rankB;
+             case 'rank-desc': 
+                 if(rankA === Infinity && rankB === Infinity) return 0;
+                 if(rankA === Infinity) return 1;
+                 if(rankB === Infinity) return -1;
+                 return rankB - rankA;
+             default: return 0;
+         }
+     });
+     
+     render();
+     toast('Lista reordenada');
+  });
+
+  // --- MODAL DE EDICIÓN ---
+  const modalBackdrop = document.getElementById('editModalBackdrop');
+  let currentEditId = null;
+
+  function openEditModal(id) {
+    const item = getItem(id);
+    if(!item) return;
+    currentEditId = id;
+    document.getElementById('editId').value = id;
+    document.getElementById('editName').value = item.text || '';
+    document.getElementById('editKakera').value = item.kakera || '';
+    document.getElementById('editRank').value = item.rank || '';
+    document.getElementById('editImage').value = item.image || '';
+    document.getElementById('editValue').value = item.value || '';
+    
+    modalBackdrop.classList.add('open');
+  }
+
+  function closeEditModal() {
+    modalBackdrop.classList.remove('open');
+    currentEditId = null;
+  }
+
+  document.getElementById('cancelEditBtn').addEventListener('click', closeEditModal);
+  modalBackdrop.addEventListener('click', e => { if(e.target === modalBackdrop) closeEditModal(); });
+
+  document.getElementById('saveEditBtn').addEventListener('click', () => {
+    const item = getItem(currentEditId);
+    if(item) {
+        item.text = document.getElementById('editName').value.trim();
+        item.kakera = document.getElementById('editKakera').value.trim();
+        item.rank = document.getElementById('editRank').value.trim();
+        item.image = document.getElementById('editImage').value.trim();
+        item.value = document.getElementById('editValue').value.trim();
+        render();
+        toast('Cambios guardados');
+    }
+    closeEditModal();
+  });
+
+  document.getElementById('deleteInModalBtn').addEventListener('click', () => {
+    if(confirm('¿Eliminar esta tarjeta?')) {
+        items = items.filter(i => i.id !== Number(currentEditId));
+        render();
+        closeEditModal();
+        toast('Tarjeta eliminada');
+    }
+  });
+
+  document.getElementById('uploadImgBtn').addEventListener('click', () => {
+    fileInput.value = '';
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return toast('Selecciona una imagen.');
+    const reader = new FileReader();
+    reader.onload = () => {
+      document.getElementById('editImage').value = reader.result;
+      toast('Imagen subida temporalmente.');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function extractLines(rawText) {
+    if (/^\$sm\s/.test(rawText)) {
+      const blocks = rawText.split(/^\s*\$sm\s+/m).map(b => b.trim()).filter(Boolean).reverse();
+      return blocks.flatMap(b => b.split(/\s+\$/)).map(n => n.trim()).filter(Boolean);
+    }
+    return rawText.split(/\r?\n/).filter(Boolean);
+  }
+
+  // --- BOTONES PRINCIPALES (IMPORTAR y ACTUALIZAR) ---
+  document.getElementById('importBtn').addEventListener('click', () => {
+    const rawText = document.getElementById('bulkText').value.trim();
+    if (!rawText) return toast('Pega texto para importar.');
+    
+    const lines = extractLines(rawText);
+
+    let countAdded = 0;
+    let countUpdated = 0;
+    
+    lines.forEach(line => {
+      const parsed = parseImportLine(line);
+      if(parsed) {
+          const existingItem = items.find(i => i.text.toLowerCase() === parsed.text.toLowerCase());
+          
+          if (existingItem) {
+              if (parsed.kakera) existingItem.kakera = parsed.kakera;
+              if (parsed.rank) existingItem.rank = parsed.rank;
+              if (parsed.image) existingItem.image = parsed.image;
+              countUpdated++;
+          } else {
+              items.push({ id: nextId++, ...parsed });
+              countAdded++;
+          }
+      }
+    });
+    
+    document.getElementById('bulkText').value = '';
+    render();
+    
+    if (countAdded > 0 && countUpdated > 0) {
+        toast(`Añadidos: ${countAdded} | Actualizados: ${countUpdated}`);
+    } else if (countAdded > 0) {
+        toast(`Se importaron ${countAdded} personajes.`);
+    } else if (countUpdated > 0) {
+        toast(`Se actualizaron ${countUpdated} personajes.`);
+    } else {
+        toast('No se encontró información válida para importar.');
+    }
+  });
+
+  document.getElementById('addBtn').addEventListener('click', () => {
+    const id = nextId++;
+    items.push({ id, text: 'Nuevo Personaje', image: '', kakera: '', rank: '', value: '', selected:false });
+    render();
+    openEditModal(id);
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', async () => {
+    if (!confirm('¿Seguro que quieres borrar TODO?')) return;
+    items = [];
+    nextId = 1;
+    document.getElementById('selectAllCb').checked = false;
+    render();
+    toast('Todo borrado.');
+  });
+
+
+  // --- ARRASTRAR Y SOLTAR MÚLTIPLE ---
+  function clearHover() {
+    clearTimeout(hoverTimer); hoverTimer = null; hoverTargetId = null;
+    list.querySelectorAll('.item.over').forEach(c => c.classList.remove('over'));
+  }
+  
+  function moveCardsToTarget(targetCard) {
+    if (!draggedIds || !draggedIds.length || !targetCard) return;
+    if (draggedIds.includes(Number(targetCard.dataset.id))) return;
+
+    const cardsBefore = [...list.querySelectorAll('.item')];
+    const oldRects = new Map(cardsBefore.map(card => [card.dataset.id, card.getBoundingClientRect()]));
+
+    const draggedNodes = draggedIds
+        .map(id => list.querySelector(`.item[data-id="${id}"]`))
+        .filter(Boolean)
+        .sort((a, b) => cardsBefore.indexOf(a) - cardsBefore.indexOf(b));
+
+    const firstDraggedIdx = cardsBefore.indexOf(draggedNodes[0]);
+    const targetIdx = cardsBefore.indexOf(targetCard);
+
+    if (firstDraggedIdx < targetIdx) {
+        targetCard.after(...draggedNodes);
+    } else {
+        targetCard.before(...draggedNodes);
+    }
+
+    for (const card of list.querySelectorAll('.item')) {
+      const old = oldRects.get(card.dataset.id);
+      const now = card.getBoundingClientRect();
+      const dx = old.left - now.left;
+      const dy = old.top - now.top;
+      if (dx || dy) {
+        card.style.transition = 'none';
+        card.style.transform = `translate(${dx}px, ${dy}px)`;
+        requestAnimationFrame(() => {
+          card.style.transition = '';
+          card.style.transform = '';
+        });
+      }
+    }
+    targetCard.classList.remove('over');
+  }
+
+  list.addEventListener('dragstart', e => {
+    const card = e.target.closest('.item');
+    if (!card) { e.preventDefault(); return; }
+    
+    document.getElementById('sortSelect').value = 'manual';
+
+    const id = Number(card.dataset.id);
+    const item = getItem(id);
+
+    if (item && item.selected) {
+        draggedIds = items.filter(i => i.selected).map(i => i.id);
+    } else {
+        draggedIds = [id];
+    }
+
+    draggedIds.forEach(dId => {
+        const c = list.querySelector(`.item[data-id="${dId}"]`);
+        if (c) c.classList.add('dragging');
+    });
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', JSON.stringify(draggedIds));
+  });
+
+  list.addEventListener('dragover', e => {
+    const target = e.target.closest('.item');
+    if (!target || !draggedIds || draggedIds.length === 0) return;
+    const targetId = Number(target.dataset.id);
+    if (draggedIds.includes(targetId)) return;
+
+    e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+    
+    if (hoverTargetId === targetId) return;
+    clearHover(); hoverTargetId = targetId;
+    target.classList.add('over');
+
+    const fastMove = Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0) > 12;
+    if (fastMove) { moveCardsToTarget(target); } 
+    else { hoverTimer = setTimeout(() => { moveCardsToTarget(target); }, 140); }
+  });
+
+  list.addEventListener('dragleave', e => {
+    const card = e.target.closest('.item');
+    if (card && !card.contains(e.relatedTarget)) {
+      card.classList.remove('over');
+      if (hoverTargetId === Number(card.dataset.id)) clearHover();
+    }
+  });
+
+  list.addEventListener('drop', e => {
+    if (!draggedIds || draggedIds.length === 0) return;
+    e.preventDefault();
+    const target = e.target.closest('.item');
+    if (target && !draggedIds.includes(Number(target.dataset.id))) moveCardsToTarget(target);
+  });
+
+  list.addEventListener('dragend', () => {
+    clearHover();
+    list.querySelectorAll('.item').forEach(c => c.classList.remove('dragging', 'over'));
+    draggedIds = [];
+    
+    const currentItems = [...list.querySelectorAll('.item')].map(card => getItem(card.dataset.id)).filter(Boolean);
+    const orderChanged = items.some((item, i) => item.id !== currentItems[i]?.id);
+    items = currentItems;
+    render(); 
+    if (orderChanged) toast('Orden actualizado y guardado.');
+  });
+
+  // --- EXPORTACIÓN ($SM) EN PARTES DE MÁX. 1900 CARACTERES ---
+  const SM_LIMIT = 1900;
+  let exportParts = [];
+
+  // Mudae pone el último $sm ejecutado al principio de la lista.
+  // Se arman las partes en el orden de la lista y se invierten: la parte 1 es la que se pega primero.
+  function buildParts() {
+    const names = items.map(i => i.text.trim()).filter(Boolean);
+    const chunks = [];
+    let cur = '';
+    for (const n of names) {
+      const next = cur ? cur + ' $' + n : '$sm ' + n;
+      if (cur && next.length > SM_LIMIT) { chunks.push(cur); cur = '$sm ' + n; }
+      else cur = next;
+    }
+    if (cur) chunks.push(cur);
+    return chunks.reverse();
+  }
+
+  function updateExportPreview() {
+    const box = document.getElementById('exportParts');
+    if (!box) return;
+    exportParts = buildParts();
+    if (!exportParts.length) { box.innerHTML = '<div class="hint" style="margin-top:10px">Aún no hay personajes para exportar.</div>'; return; }
+    const total = exportParts.length;
+    box.innerHTML = exportParts.map((t, i) => `
+      <div class="part">
+        <div class="part-head">
+          <div><strong>Parte ${i + 1} de ${total}</strong> <span>${total === 1 ? 'Pégala en Discord' : i === 0 ? 'Pégala primero' : i === total - 1 ? 'Pégala al final · queda arriba' : 'Pégala en este orden'}</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span>${t.length} / ${SM_LIMIT}</span><button class="btn small primary" data-part="${i}">Copiar</button></div>
+        </div>
+        <textarea readonly>${escapeHTML(t)}</textarea>
+        <div class="bar"><i style="width:${Math.min(100, t.length / SM_LIMIT * 100)}%"></i></div>
+      </div>`).join('');
+  }
+
+  document.getElementById('exportParts').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-part]');
+    if (!btn) return;
+    copyText(exportParts[Number(btn.dataset.part)] || '');
+    const old = btn.textContent; btn.textContent = 'Copiado ✓';
+    setTimeout(() => { btn.textContent = old; }, 1500);
+  });
+
+  document.getElementById('toggleExportBtn').addEventListener('click', () => {
+    document.getElementById('exportEditorSection').classList.toggle('open');
+  });
+
+  document.getElementById('exportFormattedBtn').addEventListener('click', () => {
+    const txt = exportParts.map((t, i) => `--- Parte ${i + 1} de ${exportParts.length} ---\n${t}`).join('\n\n');
+    const url = URL.createObjectURL(new Blob([txt], {type:'text/plain;charset=utf-8'}));
+    const a = document.createElement('a'); a.href = url; a.download = 'mudae-sm-comandos.txt'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  // --- PROYECTOS JSON ---
+  document.getElementById('exportProjectBtn').addEventListener('click', () => {
+    const state = currentState();
+    const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'proyecto_mudae.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  document.getElementById('importProjectBtn').addEventListener('click', () => projectInput.click());
+  projectInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const saved = JSON.parse(ev.target.result);
+        if (!saved || !Array.isArray(saved.items)) throw new Error("Inválido");
+        items = saved.items.map((item, i) => ({
+          id: Number(item.id) || i+1, text: String(item.text||''), image: String(item.image||''),
+          value: String(item.value||''), kakera: String(item.kakera||''), rank: String(item.rank||''), selected: false
+        }));
+        nextId = Math.max(saved.nextId || 1, ...items.map(i => i.id+1), 1);
+        loadLists(saved);
+        document.getElementById('sortSelect').value = 'manual';
+        render(); toast('Proyecto cargado.');
+      } catch (err) { toast('Error al leer el archivo.'); }
+    };
+    reader.readAsText(file);
+    projectInput.value = '';
+  });
+
+
+  // --- PESTAÑAS ---
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
+    document.getElementById('viewMain').hidden = t.dataset.tab !== 'main';
+    document.getElementById('viewLists').hidden = t.dataset.tab !== 'lists';
+    if (t.dataset.tab === 'lists') renderLists();
+  }));
+
+  // --- LISTAS PERSONALIZADAS ---
+  const lSel = new Set(); // selección dentro de listas: 'idLista:idPersonaje'
+  function miniCard(item, listId) {
+    return `<article class="item mini ${listId ? tierOf(item) : ''} rk-${rankTier(item)}${listId && lSel.has(listId + ':' + item.id) ? ' selected' : ''}" draggable="true" data-id="${item.id}" data-src="${listId}">
+      <div class="image-wrap">
+        ${item.image ? `<img src="${escapeHTML(item.image)}" loading="lazy" onerror="this.style.display='none'">` : `<div class="image-placeholder">Sin imagen</div>`}
+        <div class="badges">${item.rank ? `<span class="badge rank" title="${escapeHTML(rankTitle(item))}">#${escapeHTML(item.rank)}</span>` : ''}${item.kakera ? `<span class="badge kakera">💎 ${escapeHTML(item.kakera)}</span>` : ''}</div>
+        <div class="card-actions">
+          <button class="card-btn" data-act="copy" data-id="${item.id}" title="Copiar nombre">📋</button>
+          ${listId ? '' : `<button class="card-btn" data-act="add" data-id="${item.id}" title="Añadir a la lista elegida">➕</button>`}
+          ${listId ? `<button class="card-btn" data-act="remove" data-id="${item.id}" data-list="${listId}" title="Quitar de la lista">✖</button>` : ''}
+        </div>
+        <div class="item-name">${escapeHTML(item.text) || 'Sin nombre'}</div>
+      </div></article>`;
+  }
+
+  function pruneSel() {
+    [...lSel].forEach(k => { const [l, i] = k.split(':').map(Number); const L = getList(l); if (!L || !L.members.includes(i)) lSel.delete(k); });
+  }
+  function selCountOf(listId) { return [...lSel].filter(k => k.startsWith(listId + ':')).length; }
+  function refreshListSel() {
+    viewLists.querySelectorAll('.lcard').forEach(sec => {
+      const id = Number(sec.dataset.list), n = selCountOf(id);
+      const b = sec.querySelector('[data-lact="unsel"]'), a = sec.querySelector('[data-lact="selall"]');
+      if (b) { b.hidden = !n; b.textContent = `Quitar seleccionados (${n})`; }
+      const total = getList(id) ? getList(id).members.length : 0;
+      if (a) a.textContent = n && n === total ? 'Deseleccionar' : 'Seleccionar todo';
+    });
+  }
+  function renderLists() {
+    computeCuts(); pruneSel();
+    const tl = document.getElementById('targetList'), prev = tl.value;
+    tl.innerHTML = lists.map(l => `<option value="${l.id}">➕ ${escapeHTML(l.name)}</option>`).join('') || '<option value="">Crea una lista primero</option>';
+    if (prev && getList(prev)) tl.value = prev;
+    const q = document.getElementById('poolSearch').value.trim().toLowerCase();
+    document.getElementById('poolGrid').innerHTML = items.filter(i => i.text.toLowerCase().includes(q)).map(i => miniCard(i, 0)).join('') || '<div class="hint">Sin personajes.</div>';
+    document.getElementById('listsBox').innerHTML = lists.map(l => {
+      const mem = l.members.map(getItem).filter(Boolean);
+      const nsel = selCountOf(l.id);
+      return `<section class="panel lcard" data-list="${l.id}">
+        <div class="lhead"><h3>${escapeHTML(l.name)} <span class="hint">${mem.length}</span></h3>
+          <div class="lhead-actions">
+            <button class="btn small" data-lact="selall" data-list="${l.id}">${nsel && nsel === mem.length ? 'Deseleccionar' : 'Seleccionar todo'}</button>
+            <button class="btn small danger" data-lact="unsel" data-list="${l.id}" ${nsel ? '' : 'hidden'}>Quitar seleccionados (${nsel})</button>
+            <button class="btn small" data-lact="rename" data-list="${l.id}">Renombrar</button>
+            <button class="btn small danger" data-lact="delete" data-list="${l.id}">Eliminar lista</button>
+          </div></div>
+        <div class="dropzone mgrid" data-list="${l.id}">${mem.map(i => miniCard(i, l.id)).join('') || '<div class="hint dz-empty">Arrastra personajes aquí</div>'}</div>
+      </section>`;
+    }).join('') || '<div class="empty"><strong>Aún no hay listas</strong>Crea una con un nombre, por ejemplo «Favoritos».</div>';
+  }
+
+  function createList() {
+    const input = document.getElementById('newListName');
+    const name = input.value.trim();
+    if (!name) return toast('Escribe un nombre para la lista.');
+    lists.push({ id: nextListId++, name, members: [] });
+    input.value = '';
+    saveItems();
+  }
+  document.getElementById('newListBtn').addEventListener('click', createList);
+  document.getElementById('newListName').addEventListener('keydown', e => { if (e.key === 'Enter') createList(); });
+  document.getElementById('poolSearch').addEventListener('input', renderLists);
+
+  const viewLists = document.getElementById('viewLists');
+  viewLists.addEventListener('click', e => {
+    const cb = e.target.closest('button[data-act]');
+    if (cb) {
+      const item = getItem(cb.dataset.id);
+      if (cb.dataset.act === 'copy' && item) copyText(item.text);
+      if (cb.dataset.act === 'add') {
+        const l = getList(document.getElementById('targetList').value);
+        if (!l) return toast('Crea una lista primero.');
+        if (l.members.includes(Number(cb.dataset.id))) return toast('Ya está en esa lista.');
+        l.members.push(Number(cb.dataset.id)); saveItems(); toast(`Añadido a "${l.name}"`);
+      }
+      if (cb.dataset.act === 'remove') {
+        const l = getList(cb.dataset.list);
+        if (l) { l.members = l.members.filter(m => m !== Number(cb.dataset.id)); saveItems(); }
+      }
+      return;
+    }
+    const card = e.target.closest('.dropzone .item.mini');
+    if (card && !e.target.closest('button')) {
+      const key = card.dataset.src + ':' + card.dataset.id;
+      if (lSel.has(key)) lSel.delete(key); else lSel.add(key);
+      card.classList.toggle('selected', lSel.has(key));
+      refreshListSel();
+      return;
+    }
+    const lb = e.target.closest('button[data-lact]');
+    if (!lb) return;
+    const l = getList(lb.dataset.list);
+    if (!l) return;
+    if (lb.dataset.lact === 'selall') {
+      const all = l.members.length && selCountOf(l.id) === l.members.length;
+      l.members.forEach(m => { const k = l.id + ':' + m; if (all) lSel.delete(k); else lSel.add(k); });
+      renderLists(); return;
+    }
+    if (lb.dataset.lact === 'unsel') {
+      const ids = l.members.filter(m => lSel.has(l.id + ':' + m));
+      l.members = l.members.filter(m => !ids.includes(m));
+      ids.forEach(m => lSel.delete(l.id + ':' + m));
+      saveItems(); toast(`${ids.length} quitados de "${l.name}"`); return;
+    }
+    if (lb.dataset.lact === 'rename') {
+      const name = (prompt('Nuevo nombre de la lista:', l.name) || '').trim();
+      if (name) { l.name = name; saveItems(); }
+    } else if (confirm(`¿Eliminar la lista "${l.name}"? Los personajes no se borran.`)) {
+      lists = lists.filter(x => x.id !== l.id);
+      saveItems();
+    }
+  });
+
+  // Arrastre dentro de listas: igual que en la pestaña principal
+  // (varios seleccionados a la vez, las tarjetas se reacomodan mientras arrastras)
+  let lDrag = null, lHoverId = null, lHoverTimer = null;
+  const dropZone = e => e.target.closest('.dropzone, #poolDrop');
+  const zoneCards = z => [...z.querySelectorAll('.item.mini')];
+  function lClearHover() {
+    clearTimeout(lHoverTimer); lHoverTimer = null; lHoverId = null;
+    viewLists.querySelectorAll('.item.over').forEach(c => c.classList.remove('over'));
+  }
+  function lMoveToTarget(zone, target) {
+    if (!lDrag || !target) return;
+    const before = zoneCards(zone);
+    const nodes = lDrag.ids.map(id => zone.querySelector(`.item[data-id="${id}"]`)).filter(Boolean)
+      .sort((a, b) => before.indexOf(a) - before.indexOf(b));
+    if (!nodes.length || nodes.includes(target)) return;
+    const old = new Map(before.map(c => [c.dataset.id, c.getBoundingClientRect()]));
+    if (before.indexOf(nodes[0]) < before.indexOf(target)) target.after(...nodes); else target.before(...nodes);
+    zoneCards(zone).forEach(c => {
+      const o = old.get(c.dataset.id), n = c.getBoundingClientRect();
+      const dx = o.left - n.left, dy = o.top - n.top;
+      if (dx || dy) {
+        c.style.transition = 'none'; c.style.transform = `translate(${dx}px, ${dy}px)`;
+        requestAnimationFrame(() => { c.style.transition = ''; c.style.transform = ''; });
+      }
+    });
+    target.classList.remove('over');
+  }
+  viewLists.addEventListener('dragstart', e => {
+    const c = e.target.closest('.item.mini');
+    if (!c) return;
+    const id = Number(c.dataset.id), src = Number(c.dataset.src);
+    let ids = [id];
+    if (src && lSel.has(src + ':' + id) && getList(src)) ids = getList(src).members.filter(m => lSel.has(src + ':' + m));
+    lDrag = { ids, src };
+    if (src) ids.forEach(i => { const n = viewLists.querySelector(`.dropzone[data-list="${src}"] .item[data-id="${i}"]`); if (n) n.classList.add('dragging'); });
+    else c.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', JSON.stringify(ids));
+  });
+  viewLists.addEventListener('dragover', e => {
+    const z = dropZone(e);
+    if (!lDrag || !z) return;
+    const target = e.target.closest('.item.mini');
+    const same = z.classList.contains('dropzone') && Number(z.dataset.list) === lDrag.src;
+    if (same) {
+      if (!target || !z.contains(target) || lDrag.ids.includes(Number(target.dataset.id))) { e.preventDefault(); return; }
+      e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+      const tid = Number(target.dataset.id);
+      if (lHoverId === tid) return;
+      lClearHover(); lHoverId = tid; target.classList.add('over');
+      const fast = Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0) > 12;
+      if (fast) lMoveToTarget(z, target);
+      else lHoverTimer = setTimeout(() => lMoveToTarget(z, target), 140);
+      return;
+    }
+    e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+    z.classList.add('over');
+    if (target && z.contains(target) && lHoverId !== Number(target.dataset.id)) {
+      viewLists.querySelectorAll('.item.over').forEach(c => c.classList.remove('over'));
+      lHoverId = Number(target.dataset.id); target.classList.add('over');
+    }
+  });
+  viewLists.addEventListener('dragleave', e => {
+    const z = dropZone(e);
+    if (z && !z.contains(e.relatedTarget)) z.classList.remove('over');
+    const c = e.target.closest('.item.mini');
+    if (c && !c.contains(e.relatedTarget)) {
+      c.classList.remove('over');
+      if (lHoverId === Number(c.dataset.id)) { clearTimeout(lHoverTimer); lHoverId = null; }
+    }
+  });
+  viewLists.addEventListener('dragend', () => {
+    clearTimeout(lHoverTimer); lHoverTimer = null; lHoverId = null;
+    const d = lDrag; lDrag = null;
+    viewLists.querySelectorAll('.dragging,.over').forEach(n => n.classList.remove('dragging', 'over'));
+    if (d && d.src) {
+      const l = getList(d.src), z = viewLists.querySelector(`.dropzone[data-list="${d.src}"]`);
+      if (l && z) {
+        const order = zoneCards(z).map(c => Number(c.dataset.id));
+        if (order.length && order.join() !== l.members.join()) { l.members = order; saveItems(); toast('Orden actualizado y guardado.'); }
+      }
+    }
+  });
+  viewLists.addEventListener('drop', e => {
+    const z = dropZone(e);
+    if (!lDrag || !z) return;
+    e.preventDefault();
+    const { ids, src } = lDrag;
+    const same = z.classList.contains('dropzone') && Number(z.dataset.list) === src;
+    if (same) {
+      const t = e.target.closest('.item.mini');
+      if (t && z.contains(t) && !ids.includes(Number(t.dataset.id))) lMoveToTarget(z, t);
+      return; // el orden se guarda en dragend
+    }
+    lDrag = null;
+    const s = src ? getList(src) : null;
+    if (z.id === 'poolDrop') {
+      if (s) { s.members = s.members.filter(m => !ids.includes(m)); ids.forEach(m => lSel.delete(src + ':' + m)); }
+    } else {
+      const dest = getList(z.dataset.list);
+      if (!dest) return;
+      const tgt = e.target.closest('.item.mini');
+      const before = tgt && z.contains(tgt) ? Number(tgt.dataset.id) : null;
+      if (s) { s.members = s.members.filter(m => !ids.includes(m)); ids.forEach(m => lSel.delete(src + ':' + m)); }
+      dest.members = dest.members.filter(m => !ids.includes(m));
+      const idx = before !== null ? dest.members.indexOf(before) : -1;
+      dest.members.splice(idx < 0 ? dest.members.length : idx, 0, ...ids);
+    }
+    saveItems();
+  });
+
+  // --- GUARDAR / CARGAR LISTAS (por nombre de personaje) ---
+  document.getElementById('saveListsBtn').addEventListener('click', () => {
+    if (!lists.length) return toast('No hay listas para guardar.');
+    const data = { type: 'mudae-listas', lists: lists.map(l => ({ name: l.name, members: l.members.map(getItem).filter(Boolean).map(i => i.text) })) };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'listas_mudae.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  const listsInput = document.getElementById('listsInput');
+  document.getElementById('loadListsBtn').addEventListener('click', () => listsInput.click());
+  listsInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data || !Array.isArray(data.lists)) throw new Error('Inválido');
+        const key = t => String(t || '').trim().toLowerCase();
+        let added = 0, merged = 0, missing = 0;
+        data.lists.forEach(l => {
+          const name = String(l.name || '').trim();
+          if (!name) return;
+          const ids = (l.members || []).map(n => {
+            const it = items.find(i => key(i.text) === key(n));
+            if (!it) missing++;
+            return it ? it.id : null;
+          }).filter(id => id !== null);
+          let target = lists.find(x => key(x.name) === key(name));
+          if (target) merged++; else { target = { id: nextListId++, name, members: [] }; lists.push(target); added++; }
+          ids.forEach(id => { if (!target.members.includes(id)) target.members.push(id); });
+        });
+        saveItems();
+        toast(`Listas nuevas: ${added} · combinadas: ${merged}` + (missing ? ` · ${missing} personajes no están en la página` : ''));
+      } catch (err) { toast('Error al leer el archivo de listas.'); }
+    };
+    reader.readAsText(file);
+    listsInput.value = '';
+  });
+
+  // --- VERIFICAR LISTA ---
+  const verifyBackdrop = document.getElementById('verifyBackdrop');
+  const norm = t => String(t || '').trim().toLowerCase();
+  document.getElementById('verifyBtn').addEventListener('click', () => verifyBackdrop.classList.add('open'));
+  document.getElementById('verifyCloseBtn').addEventListener('click', () => verifyBackdrop.classList.remove('open'));
+  verifyBackdrop.addEventListener('click', e => { if (e.target === verifyBackdrop) verifyBackdrop.classList.remove('open'); });
+
+  let verifyMissing = [];
+  function runVerify() {
+    const raw = document.getElementById('verifyText').value.trim();
+    const pasted = extractLines(raw).map(parseImportLine).filter(Boolean);
+    if (!pasted.length) return toast('Pega una lista para verificar.');
+    const inPasted = new Set(pasted.map(p => norm(p.text)));
+    const inPage = new Set(items.map(i => norm(i.text)));
+    const seen = new Set();
+    verifyMissing = pasted.filter(p => { const k = norm(p.text); if (inPage.has(k) || seen.has(k)) return false; seen.add(k); return true; });
+    const extra = items.filter(i => !inPasted.has(norm(i.text)));
+    const box = document.getElementById('verifyResults');
+    if (!verifyMissing.length && !extra.length) {
+      box.innerHTML = `<div class="vok">✓ La página coincide con tu lista (${items.length} personajes)</div>`;
+      return;
+    }
+    box.innerHTML = `<div class="hint" style="margin-top:14px">Lista pegada: ${inPasted.size} · Página: ${items.length}</div>
+      <div class="vcols">
+        <div class="vbox"><h3>Faltan en la página (${verifyMissing.length})</h3>
+          <div class="vlist">${verifyMissing.map(p => `<span>${escapeHTML(p.text)}</span>`).join('') || '<span class="hint">Ninguno</span>'}</div>
+          ${verifyMissing.length ? `<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn small" id="vCopyMissing">Copiar nombres</button><button class="btn small primary" id="vAddMissing">Añadir faltantes</button></div>` : ''}
+        </div>
+        <div class="vbox"><h3>Sobran en la página (${extra.length})</h3>
+          <div class="vlist">${extra.map(i => `<label><input type="checkbox" class="vx" value="${i.id}" checked style="accent-color:var(--accent)"> ${escapeHTML(i.text)}</label>`).join('') || '<span class="hint">Ninguno</span>'}</div>
+          ${extra.length ? `<button class="btn small danger" id="vDelExtra">Eliminar seleccionados</button>` : ''}
+        </div>
+      </div>`;
+    document.getElementById('vCopyMissing')?.addEventListener('click', () => copyText(verifyMissing.map(p => p.text).join('\n')));
+    document.getElementById('vAddMissing')?.addEventListener('click', () => {
+      verifyMissing.forEach(p => items.push({ id: nextId++, ...p }));
+      render(); runVerify(); toast('Personajes añadidos.');
+    });
+    document.getElementById('vDelExtra')?.addEventListener('click', () => {
+      const ids = [...box.querySelectorAll('.vx:checked')].map(c => Number(c.value));
+      if (!ids.length) return toast('No hay personajes seleccionados.');
+      if (!confirm(`¿Eliminar ${ids.length} personajes de la página?`)) return;
+      items = items.filter(i => !ids.includes(i.id));
+      render(); runVerify(); toast('Personajes eliminados.');
+    });
+  }
+  document.getElementById('verifyRunBtn').addEventListener('click', runVerify);
+
+  // --- EXTRAS: deshacer, estadísticas, filtro, diversión ---
+  const num = v => Number(String(v || '').replace(/[^\d.]/g, '')) || 0;
+  // Brillo por kakera: de 100 a 199, de 200 a 299 ... 900 o más
+  function computeCuts() {}
+  const KCUTS = [100, 200, 300, 400, 500, 600, 700, 800, 900];
+  const tierOf = i => { const k = num(i.kakera); let t = 0; KCUTS.forEach((c, n) => { if (k >= c) t = n + 1; }); return t ? 'tier-' + t : ''; };
+  const TIERS = [
+    { k: '', n: 'Sin brillo', c: '#6f6a8d', d: 'Menos de 100 💎' },
+    { k: 'tier-1', n: 'Ópalo', c: '#cfd8ff', d: '100 a 199 💎' },
+    { k: 'tier-2', n: 'Zafiro', c: '#6fe0ff', d: '200 a 299 💎' },
+    { k: 'tier-3', n: 'Esmeralda', c: '#5fe3a1', d: '300 a 399 💎' },
+    { k: 'tier-4', n: 'Amatista', c: '#b98cff', d: '400 a 499 💎' },
+    { k: 'tier-5', n: 'Peridoto', c: '#c6f56a', d: '500 a 599 💎' },
+    { k: 'tier-6', n: 'Cuarzo rosa', c: '#ff7ad9', d: '600 a 699 💎' },
+    { k: 'tier-7', n: 'Ámbar', c: '#ff9f43', d: '700 a 799 💎' },
+    { k: 'tier-8', n: 'Topacio', c: '#ffcb5c', d: '800 a 899 💎' },
+    { k: 'tier-9', n: 'Rubí', c: '#ff6b5c', d: '900 💎 o más' }
+  ];
+  const RANKS = [
+    { k: 0, n: 'Sin rank', c: '#6f6a8d', d: 'Sin rank' },
+    { k: 1, n: 'Mítico', c: '#fff0a0', d: 'Rank 1 a 10' },
+    { k: 2, n: 'Superestrella', c: '#ffd24d', d: 'Rank 11 a 100' },
+    { k: 3, n: 'Estrella', c: '#ffa94d', d: 'Rank 101 a 500' },
+    { k: 4, n: 'Famoso', c: '#ff7f6b', d: 'Rank 501 a 1,000' },
+    { k: 5, n: 'Popular', c: '#ff8fab', d: 'Rank 1,001 a 5,000' },
+    { k: 6, n: 'Conocido', c: '#9ad0ff', d: 'Rank 5,001 a 15,000' },
+    { k: 7, n: 'Poco visto', c: '#6fe0e0', d: 'Rank 15,001 a 40,000' },
+    { k: 8, n: 'Desconocido', c: '#c4c0e0', d: 'Rank 40,001 a 80,000' },
+    { k: 9, n: 'De nicho', c: '#a9d8b8', d: 'Rank 80,001 a 120,000' },
+    { k: 10, n: 'Wey quien eres', c: '#7ee2a8', d: 'Rank 120,001 en adelante' }
+  ];
+  const RANK_TOTAL = 152836;
+  const RCUTS = [10, 100, 500, 1000, 5000, 15000, 40000, 80000, 120000];
+  const rankTier = i => { const r = num(i.rank); if (!r) return 0; const n = RCUTS.findIndex(c => r <= c); return n < 0 ? 10 : n + 1; };
+  const rankTitle = i => { const r = num(i.rank); if (!r) return ''; const pct = Math.min(100, r / RANK_TOTAL * 100); return `${RANKS[rankTier(i)].n} · Top ${pct.toFixed(pct < 1 ? 2 : 1)}%`; };
+  const $ = id => document.getElementById(id);
+
+  // --- CHISPAS (partículas) para los niveles más altos ---
+  // Posiciones fijas por personaje (semilla = id) para que no cambien al re-renderizar.
+  function seeded(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function sparksHTML(item) {
+    const t = Number((tierOf(item).match(/\d+/) || [0])[0]);
+    if (t < 8) return '';
+    const r = seeded(item.id * 7919 + 13), top = t === 9;
+    const cols = top ? ['#ff6b5c', '#ff9f43', '#ffd24d', '#fff0a0'] : ['#ffcb5c', '#ffd98a', '#fff0a0'];
+    const n = top ? 18 : 0, rise = [110, 220];
+    let h = '';
+    for (let i = 0; i < n; i++) {
+      const d = 1.5 + r() * 1.7;
+      h += `<i style="--x:${(6 + r() * 88).toFixed(0)}%;--dx:${((r() - .5) * 46).toFixed(0)}px;--dy:-${(rise[0] + r() * (rise[1] - rise[0])).toFixed(0)}px;--s:${(3 + r() * 3.2).toFixed(1)}px;--d:${d.toFixed(2)}s;--dl:-${(r() * d).toFixed(2)}s;--c:${cols[Math.floor(r() * cols.length)]}"></i>`;
+    }
+    for (let i = 0; i < (top ? 0 : 5); i++) {
+      const d = 1.6 + r() * 1.6;
+      h += `<i class="star" style="--x:${(8 + r() * 80).toFixed(0)}%;--y:${(8 + r() * 78).toFixed(0)}%;--s:${(8 + r() * 7).toFixed(0)}px;--d:${d.toFixed(2)}s;--dl:-${(r() * d).toFixed(2)}s;--c:${cols[Math.floor(r() * cols.length)]}"></i>`;
+    }
+    return `<div class="sparks" aria-hidden="true">${h}</div>`;
+  }
+  function rankSparks(item) {
+    if (rankTier(item) !== 1) return '';
+    const r = seeded(item.id * 104729 + 7);
+    let h = '';
+    for (let i = 0; i < 14; i++) {
+      const ang = (-50 + r() * 180) * Math.PI / 180, dist = 20 + r() * 26, d = 1.1 + r() * 1.1;
+      h += `<i class="rs" style="--dx:${(Math.cos(ang) * dist).toFixed(1)}px;--dy:${(Math.sin(ang) * dist).toFixed(1)}px;--s:${(2.8 + r() * 2).toFixed(1)}px;--d:${d.toFixed(2)}s;--dl:-${(r() * d).toFixed(2)}s"></i>`;
+    }
+    return h;
+  }
+
+  function pushUndo() {
+    const snap = JSON.stringify({ items: items.map(({ selected, ...r }) => r), lists, nextId, nextListId });
+    if (snap === lastSnap) return;
+    if (lastSnap) { undoStack.push(lastSnap); if (undoStack.length > 30) undoStack.shift(); }
+    lastSnap = snap;
+  }
+  function undo() {
+    const snap = undoStack.pop();
+    if (!snap) return toast('No hay nada que deshacer.');
+    const st = JSON.parse(snap);
+    items = st.items.map(i => ({ ...i, selected: false }));
+    nextId = st.nextId; lists = st.lists; nextListId = st.nextListId;
+    lastSnap = snap;
+    render();
+    toast('Deshecho ↩️');
+  }
+  $('undoBtn').addEventListener('click', undo);
+
+  function dupIds() {
+    const seen = new Set(), d = [];
+    items.forEach(i => { const k = String(i.text).trim().toLowerCase(); if (seen.has(k)) d.push(i.id); else seen.add(k); });
+    return d;
+  }
+  function updateStats() {
+    const tot = items.reduce((a, i) => a + num(i.kakera), 0);
+    const noImg = items.filter(i => !i.image).length, dups = dupIds().length;
+    $('stats').innerHTML = items.length ? [
+      `<span class="chip">👥 ${items.length}</span>`,
+      `<span class="chip">💎 ${tot.toLocaleString('es')} kakera</span>`,
+      noImg ? `<span class="chip">🖼️ ${noImg} sin imagen</span>` : '',
+      dups ? `<button class="chip" id="dupBtn" title="Selecciona las copias repetidas">♊ ${dups} repetidos · seleccionar</button>` : '',
+    ].join('') : '';
+    const any = items.some(i => i.selected);
+    ['selCopyBtn', 'selTopBtn', 'selBottomBtn'].forEach(id => { $(id).hidden = !any; });
+    $('selBar').classList.toggle('on', any);
+    $('selCount').textContent = items.filter(i => i.selected).length;
+    try { renderTierBar(); } catch (e) {}
+  }
+  $('stats').addEventListener('click', e => {
+    if (!e.target.closest('#dupBtn')) return;
+    const d = new Set(dupIds());
+    items.forEach(i => { i.selected = d.has(i.id); });
+    render(); toast(`${d.size} repetidos seleccionados. Ya puedes borrarlos.`);
+  });
+
+  let hiddenTiers = new Set();
+  try { hiddenTiers = new Set(JSON.parse(localStorage.getItem('mudae-hidden-v2') || '[]')); } catch (e) {}
+  function applyFilter() {
+    const q = $('filterInput').value.trim().toLowerCase();
+    document.querySelectorAll('#list .item').forEach(c => {
+      const it = getItem(c.dataset.id);
+      c.hidden = !it || (!!q && !it.text.toLowerCase().includes(q)) || hiddenTiers.has('k:' + tierOf(it)) || hiddenTiers.has('r:' + rankTier(it));
+    });
+    updateTierSummary();
+  }
+  const store0 = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+  let tierOpen = store0.get('mudae-tier-open');
+  tierOpen = tierOpen === null ? window.matchMedia('(min-width:701px)').matches : tierOpen === '1';
+  function tierCounts() {
+    const k = {}, r = {};
+    items.forEach(i => { const a = tierOf(i), b = rankTier(i); k[a] = (k[a] || 0) + 1; r[b] = (r[b] || 0) + 1; });
+    return { k, r };
+  }
+  function tierSummaryHTML() {
+    const total = items.length;
+    const shown = [...document.querySelectorAll('#list .item')].filter(c => !c.hidden).length;
+    const filtered = hiddenTiers.size > 0 || $('filterInput').value.trim();
+    return `<span class="lbl">Mostrando </span><b>${shown}</b> de ${total}${hiddenTiers.size ? ` · ${hiddenTiers.size} oculto${hiddenTiers.size > 1 ? 's' : ''}` : ''}`;
+  }
+  function updateTierSummary() { const el = $('tierSum'); if (el) el.innerHTML = tierSummaryHTML(); }
+  function renderTierBar() {
+    const cnt = tierCounts();
+    const chip = (t, pre, group, n) => {
+      const off = hiddenTiers.has(pre + t.k);
+      return `<button class="tchip ${off ? 'off' : 'on'}${n ? '' : ' empty-tier'}" data-key="${pre}${t.k}" style="--tc:${t.c}" aria-pressed="${!off}" title="${t.d}">
+        <span class="tsw ${group === 'k' ? 'gem' : 'dot2'}"></span>
+        <span class="tx"><b>${t.n}</b><small>${t.d}</small></span>
+        <span class="tn">${n}</span><span class="tchk">✓</span></button>`;
+    };
+    const group = (title, hint, arr, pre, counts) => `<div class="fgroup">
+      <div class="fgroup-head"><h3>${title}<small>${hint}</small></h3>
+        <div class="fmini"><button class="fl" data-all="${pre}">Todos</button><button class="fl" data-none="${pre}">Ninguno</button></div></div>
+      <div class="tgrid">${arr.map(t => chip(t, pre, pre === 'k:' ? 'k' : 'r', counts[pre === 'k:' ? t.k : t.k] || 0)).join('')}</div></div>`;
+    $('tierBar').innerHTML = `<div class="fpanel${tierOpen ? ' open' : ''}">
+      <button class="fhead" id="tierToggle" aria-expanded="${tierOpen}">
+        <span>🎚️ Filtrar por brillo y rank</span>
+        <span class="fsum" id="tierSum">${tierSummaryHTML()}</span>
+        <span class="chev">▾</span></button>
+      <div class="fbody" ${tierOpen ? '' : 'hidden'}>
+        ${group('✨ Brillo', 'según kakera', TIERS, 'k:', cnt.k)}
+        ${group('🏆 Rank', 'según popularidad', RANKS, 'r:', cnt.r)}
+        ${hiddenTiers.size ? '<button class="btn small" data-key="all">👁️ Mostrar todo</button>' : ''}
+      </div></div>`;
+  }
+  $('tierBar').addEventListener('click', e => {
+    if (e.target.closest('#tierToggle')) {
+      tierOpen = !tierOpen; store0.set('mudae-tier-open', tierOpen ? '1' : '0'); renderTierBar(); return;
+    }
+    const all = e.target.closest('[data-all]'), none = e.target.closest('[data-none]');
+    if (all || none) {
+      const pre = (all || none).dataset.all || (all || none).dataset.none;
+      const arr = pre === 'k:' ? TIERS : RANKS;
+      arr.forEach(t => { if (all) hiddenTiers.delete(pre + t.k); else hiddenTiers.add(pre + t.k); });
+    } else {
+      const b = e.target.closest('[data-key]'); if (!b) return;
+      const k = b.dataset.key;
+      if (k === 'all') hiddenTiers.clear(); else if (hiddenTiers.has(k)) hiddenTiers.delete(k); else hiddenTiers.add(k);
+    }
+    try { localStorage.setItem('mudae-hidden-v2', JSON.stringify([...hiddenTiers])); } catch (err) {}
+    renderTierBar(); applyFilter();
+  });
+  renderTierBar();
+  $('filterInput').addEventListener('input', applyFilter);
+
+  $('selCopyBtn').addEventListener('click', () => copyText(items.filter(i => i.selected).map(i => i.text).join('\n')));
+  const moveSel = top => {
+    const sel = items.filter(i => i.selected), rest = items.filter(i => !i.selected);
+    items = top ? [...sel, ...rest] : [...rest, ...sel];
+    render();
+  };
+  $('selTopBtn').addEventListener('click', () => moveSel(true));
+  $('selBottomBtn').addEventListener('click', () => moveSel(false));
+
+  $('shuffleBtn').addEventListener('click', () => {
+    if (!items.length) return;
+    for (let i = items.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [items[i], items[j]] = [items[j], items[i]]; }
+    $('sortSelect').value = 'manual';
+    render(); toast('Mezclado 🔀 (Ctrl+Z para deshacer)');
+  });
+
+  function spotlight() {
+    if (!items.length) return toast('Aún no hay personajes.');
+    let it; do { it = items[Math.floor(Math.random() * items.length)]; } while (items.length > 1 && it.id === spotId);
+    spotId = it.id;
+    $('spotCard').innerHTML = `${it.image ? `<img src="${escapeHTML(it.image)}" alt="">` : ''}<h3>${escapeHTML(it.text)}</h3>
+      <div class="hint">${it.rank ? '🏆 #' + escapeHTML(it.rank) + ' · ' + escapeHTML(rankTitle(it)) + '  ' : ''}${it.kakera ? '💎 ' + escapeHTML(it.kakera) : ''}</div>`;
+    $('spotBackdrop').classList.add('open');
+  }
+  $('spotBtn').addEventListener('click', spotlight);
+  $('spotNextBtn').addEventListener('click', spotlight);
+  $('spotCopyBtn').addEventListener('click', () => { const it = getItem(spotId); if (it) copyText(it.text); });
+  $('spotCloseBtn').addEventListener('click', () => $('spotBackdrop').classList.remove('open'));
+  $('spotBackdrop').addEventListener('click', e => { if (e.target.id === 'spotBackdrop') e.target.classList.remove('open'); });
+
+  const store = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+  const setSize = v => { $('list').style.setProperty('--cw', v + 'px'); $('sizeRange').value = v; };
+  $('sizeRange').addEventListener('input', e => { setSize(e.target.value); store.set('mudae-size', e.target.value); });
+  const setAccent = (a, i) => { document.documentElement.style.setProperty('--accent', a); document.documentElement.style.setProperty('--accent-ink', i); };
+  $('dots').addEventListener('click', e => {
+    const d = e.target.closest('.dot'); if (!d) return;
+    setAccent(d.dataset.a, d.dataset.i); store.set('mudae-accent', d.dataset.a + '|' + d.dataset.i);
+  });
+  if (store.get('mudae-size')) setSize(store.get('mudae-size'));
+  if (store.get('mudae-accent')) setAccent(...store.get('mudae-accent').split('|'));
+
+  document.addEventListener('keydown', e => {
+    const typing = /INPUT|TEXTAREA|SELECT/.test(e.target.tagName);
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && !typing) { e.preventDefault(); undo(); }
+    else if (e.key === '/' && !typing) { e.preventDefault(); $('filterInput').focus(); }
+    else if (e.key === 'Escape') document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+  });
+
+  // --- BARRA DE SELECCIÓN (celular/tablet) ---
+  $('selBar').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'selClearBtn') { items.forEach(i => { i.selected = false; }); render(); }
+    else if (b.dataset.sb) $(b.dataset.sb).click();
+  });
+
+  // --- ARRASTRE TÁCTIL (mantener presionado) ---
+  (function () {
+    try { new DataTransfer(); new DragEvent('x'); } catch (e) { return; }
+    let timer, scroller, src, box, ghost, dt, active = false, sx = 0, sy = 0, px = 0, py = 0, over = null, lastTouch = 0, justDragged = 0;
+    const fire = (type, target, rel) => target.dispatchEvent(new DragEvent(type, { bubbles: true, cancelable: true, clientX: px, clientY: py, relatedTarget: rel || null, dataTransfer: dt }));
+    const place = () => { ghost.style.left = (px - ghost.offsetWidth / 2) + 'px'; ghost.style.top = (py - ghost.offsetHeight / 2) + 'px'; };
+    const cleanup = () => { clearTimeout(timer); clearInterval(scroller); if (ghost) ghost.remove(); ghost = null; active = false; over = null; };
+
+    // Evita que el navegador inicie su propio arrastre nativo tras un toque
+    document.addEventListener('dragstart', e => { if (e.isTrusted && Date.now() - lastTouch < 1500) { e.preventDefault(); e.stopPropagation(); } }, true);
+    document.addEventListener('contextmenu', e => { if (Date.now() - lastTouch < 1500 && e.target.closest('.item')) e.preventDefault(); });
+    document.addEventListener('click', e => { if (Date.now() - justDragged < 500) { e.stopPropagation(); e.preventDefault(); } }, true);
+
+    function begin() {
+      dt = new DataTransfer(); active = true;
+      fire('dragstart', src);
+      ghost = src.cloneNode(true);
+      ghost.classList.remove('dragging', 'over');
+      Object.assign(ghost.style, { position: 'fixed', width: src.offsetWidth + 'px', zIndex: 300, pointerEvents: 'none', opacity: '.92', margin: '0', transition: 'none', transform: 'scale(.92) rotate(-3deg)' });
+      document.body.appendChild(ghost); place();
+      if (navigator.vibrate) navigator.vibrate(12);
+      scroller = setInterval(() => { if (py < 90) window.scrollBy(0, -14); else if (py > innerHeight - 90) window.scrollBy(0, 14); }, 16);
+    }
+
+    document.addEventListener('touchstart', e => {
+      lastTouch = Date.now();
+      const c = e.touches.length === 1 && e.target.closest('.item[draggable="true"]');
+      if (!c || e.target.closest('button')) return;
+      src = c; box = c.closest('#list, #viewLists');
+      sx = px = e.touches[0].clientX; sy = py = e.touches[0].clientY;
+      timer = setTimeout(begin, 300);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+      const t = e.touches[0]; px = t.clientX; py = t.clientY;
+      if (!active) { if (Math.hypot(px - sx, py - sy) > 10) clearTimeout(timer); return; }
+      e.preventDefault(); place();
+      const el = document.elementFromPoint(px, py);
+      if (el !== over) { if (over) fire('dragleave', over, el); over = el; }
+      if (el) fire('dragover', el);
+    }, { passive: false });
+
+    const finish = drop => e => {
+      clearTimeout(timer);
+      if (!active) return;
+      if (e.cancelable) e.preventDefault();
+      const el = document.elementFromPoint(px, py);
+      if (drop && el) fire('drop', el);
+      fire('dragend', box);
+      justDragged = Date.now(); cleanup();
+    };
+    document.addEventListener('touchend', finish(true));
+    document.addEventListener('touchcancel', finish(false));
+  })();
+
+  // Inicializar
+  (async () => {
+    await loadSavedState();
+    render();
+  })();
+})();
+</script>
+</body>
+</html>
