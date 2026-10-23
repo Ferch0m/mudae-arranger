@@ -104,7 +104,7 @@ footer{margin-top:28px;color:var(--muted);font-size:12px;text-align:center}
 .lcard{margin-bottom:16px}
 .lhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .lhead h3{margin:0;font-size:18px;font-weight:900}.lhead-actions{display:flex;gap:6px;flex-wrap:wrap}
-.dropzone{min-height:130px;border:2px dashed var(--line);border-radius:12px;padding:10px;transition:.15s}
+.dropzone{min-height:130px;border:2px dashed var(--line);border-radius:12px;padding:10px}
 .dropzone.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent)}
 .dz-empty{grid-column:1/-1;text-align:center;align-self:center;padding:30px 0}
 .modal.wide{width:min(100%,780px)}
@@ -487,6 +487,10 @@ select option,select optgroup{background:var(--panel2);color:var(--ink)}
 .modal{contain:layout style;overscroll-behavior:contain;transform:translateZ(0)}
 body.modal-open :is(#list,#viewLists),body.modal-open :is(#list,#viewLists) *,body.modal-open :is(#list,#viewLists) *::before,body.modal-open :is(#list,#viewLists) *::after,body.modal-open #list::before{animation-play-state:paused!important}
 body.modal-open :is(#list,#viewLists) .item{transition:none!important}
+/* Panel Personajes: las tarjetas lejos de la vista no animan ni se dibujan (se reactivan al acercarse) */
+#poolGrid .item.io-off,#poolGrid .item.io-off *,#poolGrid .item.io-off::before,#poolGrid .item.io-off::after,#poolGrid .item.io-off *::before,#poolGrid .item.io-off *::after{animation:none!important}
+#poolGrid .item.io-off .sparks{display:none}
+#poolGrid .item.io-off{visibility:hidden}
 </style>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:; img-src 'self' data: blob: https: http:;">
 </head>
@@ -710,7 +714,6 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
             <li><strong>Faltan en la página:</strong> están en tu lista pero no tienes tarjeta. Puedes copiar los nombres o pulsar <em>Añadir faltantes</em>.</li>
             <li><strong>Sobran en la página:</strong> tienes la tarjeta pero no está en tu lista. Marca o desmarca con las casillas y pulsa <em>Eliminar seleccionados</em>.</li>
             <li><strong>Datos distintos o incompletos:</strong> el mismo personaje con otra kakera, rank o serie, o sin imagen. Pulsa <em>Actualizar tarjetas con lo pegado</em>.</li>
-            <li><strong>Orden:</strong> si el orden de tus tarjetas difiere del pegado, puedes pulsar <em>Ordenar como la lista pegada</em>.</li>
             <li>Si todo coincide verás «✓ La página coincide con lo que pegaste».</li>
           </ul>
           <div class="note">Si «Sobran» muestra personajes que sí tienes, revisa que la lista pegada esté completa: debe incluir el mensaje completo que te entrego Mudae.</div>
@@ -992,7 +995,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
 <div class="modal-backdrop" id="verifyBackdrop">
   <div class="modal wide">
     <h2>Verificar lista</h2>
-    <div class="hint">Pega la salida de cualquiera de estos comandos (o varias juntas) y se compara con las tarjetas de esta página: faltantes, sobrantes, datos distintos y orden.</div>
+    <div class="hint">Pega la salida de cualquiera de estos comandos (o varias juntas) y se compara con las tarjetas de esta página: faltantes, sobrantes y datos distintos.</div>
     <ol class="vguide">
       <li><span class="vn">1</span><div class="vt"><b><code>$mmsii-k</code> · Kakera:</b> nombre, kakera e imagen. Importa este primero: define el orden de tus tarjetas.</div><button class="btn small" onclick="copyText('$mmsii-k')">Copiar</button></li>
       <li><span class="vn">2</span><div class="vt"><b><code>$mmsii-kr</code> · Rank + Ka:</b> completa el rank de cada personaje.</div><button class="btn small" onclick="copyText('$mmsii-kr')">Copiar</button></li>
@@ -1688,6 +1691,28 @@ function escapeHTML(value) {
     targetCard.classList.remove('over');
   }
 
+  // --- IMAGEN DE ARRASTRE PROPIA ---
+  // Chrome/Edge desvanecen (y aclaran) la imagen nativa de arrastre cuando la tarjeta es grande.
+  // Se oculta la nativa y se dibuja una copia del mismo tamaño y con transparencia fija (.7) que sigue al cursor.
+  const BLANK_IMG = new Image(); BLANK_IMG.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  let dragGhost = null;
+  function moveDragGhost(x, y) { if (dragGhost) dragGhost.style.transform = `translate(${x - dragGhost.offsetWidth / 2}px, ${y - dragGhost.offsetHeight / 2}px) rotate(-3deg)`; }
+  function startDragGhost(e, card) {
+    endDragGhost();
+    if (!e.isTrusted) return; // el arrastre táctil ya dibuja su propia tarjeta
+    try { e.dataTransfer.setDragImage(BLANK_IMG, 0, 0); } catch (err) { return; }
+    const g = card.cloneNode(true);
+    g.classList.remove('dragging', 'over', 'selected');
+    g.removeAttribute('data-id'); g.removeAttribute('draggable');
+    Object.assign(g.style, { position: 'fixed', left: '0', top: '0', width: card.offsetWidth + 'px', zIndex: 300, pointerEvents: 'none', opacity: '.7', margin: '0', transition: 'none', cursor: 'grabbing', boxShadow: '0 10px 18px rgba(0,0,0,.45)', willChange: 'transform' });
+    document.body.appendChild(g); dragGhost = g; document.body.classList.add('is-dragging');
+    moveDragGhost(e.clientX, e.clientY);
+  }
+  function endDragGhost() { document.body.classList.remove('is-dragging'); if (dragGhost) { dragGhost.remove(); dragGhost = null; } }
+  document.addEventListener('dragover', e => { if (dragGhost) moveDragGhost(e.clientX, e.clientY); }, true);
+  document.addEventListener('drop', endDragGhost, true);
+  document.addEventListener('dragend', endDragGhost, true);
+
   list.addEventListener('dragstart', e => {
     const card = e.target.closest('.item');
     if (!card) { e.preventDefault(); return; }
@@ -1708,13 +1733,20 @@ function escapeHTML(value) {
         draggedIds = [id];
     }
 
-    draggedIds.forEach(dId => {
-        const c = list.querySelector(`.item[data-id="${dId}"]`);
-        if (c) c.classList.add('dragging');
-    });
+    // La clase .dragging se aplica después de que el navegador captura la imagen del arrastre;
+    // así la imagen que sigue al cursor siempre se ve opaca, sin importar el tamaño de la tarjeta.
+    const dragNow = draggedIds.slice();
+    setTimeout(() => {
+        if (!draggedIds.length) return;
+        dragNow.forEach(dId => {
+            const c = list.querySelector(`.item[data-id="${dId}"]`);
+            if (c) c.classList.add('dragging');
+        });
+    }, 0);
 
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', JSON.stringify(draggedIds));
+    startDragGhost(e, card);
   });
 
   list.addEventListener('dragover', e => {
@@ -1874,7 +1906,7 @@ function escapeHTML(value) {
   // --- LISTAS PERSONALIZADAS ---
   const lSel = new Set(); // selección dentro de listas: 'idLista:idPersonaje'
   function miniCard(item, listId) {
-    return `<article class="item mini ${tierOf(item)} rk-${rankTier(item)}${listId && lSel.has(listId + ':' + item.id) ? ' selected' : ''}" draggable="true" data-id="${item.id}" data-src="${listId}">
+    return `<article class="item mini ${tierOf(item)} rk-${rankTier(item)}${listId && lSel.has(listId + ':' + item.id) ? ' selected' : ''}${listId ? '' : ' io-off'}" draggable="true" data-id="${item.id}" data-src="${listId}">
       <div class="image-wrap">
         ${item.image ? `<img referrerpolicy="no-referrer" src="${escapeHTML(item.image)}" loading="lazy" onerror="this.style.display='none'">` : `<div class="image-placeholder">Sin imagen</div>`}
         <div class="badges">${item.rank ? `<span class="badge rank" title="${escapeHTML(rankTitle(item))}">#${escapeHTML(item.rank)}${rankSparks(item)}</span>` : ''}${item.kakera ? `<span class="badge kakera">💎 ${escapeHTML(fmtNum(item.kakera))}</span>` : ''}</div>
@@ -1884,7 +1916,7 @@ function escapeHTML(value) {
           ${listId ? `<button class="card-btn" data-act="remove" data-id="${item.id}" data-list="${listId}" title="Quitar de la lista">✖</button>` : ''}
         </div>
         <div class="item-name">${escapeHTML(item.text) || 'Sin nombre'}</div>
-      </div>${sparksHTML(item)}</article>`;
+      </div>${sparksHTML(item, true)}</article>`;
   }
 
   function pruneSel() {
@@ -1900,6 +1932,14 @@ function escapeHTML(value) {
       if (a) a.textContent = n && n === total ? 'Deseleccionar' : 'Seleccionar todo';
     });
   }
+  let poolIO = null;
+  function watchPool() {
+    const cards = document.querySelectorAll('#poolGrid .item.mini');
+    if (!('IntersectionObserver' in window)) { cards.forEach(c => c.classList.remove('io-off')); return; }
+    if (poolIO) poolIO.disconnect();
+    poolIO = new IntersectionObserver(es => es.forEach(en => en.target.classList.toggle('io-off', !en.isIntersecting)), { root: document.getElementById('poolDrop'), rootMargin: '300px 0px' });
+    cards.forEach(c => poolIO.observe(c));
+  }
   function renderLists() {
     computeCuts(); pruneSel();
     const tl = document.getElementById('targetList'), prev = tl.value;
@@ -1907,6 +1947,7 @@ function escapeHTML(value) {
     if (prev && getList(prev)) tl.value = prev;
     const q = document.getElementById('poolSearch').value.trim().toLowerCase();
     document.getElementById('poolGrid').innerHTML = items.filter(i => i.text.toLowerCase().includes(q)).map(i => miniCard(i, 0)).join('') || '<div class="hint">Sin personajes.</div>';
+    watchPool();
     document.getElementById('listsBox').innerHTML = lists.map(l => {
       const mem = l.members.map(getItem).filter(Boolean);
       const nsel = selCountOf(l.id);
@@ -2025,10 +2066,14 @@ function escapeHTML(value) {
     let ids = [id];
     if (src && lSel.has(src + ':' + id) && getList(src)) ids = getList(src).members.filter(m => lSel.has(src + ':' + m));
     lDrag = { ids, src };
-    if (src) ids.forEach(i => { const n = viewLists.querySelector(`.dropzone[data-list="${src}"] .item[data-id="${i}"]`); if (n) n.classList.add('dragging'); });
-    else c.classList.add('dragging');
+    setTimeout(() => {
+      if (!lDrag) return;
+      if (src) ids.forEach(i => { const n = viewLists.querySelector(`.dropzone[data-list="${src}"] .item[data-id="${i}"]`); if (n) n.classList.add('dragging'); });
+      else c.classList.add('dragging');
+    }, 0);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', JSON.stringify(ids));
+    startDragGhost(e, c);
   });
   viewLists.addEventListener('dragover', e => {
     const z = dropZone(e);
@@ -2047,7 +2092,7 @@ function escapeHTML(value) {
       return;
     }
     e.preventDefault(); e.dataTransfer.dropEffect = 'move';
-    z.classList.add('over');
+    if (!z.classList.contains('over')) z.classList.add('over');
     if (target && z.contains(target) && lHoverId !== Number(target.dataset.id)) {
       viewLists.querySelectorAll('.item.over').forEach(c => c.classList.remove('over'));
       lHoverId = Number(target.dataset.id); target.classList.add('over');
@@ -2055,7 +2100,11 @@ function escapeHTML(value) {
   });
   viewLists.addEventListener('dragleave', e => {
     const z = dropZone(e);
-    if (z && !z.contains(e.relatedTarget)) z.classList.remove('over');
+    if (z && z.classList.contains('over')) {
+      const r = z.getBoundingClientRect();
+      const inside = e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom;
+      if (!inside && !z.contains(e.relatedTarget)) z.classList.remove('over');
+    }
     const c = e.target.closest('.item.mini');
     if (c && !c.contains(e.relatedTarget)) {
       c.classList.remove('over');
@@ -2220,18 +2269,16 @@ function escapeHTML(value) {
     // orden
     const pageKeys = items.filter(i => map.has(norm(i.text))).map(i => norm(i.text));
     const pastedKeys = order.filter(k => inPage.has(k));
-    const hasDup = new Set(pageKeys).size !== pageKeys.length;
-    const orderDiffers = !hasDup && pageKeys.length >= 2 && pageKeys.join('\n') !== pastedKeys.join('\n');
 
     const box = document.getElementById('verifyResults');
     const detected = `<div class="vstat vfull"><span class="vchip">Detectado: ${detectKind(st)}</span><span class="vchip">${st.lines} líneas</span><span class="vchip">💎 ${st.kakera}</span><span class="vchip"># ${st.rank}</span><span class="vchip">📚 ${st.series}</span><span class="vchip">🖼️ ${st.image}</span></div>`;
     const expect = { k: ['kakera', '$mmsii-k'], kr: ['rank', '$mmsii-kr'], series: ['series', '$mmsa+-k'] }[mode];
     const warn = expect && !st[expect[0]] ? `<div class="vwarn">No encontré ${expect[0] === 'rank' ? 'ranks (#)' : expect[0] === 'series' ? 'series' : 'kakera'} en lo que pegaste. ¿Seguro que es la salida de ${expect[1]}? Si tu formato es distinto, elige "Detectar automáticamente".</div>` : '';
 
-    const allGood = !verifyMissing.length && !extra.length && !diffs.length && !orderDiffers;
+    const allGood = !verifyMissing.length && !extra.length && !diffs.length;
     let html = detected + warn;
     if (allGood) {
-      html += `<div class="vok">✓ La página coincide con lo que pegaste (${pastedKeys.length} personajes, mismo orden)</div>`;
+      html += `<div class="vok">✓ La página coincide con lo que pegaste (${pastedKeys.length} personajes)</div>`;
     } else {
       html += `<div class="hint" style="margin-top:6px">Pegados: ${map.size} · Página: ${items.length}</div>
       <div class="vcols">
@@ -2248,9 +2295,7 @@ function escapeHTML(value) {
         <div class="vdiff">${diffs.map(d => `<label><input type="checkbox" class="vd" value="${d.it.id}" checked style="accent-color:var(--accent)"><span>${escapeHTML(d.it.text)}<small>${d.ch.map(c => escapeHTML(c.t)).join(' · ')}</small></span></label>`).join('') || '<span class="hint">Todos los datos coinciden</span>'}</div>
         ${diffs.length ? `<button class="btn small primary" id="vApplyDiff">Actualizar tarjetas con lo pegado</button>` : ''}
       </div>
-      <div class="vbox vfull"><h3>Orden</h3>
-        ${orderDiffers ? `<div class="hint" style="margin:6px 0 10px">El orden de tus tarjetas es distinto al de la lista pegada.</div><button class="btn small primary" id="vApplyOrder">Ordenar como la lista pegada</button>` : '<span class="hint">El orden coincide</span>'}
-      </div>`;
+`;
     }
     box.innerHTML = html;
 
@@ -2276,15 +2321,6 @@ function escapeHTML(value) {
       });
       if (!n) return toast('No hay personajes seleccionados.');
       render(); runVerify(); toast(`${n} tarjetas actualizadas.`);
-    });
-    document.getElementById('vApplyOrder')?.addEventListener('click', () => {
-      const slots = [], byKey = new Map();
-      items.forEach((it, ix) => { const k = norm(it.text); if (map.has(k)) { slots.push(ix); byKey.set(k, it); } });
-      const ordered = pastedKeys.map(k => byKey.get(k)).filter(Boolean);
-      if (ordered.length !== slots.length) return toast('No se pudo ordenar (nombres repetidos).');
-      slots.forEach((ix, n) => { items[ix] = ordered[n]; });
-      const ss = document.getElementById('sortSelect'); if (ss) ss.value = 'manual';
-      render(); runVerify(); toast('Orden actualizado.');
     });
   }
   document.getElementById('verifyRunBtn').addEventListener('click', runVerify);
@@ -2329,18 +2365,18 @@ function escapeHTML(value) {
   // --- CHISPAS (partículas) para los niveles más altos ---
   // Posiciones fijas por personaje (semilla = id) para que no cambien al re-renderizar.
   function seeded(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-  function sparksHTML(item) {
+  function sparksHTML(item, mini) {
     const t = Number((tierOf(item).match(/\d+/) || [0])[0]);
     if (t < 8) return '';
     const r = seeded(item.id * 7919 + 13), top = t === 9;
     const cols = top ? ['#ff6b5c', '#ff9f43', '#ffd24d', '#fff0a0'] : ['#ffcb5c', '#ffd98a', '#fff0a0'];
-    const n = top ? 18 : 0, rise = [110, 220];
+    const n = top ? (mini ? 8 : 18) : 0, rise = [110, 220];
     let h = '';
     for (let i = 0; i < n; i++) {
       const d = 1.5 + r() * 1.7;
       h += `<i style="--x:${(6 + r() * 88).toFixed(0)}%;--dx:${((r() - .5) * 46).toFixed(0)}px;--dy:-${(rise[0] + r() * (rise[1] - rise[0])).toFixed(0)}px;--s:${(3 + r() * 3.2).toFixed(1)}px;--d:${d.toFixed(2)}s;--dl:-${(r() * d).toFixed(2)}s;--c:${cols[Math.floor(r() * cols.length)]}"></i>`;
     }
-    for (let i = 0; i < (top ? 0 : 5); i++) {
+    for (let i = 0; i < (top ? 0 : (mini ? 3 : 5)); i++) {
       const d = 1.6 + r() * 1.6;
       h += `<i class="star" style="--x:${(8 + r() * 80).toFixed(0)}%;--y:${(8 + r() * 78).toFixed(0)}%;--s:${(8 + r() * 7).toFixed(0)}px;--d:${d.toFixed(2)}s;--dl:-${(r() * d).toFixed(2)}s;--c:${cols[Math.floor(r() * cols.length)]}"></i>`;
     }
@@ -3185,6 +3221,7 @@ window.runMudaeTests = async function (opts = {}) {
       const mainOn = !!m && auraOn(m) && rankOn(m) && cs(m.querySelector('.sparks')).display !== 'none';
       await tab('lists');
       const pool = miniOf('#poolGrid', PFX + 'SA1'), zone = miniOf('.dropzone', PFX + 'SA1');
+      if (pool) { pool.scrollIntoView({ block: 'center' }); await sleep(120); } // el panel solo anima lo que se ve
       const poolOn = !!pool && auraOn(pool) && rankOn(pool) && cs(pool.querySelector('.sparks')).display !== 'none';
       const zoneOn = !!zone && auraOn(zone) && rankOn(zone) && cs(zone.querySelector('.sparks')).display !== 'none';
       check('Efectos en listas', `«${w}»: Principal ${exp[w][0] ? 'con' : 'sin'} efectos`, mainOn === exp[w][0], `mainOn=${mainOn}`);
@@ -3196,8 +3233,8 @@ window.runMudaeTests = async function (opts = {}) {
     await setWhere('both'); await tab('lists');
     const z8 = miniOf('.dropzone', PFX + 'SA2'), z9 = miniOf('.dropzone', PFX + 'SA1');
     if (z8 && z9) {
-      check('Efectos en listas', 'Topacio en lista: solo estrellas', z8.querySelectorAll('.sparks i.star').length === 5 && z8.querySelectorAll('.sparks i:not(.star)').length === 0);
-      check('Efectos en listas', 'Rubí en lista: solo partículas que suben', z9.querySelectorAll('.sparks i:not(.star)').length === 18 && z9.querySelectorAll('.sparks i.star').length === 0);
+      check('Efectos en listas', 'Topacio en lista: solo estrellas (3, versión ligera)', z8.querySelectorAll('.sparks i.star').length === 3 && z8.querySelectorAll('.sparks i:not(.star)').length === 0);
+      check('Efectos en listas', 'Rubí en lista: solo partículas que suben (8, versión ligera)', z9.querySelectorAll('.sparks i:not(.star)').length === 8 && z9.querySelectorAll('.sparks i.star').length === 0);
       check('Efectos en listas', 'Mítico en lista: chispas en la insignia', z9.querySelectorAll('.badge.rank .rs').length >= 10);
     }
     // seleccionada: sin efectos
