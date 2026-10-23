@@ -1,10 +1,10 @@
-f<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mudae Arranger</title>
+<title>Lista visual arrastrable - Mudae Arranger</title>
 <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -510,7 +510,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
   <section class="toolbar">
     <div class="panel">
       <div class="section-title">Importar o actualizar personajes</div>
-      <textarea id="bulkText" placeholder="Pega aquí el resultado de Mudae o tus comandos $sm...&#10;Ej 1: #1,072 - Ghostface 268 ka - https://...&#10;Ej 2: $sm Wallace Wells $Matt $Rigby"></textarea>
+      <textarea id="bulkText" placeholder="Pega aquí el resultado de Mudae o tus comandos $sm...&#10;Ej 1: #1,072 - Ghostface 268 ka - https://...&#10;Ej 2: #1,072 - Ghostface - Scream 268 ka&#10;Ej 3: $sm Wallace Wells $Matt $Rigby"></textarea>
       <div class="import-row">
         <div class="hint">Detecta listas completas, actualizaciones y uno o varios comandos $sm.</div>
         <button class="btn primary" id="importBtn">Importar</button>
@@ -522,6 +522,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
           <button class="btn small" onclick="copyText('$mmsii-k')">$mmsii-k · Kakera</button>
           <button class="btn small" onclick="copyText('$mmsii-kr')">$mmsii-kr · Rank + Ka</button>
           <button class="btn small" onclick="copyText('$mmsa+-k')">$mmsa+-k · Serie + Ka</button>
+          <button class="btn small" onclick="copyText('$mmsa+-kr')" title="Atajo: trae rank, kakera y serie en un solo comando">$mmsa+-kr · Rank + Serie + Ka</button>
         </div>
         <div class="cmd-order">
           <strong>Para exportar tus personajes en el orden que tienes en Mudae, usa los comandos en este orden:</strong>
@@ -529,6 +530,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
             <li><code>$mmsii-k</code> · Kakera: nombre, kakera e imagen. Importa este primero: define el orden de tus tarjetas.</li>
             <li><code>$mmsii-kr</code> · Rank + Ka: completa el rank de cada personaje.</li>
             <li><code>$mmsa+-k</code>: completa de qué serie viene cada personaje (alimenta el filtro por serie).</li>
+            <li><b>Atajo:</b> <code>$mmsa+-kr</code> · Rank + Serie + Ka trae rank, kakera y serie en un solo comando, así que reemplaza a los pasos 2 y 3. Importa siempre primero <code>$mmsii-k</code> (es el único que trae la imagen).</li>
           </ol>
           <div class="hint" style="margin-top:6px">Las importaciones siguientes no cambian el orden: solo actualizan los datos de los personajes que ya existen. Más detalles en la pestaña Tutorial.</div>
         </div>
@@ -640,7 +642,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
         <summary>🚀 Inicio rápido</summary>
         <div class="tbody">
           <ol>
-            <li>En Discord, ejecuta los comandos de Mudae (<code>$mmsii-k</code>, <code>$mmsii-kr</code> y <code>$mmsa+-k</code>) y copia lo que te muestra.</li>
+            <li>En Discord, ejecuta los comandos de Mudae (<code>$mmsii-k</code> y después <code>$mmsa+-kr</code>, o los tres: <code>$mmsii-k</code>, <code>$mmsii-kr</code> y <code>$mmsa+-k</code>) y copia lo que te muestra.</li>
             <li>Pégalo en el campo <strong>Importar o actualizar personajes</strong> y pulsa <strong>Importar</strong>.</li>
             <li>Haz clic en las tarjetas para seleccionarlas y arrástralas para ordenarlas.</li>
             <li>Pulsa <strong>📝 Comandos $sm</strong>, copia cada parte y pégala en Discord en el orden indicado.</li>
@@ -658,18 +660,19 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
             <tr><td>1</td><td><code>$mmsii-k</code></td><td>Nombre, kakera e imagen. Se importa primero porque define el orden de tus tarjetas.</td></tr>
             <tr><td>2</td><td><code>$mmsii-kr</code></td><td>Rank, nombre, kakera e imagen. Completa el rank de cada personaje.</td></tr>
             <tr><td>3</td><td><code>$mmsa+-k</code></td><td>Nombre, serie y kakera. Completa de dónde viene cada personaje.</td></tr>
+            <tr><td>Atajo</td><td><code>$mmsa+-kr</code></td><td>Rank, nombre, serie y kakera (sin imagen). Completa el rank y la serie de una sola vez, así que reemplaza a los pasos 2 y 3.</td></tr>
           </table>
           <h4>Cómo responde Mudae</h4>
           <p>Mudae te envía la lista por <strong>mensaje privado (DM)</strong>, dividida en varios mensajes. Solo el <strong>primer mensaje</strong> trae una cabecera; los siguientes traen únicamente personajes:</p>
           <table>
             <tr><th>Línea de la cabecera</th><th>Cuándo aparece</th></tr>
             <tr><td><code>tuUsuario's harem</code></td><td>Siempre</td></tr>
-            <tr><td><code>AVG: 10,142</code></td><td>Solo con <code>$mmsii-kr</code></td></tr>
-            <tr><td><code>Top 15 value: 7,479</code></td><td>Solo con <code>$mmsii-kr</code></td></tr>
+            <tr><td><code>AVG: 10,142</code></td><td>Solo con <code>$mmsii-kr</code> y <code>$mmsa+-kr</code></td></tr>
+            <tr><td><code>Top 15 value: 7,479</code></td><td>Solo con <code>$mmsii-kr</code> y <code>$mmsa+-kr</code></td></tr>
             <tr><td><code>Total value: 9,216</code></td><td>Siempre</td></tr>
           </table>
           <p>Copia todos los mensajes y pégalos juntos. La página <strong>ignora automáticamente la cabecera</strong>, así que no se importa como personaje, ni en Importar ni en Verificar lista.</p>
-          <div class="note">En <code>$mmsa+-k</code> la serie puede contener emojis (por ejemplo <code>Derp - 😒 59 ka</code>); se importa igual.</div>
+          <div class="note">La cabecera puede venir numerada (por ejemplo <code>1. tuUsuario's harem</code>); también se ignora. En <code>$mmsa+-k</code> y <code>$mmsa+-kr</code> la serie puede contener emojis (por ejemplo <code>Derp - 😒 59 ka</code>); se importa igual.</div>
         </div>
       </details>
 
@@ -681,6 +684,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
             <li><code>#1,072 - Ghostface 268 ka - https://mudae.net/...</code> (rank, kakera e imagen)</li>
             <li><code>Ghostface 268 ka - https://mudae.net/...</code> (kakera e imagen)</li>
             <li><code>Ghostface - Scream 268 ka</code> (serie y kakera)</li>
+            <li><code>#1,072 - Ghostface - Scream 268 ka</code> (rank, serie y kakera: la salida de <code>$mmsa+-kr</code>)</li>
             <li><code>$sm Wallace Wells $Matt $Rigby</code> (uno o varios comandos $sm; se importa solo el nombre)</li>
           </ul>
           <h4>Reglas al importar</h4>
@@ -706,7 +710,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
           <p>Sirve para comprobar que la página tiene exactamente los mismos personajes que tu harem en Mudae.</p>
           <ol>
             <li>Pulsa <strong>🔍 Verificar lista</strong>.</li>
-            <li>Pega la salida de <code>$mmsii-k</code>, <code>$mmsii-kr</code>, <code>$mmsa+-k</code> o tus comandos <code>$sm</code> (puedes pegar varios juntos).</li>
+            <li>Pega la salida de <code>$mmsii-k</code>, <code>$mmsii-kr</code>, <code>$mmsa+-k</code>, <code>$mmsa+-kr</code> o tus comandos <code>$sm</code> (puedes pegar varios juntos).</li>
             <li>Pulsa <strong>Comparar</strong>.</li>
           </ol>
           <p><strong>Los personajes se emparejan por nombre</strong> (no importan mayúsculas ni espacios extra). Además se comparan los datos que traiga lo pegado: kakera, rank, serie e imagen. Arriba verás qué paso te falta (por ejemplo, cuántos personajes aún no tienen rank o serie).</p>
@@ -773,7 +777,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
         <div class="tbody">
           <ul>
             <li><strong>Filtrar por nombre:</strong> escribe en el buscador (atajo: tecla <code>/</code>).</li>
-            <li><strong>📚 Filtrar por serie:</strong> lista vertical con todas las series y cuántos personajes tiene cada una. Haz clic en una o varias para ver solo esas; con «Limpiar» vuelves a ver todo. El campo de arriba busca dentro de la lista de series y los botones «Ordenar» la acomodan de A - Z, de Z - A, de mayor a menor cantidad de personajes o de menor a mayor (tu elección se guarda; «Sin serie» siempre queda al final). Las series salen de <code>$mmsa+-k</code> o del campo Serie al editar.</li>
+            <li><strong>📚 Filtrar por serie:</strong> lista vertical con todas las series y cuántos personajes tiene cada una. Haz clic en una o varias para ver solo esas; con «Limpiar» vuelves a ver todo. El campo de arriba busca dentro de la lista de series y los botones «Ordenar» la acomodan de A - Z, de Z - A, de mayor a menor cantidad de personajes o de menor a mayor (tu elección se guarda; «Sin serie» siempre queda al final). Las series salen de <code>$mmsa+-k</code>, <code>$mmsa+-kr</code> o del campo Serie al editar.</li>
             <li><strong>↕️ Editar orden:</strong> pega el texto que entrega Mudae y las tarjetas se reordenan igual; los personajes que no aparecen se quedan al final. Se puede deshacer con Ctrl+Z.</li>
             <li><strong>🎚️ Filtrar por brillo y rank:</strong> oculta o muestra niveles de kakera (Ópalo a Rubí) y de rank (Mítico a «Wey quien eres»).</li>
             <li>Los filtros se combinan entre sí. El contador muestra cuántas tarjetas ves.</li>
@@ -982,7 +986,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
 <div class="modal-backdrop" id="orderBackdrop">
   <div class="modal wide">
     <h2>Editar orden con texto de Mudae</h2>
-    <div class="hint">Pega el texto que entrega Mudae (por ejemplo la salida de <code>$mmsii-k</code> o <code>$mmsii-kr</code>, o un comando <code>$sm</code>) y las tarjetas se reordenan igual que el texto. Los personajes que no aparezcan se quedan al final, en su orden actual. Se puede deshacer con Ctrl+Z.</div>
+    <div class="hint">Pega el texto que entrega Mudae (por ejemplo la salida de <code>$mmsii-k</code>, <code>$mmsii-kr</code> o <code>$mmsa+-kr</code>, o un comando <code>$sm</code>) y las tarjetas se reordenan igual que el texto. Los personajes que no aparezcan se quedan al final, en su orden actual. Se puede deshacer con Ctrl+Z.</div>
     <textarea id="orderText" style="margin-top:10px" placeholder="#1,072 - Ghostface 268 ka&#10;#2,500 - Wallace Wells 80 ka&#10;..."></textarea>
     <div class="vstat" id="orderInfo"></div>
     <div class="modal-actions" style="margin-top:6px">
@@ -1000,10 +1004,11 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
       <li><span class="vn">1</span><div class="vt"><b><code>$mmsii-k</code> · Kakera:</b> nombre, kakera e imagen. Importa este primero: define el orden de tus tarjetas.</div><button class="btn small" onclick="copyText('$mmsii-k')">Copiar</button></li>
       <li><span class="vn">2</span><div class="vt"><b><code>$mmsii-kr</code> · Rank + Ka:</b> completa el rank de cada personaje.</div><button class="btn small" onclick="copyText('$mmsii-kr')">Copiar</button></li>
       <li><span class="vn">3</span><div class="vt"><b><code>$mmsa+-k</code>:</b> completa de qué serie viene cada personaje (alimenta el filtro por serie).</div><button class="btn small" onclick="copyText('$mmsa+-k')">Copiar</button></li>
+      <li><span class="vn">+</span><div class="vt"><b><code>$mmsa+-kr</code> · Rank + Serie + Ka:</b> atajo que reemplaza a los pasos 2 y 3 (rank y serie en un solo comando).</div><button class="btn small" onclick="copyText('$mmsa+-kr')">Copiar</button></li>
     </ol>
     <div class="vstat" id="verifyCoverage"></div>
     <input type="hidden" id="verifyMode" value="auto">
-    <textarea id="verifyText" style="margin-top:10px" placeholder="#1,072 - Ghostface 268 ka - https://...&#10;Ghostface - Scream 268 ka&#10;o $sm Personaje 1 $Personaje 2"></textarea>
+    <textarea id="verifyText" style="margin-top:10px" placeholder="#1,072 - Ghostface 268 ka - https://...&#10;#1,072 - Ghostface - Scream 268 ka&#10;o $sm Personaje 1 $Personaje 2"></textarea>
     <div class="modal-actions" style="margin-top:14px">
       <button class="btn" id="verifyCloseBtn">Cerrar</button>
       <button class="btn primary" id="verifyRunBtn">Comparar</button>
@@ -1197,6 +1202,7 @@ function escapeHTML(value) {
   //   #1,072 - Nombre 1,268 ka - https://...      ($mmsii-kr)
   //   Nombre 1.268 ka - https://...               ($mmsii-k)
   //   Nombre - Serie 1,268 ka                     ($mmsa+-k)
+  //   #1,072 - Nombre - Serie 1,268 ka            ($mmsa+-kr)
   function parseImportLine(line) {
     let text = String(line ?? '').replace(/[\u200b-\u200f\u2060\ufeff]/g, '').replace(/\*\*/g, '').trim();
     if (!text) return null;
@@ -2009,7 +2015,7 @@ function escapeHTML(value) {
     if (!l) return;
     if (lb.dataset.lact === 'copyall') {
       const names = l.members.map(getItem).filter(Boolean).map(i => i.text);
-      names.length ? copyText(names.join(' $ ')) : toast('La lista está vacía.');
+      names.length ? copyText(names.join(' - ')) : toast('La lista está vacía.');
       return;
     }
     if (lb.dataset.lact === 'selall') {
@@ -2205,7 +2211,7 @@ function escapeHTML(value) {
     listsInput.value = '';
   });
 
-  // --- VERIFICAR LISTA (acepta $mmsii-k, $mmsii-kr, $mmsa+-k y $sm) ---
+  // --- VERIFICAR LISTA (acepta $mmsii-k, $mmsii-kr, $mmsa+-k, $mmsa+-kr y $sm) ---
   const verifyBackdrop = document.getElementById('verifyBackdrop');
   const norm = normName;
   function coverageHTML() {
@@ -2214,8 +2220,8 @@ function escapeHTML(value) {
     const c = f => items.filter(i => i[f]).length;
     return [
       ['1', '$mmsii-k', 'kakera e imagen', Math.min(c('kakera'), c('image'))],
-      ['2', '$mmsii-kr', 'rank', c('rank')],
-      ['3', '$mmsa+-k', 'serie', c('series')]
+      ['2', '$mmsii-kr / $mmsa+-kr', 'rank', c('rank')],
+      ['3', '$mmsa+-k / $mmsa+-kr', 'serie', c('series')]
     ].map(([k, cmd, what, have]) => `<span class="vchip ${have === n ? 'ok' : 'warn'}">${have === n ? '✓' : '⚠'} ${k} · ${escapeHTML(cmd)} · ${what} ${have}/${n}${have < n ? ` (faltan ${n - have})` : ''}</span>`).join('');
   }
   function refreshCoverage() { document.getElementById('verifyCoverage').innerHTML = coverageHTML(); }
@@ -2224,6 +2230,7 @@ function escapeHTML(value) {
   verifyBackdrop.addEventListener('click', e => { if (e.target === verifyBackdrop) verifyBackdrop.classList.remove('open'); });
 
   function detectKind(st) {
+    if (st.rank && st.series) return '$mmsa+-kr';
     if (st.rank) return '$mmsii-kr';
     if (st.series) return '$mmsa+-k';
     if (st.kakera || st.image) return '$mmsii-k';
@@ -2641,7 +2648,7 @@ function escapeHTML(value) {
   });
   $('filterInput').addEventListener('input', applyFilter);
 
-  $('selCopyBtn').addEventListener('click', () => copyText(items.filter(i => i.selected).map(i => i.text).join(' $ ')));
+  $('selCopyBtn').addEventListener('click', () => copyText(items.filter(i => i.selected).map(i => i.text).join(' - ')));
   // --- EDITAR ORDEN CON TEXTO DE MUDAE ---
   function orderPlan() {
     const raw = $('orderText').value.trim();
@@ -3133,7 +3140,7 @@ window.runMudaeTests = async function (opts = {}) {
   await safe('Ventanas', 'verificar lista', async () => {
     $('verifyBtn').click(); await sleep(60);
     check('Ventanas', 'se abre', $('verifyBackdrop').classList.contains('open'));
-    check('Ventanas', 'guía con 3 comandos (sin $sm)', document.querySelectorAll('#verifyBackdrop .vguide li').length === 3 && ![...document.querySelectorAll('#verifyBackdrop .vguide code')].some(c => c.textContent.trim() === '$sm'));
+    check('Ventanas', 'guía con 4 comandos (sin $sm)', document.querySelectorAll('#verifyBackdrop .vguide li').length === 4 && ![...document.querySelectorAll('#verifyBackdrop .vguide code')].some(c => c.textContent.trim() === '$sm'));
     check('Ventanas', 'botones Copiar compactos', [...document.querySelectorAll('#verifyBackdrop .vguide .btn')].every(b => b.offsetHeight <= 40), [...document.querySelectorAll('#verifyBackdrop .vguide .btn')].map(b => b.offsetHeight));
     check('Ventanas', 'detección siempre automática (sin selector)', $('verifyMode').value === 'auto' && $('verifyMode').type === 'hidden');
     check('Ventanas', 'sin desenfoque (mejor rendimiento)', (cs($('verifyBackdrop')).backdropFilter || 'none') === 'none');
