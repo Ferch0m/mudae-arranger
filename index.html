@@ -64,7 +64,7 @@ textarea:focus,input:focus,select:focus{border-color:var(--accent);outline:none;
 .empty strong{display:block;color:var(--ink);font-size:18px;margin-bottom:4px}
 .modal-backdrop{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:15px;background:#08060fcc;backdrop-filter:blur(3px)}
 .modal-backdrop.open{display:flex}
-.modal{width:min(100%,480px);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 24px 70px #000a;max-height:90vh;overflow-y:auto}
+.modal{width:min(100%,480px);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 24px 70px #000a;max-height:90vh;overflow-y:auto;overflow-x:hidden}
 .modal h2{margin:0 0 14px;font-size:21px;font-weight:900}
 .modal label{display:block;margin:12px 0 5px;font-size:12px;color:var(--muted);font-weight:800}
 .modal input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--inset);color:var(--ink)}
@@ -72,6 +72,12 @@ textarea:focus,input:focus,select:focus{border-color:var(--accent);outline:none;
 .url-row-modal{display:flex;gap:8px}
 .modal-actions{display:flex;justify-content:space-between;align-items:center;margin-top:22px;flex-wrap:wrap;gap:10px;padding-top:16px;border-top:1px solid var(--line)}
 .modal-actions-right{display:flex;gap:8px}
+.expopts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.expopt{display:flex;flex-direction:column;gap:3px;text-align:left;padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--panel2);color:var(--ink)}
+.expopt small{color:var(--muted);font-weight:600;font-size:11.5px;line-height:1.3}
+.expopt:hover{border-color:var(--line-h)}
+.expopt.active{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel2))}
+@media(max-width:420px){.expopts{grid-template-columns:1fr}}
 .export-editor{display:none;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:0 0 20px}
 .export-editor.open{display:block}
 .part{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
@@ -491,6 +497,62 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
 #poolGrid .item.io-off,#poolGrid .item.io-off *,#poolGrid .item.io-off::before,#poolGrid .item.io-off::after,#poolGrid .item.io-off *::before,#poolGrid .item.io-off *::after{animation:none!important}
 #poolGrid .item.io-off .sparks{display:none}
 #poolGrid .item.io-off{visibility:hidden}
+#list .item.io-off,#list .item.io-off *,#list .item.io-off::before,#list .item.io-off::after,#list .item.io-off *::before,#list .item.io-off *::after{animation:none!important}
+#list .item.io-off .sparks{display:none}
+#list .item.io-off{visibility:hidden}
+
+/* ===== Rediseño de botones y distribución ===== */
+.toolbar{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:16px;align-items:stretch;margin-bottom:18px}
+@media(max-width:860px){.toolbar{grid-template-columns:1fr}}
+.proj{display:flex;flex-direction:column;justify-content:flex-start;gap:10px;height:100%}
+.proj .section-title{margin-bottom:0}
+.pgroup{display:flex;flex-direction:column;gap:5px}
+.pgroup-label{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.pgrid{display:grid;grid-template-columns:1fr;gap:6px}
+.pgrid.two{grid-template-columns:1fr 1fr}
+.pgrid .btn{justify-content:flex-start;padding:9px 14px}
+.pgrid.two .btn{justify-content:center}
+.pdanger{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:12px;border-top:1px dashed var(--line)}
+.pdanger .hint{font-size:11.5px}
+@media(max-width:860px){.pgrid{grid-template-columns:repeat(3,1fr)}.pgrid .btn{justify-content:center}}
+@media(max-width:520px){.pgrid{grid-template-columns:1fr 1fr}}
+
+/* Rendimiento durante el arrastre: sin hover y con aislamiento por tarjeta (los efectos siguen animados) */
+.item{contain:layout style}
+body.is-dragging :is(#list,#viewLists) .item:not(.dragging):hover{transform:none}
+body.is-dragging :is(#list,#viewLists) .card-actions{opacity:0!important;transition:none!important}
+body.is-dragging :is(#list,#viewLists) .item{will-change:auto}
+
+/* Barra de la lista */
+.list-head{margin:24px 0 10px}
+.list-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 14px;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.lc-group{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.lc-all{cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;padding:6px 8px}
+@media(max-width:700px){.list-head{flex-wrap:nowrap}.list-head h2{width:auto}.list-controls{flex-direction:column;align-items:stretch}.lc-group{width:100%}.lc-group .sort-select{flex:1 1 100%}.lc-group .btn{flex:1 1 auto}}
+
+/* Botón flotante $sm (esquina, siempre visible en la ventana principal) */
+.sm-fab{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:45;display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:999px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;box-shadow:0 10px 30px #000a,0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent);transition:transform .15s,filter .15s}
+.sm-fab:hover{filter:brightness(1.12);transform:translateY(-2px)}
+.sm-fab.on{background:var(--panel2);color:var(--ink)}
+.sm-fab-ico{font-size:17px;line-height:1}
+.sm-fab-n{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent-ink);color:var(--accent);font-size:11px;font-weight:900;display:inline-flex;align-items:center;justify-content:center}
+.sm-fab.on .sm-fab-n{background:var(--accent);color:var(--accent-ink)}
+.sm-fab-n[hidden]{display:none}
+@media(max-width:700px){.sm-fab{padding:12px 15px}.sm-fab-txt{font-size:13px}}
+body.sel-on .sm-fab{bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+@media(min-width:1025px){body.sel-on .sm-fab{bottom:calc(18px + env(safe-area-inset-bottom,0px))}}
+body.is-dragging .sm-fab{transition:none;box-shadow:none;pointer-events:none}
+
+/* Panel de comandos $sm como ventana flotante anclada al botón */
+.export-editor{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:44;width:min(440px,calc(100vw - 24px));max-height:min(70vh,640px);overflow-y:auto;margin:0;box-shadow:0 20px 60px #000c;border-color:var(--accent);overscroll-behavior:contain}
+body.sel-on .export-editor{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
+@media(min-width:1025px){body.sel-on .export-editor{bottom:calc(76px + env(safe-area-inset-bottom,0px))}}
+.sm-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.export-editor .export-actions{margin-top:12px}
+
+/* Selector de orden en la ventana de exportación */
+.exp-order{display:flex;gap:10px;align-items:center;margin-top:8px}
+.exp-order .sort-select{flex:1 1 auto;width:100%;min-width:0}
 </style>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:; img-src 'self' data: blob: https: http:;">
 </head>
@@ -537,28 +599,45 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel proj">
       <div class="section-title">Proyecto</div>
-      <div class="actions-grid">
-        <button class="btn" id="addBtn">➕ Añadir manual</button>
-        <button class="btn primary" id="toggleExportBtn">📝 Comandos $sm</button>
-        <button class="btn" id="verifyBtn">🔍 Verificar lista</button>
-        <button class="btn" id="orderBtn">↕️ Editar orden</button>
-        <button class="btn" id="importProjectBtn">📂 Cargar proyecto</button>
-        <button class="btn" id="exportProjectBtn">💾 Guardar proyecto</button>
-        <button class="btn danger" id="clearBtn">🗑️ Borrar todo</button>
+      <div class="pgroup">
+        <div class="pgroup-label">Tarjetas</div>
+        <div class="pgrid">
+          <button class="btn" id="addBtn">➕ Añadir manual</button>
+          <button class="btn" id="orderBtn">↕️ Editar orden con texto</button>
+          <button class="btn" id="verifyBtn">🔍 Verificar lista</button>
+        </div>
+      </div>
+      <div class="pgroup">
+        <div class="pgroup-label">Archivo del proyecto</div>
+        <div class="pgrid two">
+          <button class="btn" id="importProjectBtn">📂 Cargar</button>
+          <button class="btn" id="exportProjectBtn">💾 Guardar</button>
+        </div>
+      </div>
+      <div class="pgroup pdanger">
+        <button class="btn danger small" id="clearBtn">🗑️ Borrar todo</button>
+        <span class="hint">No se puede deshacer</span>
       </div>
     </div>
-  </section>
+    </section>
 
-  <section class="export-editor" id="exportEditorSection">
-    <div class="section-title">Comandos de orden ($sm)</div>
+  <section class="export-editor" id="exportEditorSection" aria-label="Comandos de orden $sm">
+    <div class="sm-head">
+      <div class="section-title" style="margin:0">Comandos de orden ($sm)</div>
+      <button class="btn small" id="smCloseBtn" type="button" aria-label="Cerrar">✕</button>
+    </div>
     <div class="hint">Mudae pone cada $sm al principio de tu lista, así que el último que pegues queda arriba. Pega las partes en el orden en que aparecen aquí, una por mensaje (máx. 1900 caracteres).</div>
     <div id="exportParts"></div>
     <div class="export-actions">
       <button class="btn" id="exportFormattedBtn">Descargar .txt</button>
     </div>
   </section>
+
+  <button class="sm-fab" id="toggleExportBtn" type="button" title="Copiar comandos $sm (siempre disponible)" aria-expanded="false" aria-controls="exportEditorSection">
+    <span class="sm-fab-ico">📝</span><span class="sm-fab-txt">Copiar $sm</span><span class="sm-fab-n" id="smFabCount" hidden></span>
+  </button>
 
   <div class="stats" id="stats"></div>
   <div class="tierbar" id="tierBar"></div>
@@ -568,7 +647,6 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
     <input type="search" id="filterInput" placeholder="Filtrar por nombre ( / )">
     <button class="btn small" id="undoBtn" title="Ctrl+Z">↩️ Deshacer</button>
     <button class="btn small" id="shuffleBtn">🔀 Mezclar</button>
-    <button class="btn small" id="spotBtn">✨ Sorpréndeme</button>
     <button class="btn small" id="selCopyBtn" hidden>📋 Copiar seleccionados</button>
     <button class="btn small" id="selSeriesBtn" hidden>📚 Asignar serie</button>
     <button class="btn small" id="selTopBtn" hidden>⬆️ Al inicio</button>
@@ -578,8 +656,11 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
 
   <div class="list-head">
     <h2>Tus tarjetas</h2>
-    <div class="list-head-actions">
-      <select id="sortSelect" class="sort-select">
+    <button class="btn small primary" id="exportOpenBtn" type="button" title="Descargar el orden actual como PDF o imagen">📥 Exportar PDF / imagen</button>
+  </div>
+  <div class="list-controls">
+    <div class="lc-group">
+      <select id="sortSelect" class="sort-select" aria-label="Ordenar tarjetas">
         <option value="manual">↕️ Orden manual</option>
         <option value="az">🔤 A - Z</option>
         <option value="za">🔤 Z - A</option>
@@ -593,7 +674,9 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
         <option value="series-asc">📚 Serie (menos personajes primero)</option>
       </select>
       <button class="btn small" id="groupBtn" type="button" aria-pressed="false" title="Junta en una sola tarjeta a los personajes de cada serie (los que no tienen serie van juntos en «Sin serie»). Vuelve a pulsarlo para abrirlas.">📚 Agrupar series</button>
-      <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:700;">
+    </div>
+    <div class="lc-group lc-sel">
+      <label class="lc-all">
         <input type="checkbox" id="selectAllCb" style="accent-color:var(--accent);"> Seleccionar todo
       </label>
       <button class="btn small" id="deselectBtn" style="display:none;">Deseleccionar</button>
@@ -645,7 +728,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
             <li>En Discord, ejecuta los comandos de Mudae (<code>$mmsii-k</code> y después <code>$mmsa+-kr</code>, o los tres: <code>$mmsii-k</code>, <code>$mmsii-kr</code> y <code>$mmsa+-k</code>) y copia lo que te muestra.</li>
             <li>Pégalo en el campo <strong>Importar o actualizar personajes</strong> y pulsa <strong>Importar</strong>.</li>
             <li>Haz clic en las tarjetas para seleccionarlas y arrástralas para ordenarlas.</li>
-            <li>Pulsa <strong>📝 Comandos $sm</strong>, copia cada parte y pégala en Discord en el orden indicado.</li>
+            <li>Pulsa el botón flotante <strong>📝 Copiar $sm</strong> (esquina inferior derecha), copia cada parte y pégala en Discord en el orden indicado.</li>
           </ol>
           <div class="note">Todo se guarda automáticamente en tu navegador. Para llevarte tus datos a otro dispositivo usa <strong>💾 Guardar proyecto</strong>.</div>
         </div>
@@ -761,7 +844,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
       <details>
         <summary>📝 Exportar el orden a Mudae ($sm)</summary>
         <div class="tbody">
-          <p>Cuando tengas el orden que quieres, pulsa <strong>📝 Comandos $sm</strong>. La página genera comandos <code>$sm Nombre1 $Nombre2 $Nombre3...</code> con los nombres de tus personajes.</p>
+          <p>Cuando tengas el orden que quieres, pulsa el botón flotante <strong>📝 Copiar $sm</strong> (esquina inferior derecha). La página genera comandos <code>$sm Nombre1 $Nombre2 $Nombre3...</code> con los nombres de tus personajes.</p>
           <ol>
             <li>Los comandos se dividen en <strong>partes</strong> de máximo 1900 caracteres, para que quepan en un mensaje de Discord.</li>
             <li>Copia la <strong>Parte 1</strong> con su botón y pégala en Discord. Después la 2, y así sucesivamente.</li>
@@ -867,7 +950,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
               </ul></li>
             <li>El <strong>tamaño</strong> de las tarjetas se ajusta con el control de la barra de herramientas.</li>
             <li>El número de personajes y la kakera total aparecen en los chips encima de las tarjetas.</li>
-            <li><strong>✨ Sorpréndeme</strong> muestra un personaje al azar.</li>
+            <li><strong>🎲 Personaje random</strong> (en cada lista, pestaña Listas) muestra un personaje al azar de esa lista.</li>
             <li><strong>Atajos:</strong> <code>/</code> enfoca el buscador, <code>Ctrl+Z</code> deshace y <code>Esc</code> cierra ventanas.</li>
             <li><strong>Privacidad:</strong> tus datos se guardan solo en tu navegador. Si limpias los datos del sitio los perderás, así que guarda un proyecto de vez en cuando.</li>
           </ul>
@@ -881,6 +964,44 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
 <input type="file" id="fileInput" accept="image/*">
 <input type="file" id="projectInput" accept=".json,application/json">
 <div class="toast" id="toast"></div>
+
+<div class="modal-backdrop" id="expBackdrop">
+  <div class="modal">
+    <h2 style="margin:0 0 4px">📥 Exportar</h2>
+    <div class="hint" id="expInfo"></div>
+    <div class="section-title" style="margin-top:16px">Formato de descarga</div>
+    <div class="expopts" id="expFmt">
+      <button type="button" class="expopt" data-fmt="pdf"><b>📄 PDF</b><small>Un solo archivo con todas las páginas</small></button>
+      <button type="button" class="expopt" data-fmt="img"><b>🖼️ Imagen</b><small>PNG (varios archivos si es largo)</small></button>
+    </div>
+    <div class="section-title" style="margin-top:16px">Orden de exportación</div>
+    <div class="exp-order">
+      <select id="expOrder" class="sort-select" aria-label="Orden de exportación">
+        <option value="current">↕️ Orden actual (como lo ves ahora)</option>
+        <option value="az">🔤 A - Z</option>
+        <option value="za">🔤 Z - A</option>
+        <option value="kakera-desc">💎 Kakera (mayor a menor)</option>
+        <option value="kakera-asc">💎 Kakera (menor a mayor)</option>
+        <option value="rank-asc">🏆 Rank (mejor a peor)</option>
+        <option value="rank-desc">🏆 Rank (peor a mejor)</option>
+        <option value="series-az">📚 Serie (A - Z)</option>
+        <option value="series-za">📚 Serie (Z - A)</option>
+        <option value="series-desc">📚 Serie (más personajes primero)</option>
+        <option value="series-asc">📚 Serie (menos personajes primero)</option>
+      </select>
+    </div>
+    <div class="hint" id="expOrderHint" style="margin-top:6px">Solo cambia el archivo descargado: el orden de tus tarjetas no se modifica.</div>
+    <div class="section-title" style="margin-top:16px">Diseño</div>
+    <div class="expopts" id="expLayout">
+      <button type="button" class="expopt" data-lay="cards"><b>🃏 Cards</b><small>Como la ventana principal, con efectos de kakera y rank</small></button>
+      <button type="button" class="expopt" data-lay="rows"><b>📋 Lista en filas</b><small>Nombre, serie, kakera, rank y efectos</small></button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="expCancelBtn" type="button">Cancelar</button>
+      <button class="btn primary" id="expGoBtn" type="button">Descargar</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal-backdrop" id="settingsBackdrop">
   <div class="modal">
@@ -1203,8 +1324,21 @@ function escapeHTML(value) {
   //   Nombre 1.268 ka - https://...               ($mmsii-k)
   //   Nombre - Serie 1,268 ka                     ($mmsa+-k)
   //   #1,072 - Nombre - Serie 1,268 ka            ($mmsa+-kr)
+  // Limpia lo que añade Mudae al copiar (sobre todo en celular):
+  //   **#122** - Nombre **82** ka   |   \#122   |   82 :kakera:   |   <:kakera:4698358>   |   <https://...>
+  function cleanImportText(raw) {
+    return String(raw ?? '')
+      .replace(/[\u200b-\u200f\u2060\ufeff]/g, '')
+      .replace(/<a?:kakera:\d*>/gi, ' ka ')            // emoji personalizado en bruto
+      .replace(/:kakera:/gi, ' ka ')                     // emoji copiado como texto
+      .replace(/\\([*_#~`>\[\]()<-])/g, '$1')           // escapes de markdown: \# \* \_
+      .replace(/\*+/g, '')                               // negritas ** (también sueltas)
+      .replace(/<(https?:\/\/[^>\s]+)>/g, '$1')          // enlaces entre < >
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
   function parseImportLine(line) {
-    let text = String(line ?? '').replace(/[\u200b-\u200f\u2060\ufeff]/g, '').replace(/\*\*/g, '').trim();
+    let text = cleanImportText(line);
     if (!text) return null;
     let image = '', kakera = '', rank = '', series = '';
 
@@ -1220,7 +1354,8 @@ function escapeHTML(value) {
         text = text.slice(0, kaMatch.index).trim();
     }
 
-    const rankMatch = text.match(/^#\s*(\d[\d.,\u00a0\u202f]*)\s*[-–—:]\s*/);
+    // Rank: "#122 - Nombre", "#1,072: Nombre" o "#122 Nombre" (sin guion al copiar desde el celular)
+    const rankMatch = text.match(/^#\s*(\d[\d.,\u00a0\u202f]*)\s*(?:[-–—:]\s*|\s+(?=\S))/);
     if (rankMatch) {
         rank = fmtNum(rankMatch[1]);
         text = text.slice(rankMatch[0].length).trim();
@@ -1333,8 +1468,19 @@ function escapeHTML(value) {
     } else {
       list.innerHTML = items.map(itemCardHTML).join('');
     }
-      
+    watchMain();
     saveItems();
+  }
+
+  // Solo las tarjetas cercanas a la pantalla animan sus efectos y se dibujan (el resto queda en pausa).
+  // Así el arrastre no depende de cuántas tarjetas tengas: con 154 solo trabajan ~las visibles.
+  let mainIO = null;
+  function watchMain() {
+    if (mainIO) { mainIO.disconnect(); mainIO = null; }
+    const cards = list.querySelectorAll('.item');
+    if (!('IntersectionObserver' in window)) return;
+    mainIO = new IntersectionObserver(es => es.forEach(en => en.target.classList.toggle('io-off', !en.isIntersecting)), { rootMargin: '400px 0px' });
+    cards.forEach(c => mainIO.observe(c));
   }
 
   // --- SELECCIÓN Y CLICS ---
@@ -1587,10 +1733,11 @@ function escapeHTML(value) {
     /^(avg|average|promedio)\s*:/i,
     /^top\s*\d+\s*value\s*:/i,
     /^(total\s*value|valor\s*total)\s*:/i,
+    /^(avg|average)\s*value\s*:/i,
     /^page\s+\d+\s*(\/|of)\s*\d+\s*$/i
   ];
   function isHeaderLine(line) {
-    const t = String(line).replace(/[\u200b-\u200f\u2060\ufeff*_`>]/g, '').trim();
+    const t = cleanImportText(line).replace(/[_`>]/g, '').trim();
     return HEADER_RES.some(re => re.test(t));
   }
 
@@ -1659,6 +1806,22 @@ function escapeHTML(value) {
     list.querySelectorAll('.item.over').forEach(c => c.classList.remove('over'));
   }
   
+
+  // Animación FLIP por lotes: primero se leen todas las posiciones y después se escriben los estilos
+  // (evita forzar un reflow por tarjeta). Solo anima las tarjetas visibles en pantalla.
+  function flipCards(cards, oldRects) {
+    const vh = window.innerHeight + 200, moves = [];
+    for (const card of cards) {
+      const old = oldRects.get(card.dataset.id); if (!old) continue;
+      const now = card.getBoundingClientRect();
+      const dx = old.left - now.left, dy = old.top - now.top;
+      if ((dx || dy) && now.bottom > -200 && now.top < vh) moves.push([card, dx, dy]);
+    }
+    for (const [card, dx, dy] of moves) { card.style.transition = 'none'; card.style.transform = `translate(${dx}px, ${dy}px)`; }
+    if (!moves.length) return;
+    requestAnimationFrame(() => { for (const [card] of moves) { card.style.transition = ''; card.style.transform = ''; } });
+  }
+
   function moveCardsToTarget(targetCard) {
     if (!draggedIds || !draggedIds.length || !targetCard) return;
     if (draggedIds.includes(Number(targetCard.dataset.id))) return;
@@ -1680,20 +1843,7 @@ function escapeHTML(value) {
         targetCard.before(...draggedNodes);
     }
 
-    for (const card of list.querySelectorAll('.item')) {
-      const old = oldRects.get(card.dataset.id);
-      const now = card.getBoundingClientRect();
-      const dx = old.left - now.left;
-      const dy = old.top - now.top;
-      if (dx || dy) {
-        card.style.transition = 'none';
-        card.style.transform = `translate(${dx}px, ${dy}px)`;
-        requestAnimationFrame(() => {
-          card.style.transition = '';
-          card.style.transform = '';
-        });
-      }
-    }
+    flipCards(list.querySelectorAll('.item'), oldRects);
     targetCard.classList.remove('over');
   }
 
@@ -1702,7 +1852,9 @@ function escapeHTML(value) {
   // Se oculta la nativa y se dibuja una copia del mismo tamaño y con transparencia fija (.7) que sigue al cursor.
   const BLANK_IMG = new Image(); BLANK_IMG.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
   let dragGhost = null;
-  function moveDragGhost(x, y) { if (dragGhost) dragGhost.style.transform = `translate(${x - dragGhost.offsetWidth / 2}px, ${y - dragGhost.offsetHeight / 2}px) rotate(-3deg)`; }
+  let ghostW = 0, ghostH = 0, ghostRaf = 0, ghostX = 0, ghostY = 0;
+  function paintGhost() { ghostRaf = 0; if (dragGhost) dragGhost.style.transform = `translate3d(${ghostX - ghostW / 2}px, ${ghostY - ghostH / 2}px, 0) rotate(-3deg)`; }
+  function moveDragGhost(x, y) { if (!dragGhost) return; ghostX = x; ghostY = y; if (!ghostRaf) ghostRaf = requestAnimationFrame(paintGhost); }
   function startDragGhost(e, card) {
     endDragGhost();
     if (!e.isTrusted) return; // el arrastre táctil ya dibuja su propia tarjeta
@@ -1710,11 +1862,11 @@ function escapeHTML(value) {
     const g = card.cloneNode(true);
     g.classList.remove('dragging', 'over', 'selected');
     g.removeAttribute('data-id'); g.removeAttribute('draggable');
-    Object.assign(g.style, { position: 'fixed', left: '0', top: '0', width: card.offsetWidth + 'px', zIndex: 300, pointerEvents: 'none', opacity: '.7', margin: '0', transition: 'none', cursor: 'grabbing', boxShadow: '0 10px 18px rgba(0,0,0,.45)', willChange: 'transform' });
-    document.body.appendChild(g); dragGhost = g; document.body.classList.add('is-dragging');
+    Object.assign(g.style, { position: 'fixed', left: '0', top: '0', width: card.offsetWidth + 'px', zIndex: 300, pointerEvents: 'none', opacity: '.7', margin: '0', transition: 'none', cursor: 'grabbing', boxShadow: '0 10px 18px rgba(0,0,0,.45)', willChange: 'transform', contain: 'layout style' });
+    document.body.appendChild(g); dragGhost = g; ghostW = g.offsetWidth; ghostH = g.offsetHeight; document.body.classList.add('is-dragging');
     moveDragGhost(e.clientX, e.clientY);
   }
-  function endDragGhost() { document.body.classList.remove('is-dragging'); if (dragGhost) { dragGhost.remove(); dragGhost = null; } }
+  function endDragGhost() { document.body.classList.remove('is-dragging'); if (ghostRaf) { cancelAnimationFrame(ghostRaf); ghostRaf = 0; } if (dragGhost) { dragGhost.remove(); dragGhost = null; } }
   document.addEventListener('dragover', e => { if (dragGhost) moveDragGhost(e.clientX, e.clientY); }, true);
   document.addEventListener('drop', endDragGhost, true);
   document.addEventListener('dragend', endDragGhost, true);
@@ -1835,6 +1987,8 @@ function escapeHTML(value) {
     const box = document.getElementById('exportParts');
     if (!box) return;
     exportParts = buildParts();
+    const fc = document.getElementById('smFabCount');
+    if (fc) { fc.textContent = exportParts.length; fc.hidden = !exportParts.length; }
     if (!exportParts.length) { box.innerHTML = '<div class="hint" style="margin-top:10px">Aún no hay personajes para exportar.</div>'; return; }
     const total = exportParts.length;
     box.innerHTML = exportParts.map((t, i) => `
@@ -1856,8 +2010,21 @@ function escapeHTML(value) {
     setTimeout(() => { btn.textContent = old; }, 1500);
   });
 
-  document.getElementById('toggleExportBtn').addEventListener('click', () => {
-    document.getElementById('exportEditorSection').classList.toggle('open');
+  const smPanel = document.getElementById('exportEditorSection'), smFab = document.getElementById('toggleExportBtn');
+  function setSmOpen(on) {
+    smPanel.classList.toggle('open', on);
+    smFab.classList.toggle('on', on);
+    smFab.setAttribute('aria-expanded', String(on));
+  }
+  smFab.addEventListener('click', () => setSmOpen(!smPanel.classList.contains('open')));
+  document.getElementById('smCloseBtn').addEventListener('click', () => setSmOpen(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && smPanel.classList.contains('open') && !document.querySelector('.modal-backdrop.open')) setSmOpen(false); });
+  // Cerrar al tocar fuera del panel
+  document.addEventListener('pointerdown', e => {
+    if (!smPanel.classList.contains('open')) return;
+    if (smPanel.contains(e.target) || smFab.contains(e.target)) return;
+    if (e.target.closest('.modal-backdrop, .toast')) return;
+    setSmOpen(false);
   });
 
   document.getElementById('exportFormattedBtn').addEventListener('click', () => {
@@ -1963,6 +2130,8 @@ function escapeHTML(value) {
             <button class="btn small" data-lact="selall" data-list="${l.id}">${nsel && nsel === mem.length ? 'Deseleccionar' : 'Seleccionar todo'}</button>
             <button class="btn small" data-lact="copyall" data-list="${l.id}" title="Copia los nombres de toda la lista separados por ' - '">📋 Copiar todos</button>
             <button class="btn small danger" data-lact="unsel" data-list="${l.id}" ${nsel ? '' : 'hidden'}>Quitar seleccionados (${nsel})</button>
+            <button class="btn small" data-lact="random" data-list="${l.id}" title="Muestra un personaje al azar de esta lista">🎲 Personaje random</button>
+            <button class="btn small" data-lact="export" data-list="${l.id}" title="Exportar esta lista como PDF o imagen">📥 Exportar</button>
             <button class="btn small" data-lact="rename" data-list="${l.id}">Renombrar</button>
             <button class="btn small danger" data-lact="delete" data-list="${l.id}">Eliminar lista</button>
           </div></div>
@@ -2029,6 +2198,11 @@ function escapeHTML(value) {
       ids.forEach(m => lSel.delete(l.id + ':' + m));
       saveItems(); toast(`${ids.length} quitados de "${l.name}"`); return;
     }
+    if (lb.dataset.lact === 'random') {
+      const pool = l.members.map(getItem).filter(Boolean);
+      if (!pool.length) return toast('Esta lista está vacía.');
+      spotlight(pool); return;
+    }
     if (lb.dataset.lact === 'rename') {
       const name = (prompt('Nuevo nombre de la lista:', l.name) || '').trim();
       if (name) { l.name = name; saveItems(); }
@@ -2055,14 +2229,7 @@ function escapeHTML(value) {
     if (!nodes.length || nodes.includes(target)) return;
     const old = new Map(before.map(c => [c.dataset.id, c.getBoundingClientRect()]));
     if (before.indexOf(nodes[0]) < before.indexOf(target)) target.after(...nodes); else target.before(...nodes);
-    zoneCards(zone).forEach(c => {
-      const o = old.get(c.dataset.id), n = c.getBoundingClientRect();
-      const dx = o.left - n.left, dy = o.top - n.top;
-      if (dx || dy) {
-        c.style.transition = 'none'; c.style.transform = `translate(${dx}px, ${dy}px)`;
-        requestAnimationFrame(() => { c.style.transition = ''; c.style.transform = ''; });
-      }
-    });
+    flipCards(zoneCards(zone), old);
     target.classList.remove('over');
   }
   viewLists.addEventListener('dragstart', e => {
@@ -2447,6 +2614,7 @@ function escapeHTML(value) {
     const any = items.some(i => i.selected);
     ['selCopyBtn', 'selSeriesBtn', 'selTopBtn', 'selBottomBtn'].forEach(id => { $(id).hidden = !any; });
     $('selBar').classList.toggle('on', any);
+    document.body.classList.toggle('sel-on', any);
     $('selCount').textContent = items.filter(i => i.selected).length;
     try { renderTierBar(); } catch (e) {}
     try { renderSeriesList(); } catch (e) {}
@@ -2710,16 +2878,19 @@ function escapeHTML(value) {
     render(); toast('Mezclado 🔀 (Ctrl+Z para deshacer)');
   });
 
-  function spotlight() {
-    if (!items.length) return toast('Aún no hay personajes.');
-    let it; do { it = items[Math.floor(Math.random() * items.length)]; } while (items.length > 1 && it.id === spotId);
+  let spotPool = null;
+  function spotlight(pool) {
+    // pool: arreglo de personajes (lista elegida). Sin argumento (botón «Otro») repite sobre la misma lista.
+    if (Array.isArray(pool)) spotPool = pool;
+    const arr = spotPool || items;
+    if (!arr.length) return toast('Esta lista está vacía.');
+    let it; do { it = arr[Math.floor(Math.random() * arr.length)]; } while (arr.length > 1 && it.id === spotId);
     spotId = it.id;
     $('spotCard').innerHTML = `${it.image ? `<img referrerpolicy="no-referrer" src="${escapeHTML(it.image)}" alt="">` : ''}<h3>${escapeHTML(it.text)}</h3>
       <div class="hint">${it.rank ? '🏆 #' + escapeHTML(it.rank) + ' · ' + escapeHTML(rankTitle(it)) + '  ' : ''}${it.kakera ? '💎 ' + escapeHTML(fmtNum(it.kakera)) : ''}${it.series ? '<br>📚 ' + escapeHTML(it.series) : ''}</div>`;
     $('spotBackdrop').classList.add('open');
   }
-  $('spotBtn').addEventListener('click', spotlight);
-  $('spotNextBtn').addEventListener('click', spotlight);
+  $('spotNextBtn').addEventListener('click', () => spotlight());
   $('spotCopyBtn').addEventListener('click', () => { const it = getItem(spotId); if (it) copyText(it.text); });
   $('spotCloseBtn').addEventListener('click', () => $('spotBackdrop').classList.remove('open'));
   $('spotBackdrop').addEventListener('click', e => { if (e.target.id === 'spotBackdrop') e.target.classList.remove('open'); });
@@ -2905,6 +3076,392 @@ function escapeHTML(value) {
     document.addEventListener('touchend', finish(true));
     document.addEventListener('touchcancel', finish(false));
   })();
+
+
+  // =====================================================================
+  // EXPORTAR ORDEN COMO PDF / IMAGEN(ES)
+  // Se dibuja en canvas (sin imágenes remotas, así nunca se "ensucia" el canvas por CORS).
+  // Muestra posición, nombre, serie, kakera, rank y los efectos (brillo por kakera y nivel de rank).
+  // Si hay muchos personajes se divide en varias páginas.
+  // =====================================================================
+  const REP = { W: 1240, H: 1754, M: 40, ROW: 112, CGAP: 16, COLS: 5, CTOP1: 358, CTOPN: 124, TOP1: 372, TOPN: 112, BOT: 54 };
+  const FONT = "'Nunito','Segoe UI',system-ui,sans-serif";
+  function repRoundRect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+  function repFit(c, text, maxW) { text = String(text ?? ''); if (c.measureText(text).width <= maxW) return text; while (text.length > 1 && c.measureText(text + '…').width > maxW) text = text.slice(0, -1); return text.trimEnd() + '…'; }
+  function tierInfo(item) { const k = tierOf(item); return TIERS.find(t => t.k === k) || TIERS[0]; }
+  function repStats(arr, withRank) {
+    const totalKa = arr.reduce((a, i) => a + num(i.kakera), 0);
+    const st = { count: arr.length, totalKa };
+    if (withRank) {
+      const ranks = arr.map(i => num(i.rank)).filter(r => r > 0).sort((a, b) => a - b);
+      const top = ranks.slice(0, 15);
+      st.ranked = ranks.length; st.topN = top.length;
+      st.sumTop = top.reduce((a, b) => a + b, 0);
+      st.avg = ranks.length ? Math.round(ranks.reduce((a, b) => a + b, 0) / ranks.length) : 0;
+    }
+    return st;
+  }
+  const nf = n => Number(n).toLocaleString('en-US');
+
+  // Carga de imágenes: directo (CORS) -> proxies de imágenes con CORS -> marcador. Así el canvas no se 'ensucia'.
+  const imgCache = new Map();
+  function loadImgEl(src) {
+    return new Promise(res => {
+      const im = new Image(); im.crossOrigin = 'anonymous'; im.referrerPolicy = 'no-referrer';
+      const t = setTimeout(() => { im.onload = im.onerror = null; res(null); }, 15000);
+      im.onload = () => { clearTimeout(t); res(im); };
+      im.onerror = () => { clearTimeout(t); res(null); };
+      im.src = src;
+    });
+  }
+  async function loadReportImage(url) {
+    if (!url) return null;
+    if (imgCache.has(url)) return imgCache.get(url);
+    const tries = /^data:/i.test(url) ? [url] : [
+      url,
+      'https://wsrv.nl/?output=jpg&w=240&url=' + encodeURIComponent(url),
+      'https://images.weserv.nl/?output=jpg&w=240&url=' + encodeURIComponent(url),
+      'https://corsproxy.io/?' + encodeURIComponent(url)
+    ];
+    let im = null;
+    for (const t of tries) { im = await loadImgEl(t); if (im) break; }
+    imgCache.set(url, im);
+    return im;
+  }
+  async function preloadReportImages(arr) {
+    const urls = [...new Set(arr.map(i => i.image).filter(Boolean))], map = new Map();
+    let done = 0, next = 0, ok = 0;
+    const worker = async () => {
+      while (next < urls.length) {
+        const u = urls[next++]; const im = await loadReportImage(u);
+        if (im) { map.set(u, im); ok++; }
+        done++; toast(`Cargando imágenes ${done}/${urls.length}…`);
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(6, urls.length) }, worker));
+    return { map, total: urls.length, ok };
+  }
+
+
+  // Dibuja una card como en la ventana principal: imagen, nombre, insignias y efectos (brillo por kakera / nivel de rank)
+  function drawReportCard(c, it, pos, x, y, w, h, im, P) {
+    const t = Number((tierOf(it).match(/\d+/) || [0])[0]), ti = TIERS[t], rt = rankTier(it), ri = RANKS[rt];
+    const rnd = seeded(it.id * 7919 + 13), R = 16;
+    const glow = [0, 0, 14, 18, 22, 26, 30, 36, 42, 48][t] || 0;
+    // halo + fondo
+    c.save();
+    if (glow) { c.shadowColor = ti.c; c.shadowBlur = glow; }
+    c.fillStyle = P.PANEL2; repRoundRect(c, x, y, w, h, R); c.fill();
+    c.restore();
+    // contenido recortado
+    c.save(); repRoundRect(c, x, y, w, h, R); c.clip();
+    if (im) {
+      const iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height, k = Math.max(w / iw, h / ih), sw = w / k, sh = h / k;
+      c.drawImage(im, (iw - sw) / 2, (ih - sh) / 2, sw, sh, x, y, w, h);
+    } else {
+      c.fillStyle = P.PANEL2; c.fillRect(x, y, w, h); c.fillStyle = P.MUTED; c.font = `700 15px ${FONT}`; c.textAlign = 'center';
+      c.fillText(it.image ? 'Sin carga' : 'Sin imagen', x + w / 2, y + h / 2); c.textAlign = 'left';
+    }
+    // tinte de color y brillo diagonal según el nivel
+    if (t >= 2) { const g = c.createLinearGradient(x, y + h, x, y); g.addColorStop(0, ti.c + '55'); g.addColorStop(.45, ti.c + '00'); c.fillStyle = g; c.fillRect(x, y, w, h); }
+    if (t >= 4) {
+      const g = c.createLinearGradient(x, y, x + w, y + h);
+      g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.42, 'rgba(255,255,255,0)'); g.addColorStop(.5, `rgba(255,255,255,${(0.1 + t * 0.03).toFixed(2)})`); g.addColorStop(.58, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+      c.fillStyle = g; c.fillRect(x, y, w, h);
+    }
+    // chispas (niveles altos)
+    if (t >= 7) {
+      const cols = t === 9 ? ['#ff6b5c', '#ff9f43', '#ffd24d', '#fff0a0'] : ['#ffcb5c', '#ffd98a', '#fff0a0'], nP = t === 9 ? 22 : t === 8 ? 12 : 7;
+      for (let i = 0; i < nP; i++) {
+        const px = x + 8 + rnd() * (w - 16), py = y + h * (0.25 + rnd() * 0.7), r = 1.6 + rnd() * 2.4, col = cols[Math.floor(rnd() * cols.length)];
+        c.save(); c.shadowColor = col; c.shadowBlur = 8; c.fillStyle = col; c.beginPath(); c.arc(px, py, r, 0, 7); c.fill(); c.restore();
+      }
+      for (let i = 0; i < (t >= 8 ? 4 : 2); i++) {
+        const px = x + 14 + rnd() * (w - 28), py = y + 40 + rnd() * (h - 120), r = 6 + rnd() * 6;
+        c.save(); c.shadowColor = '#fff0a0'; c.shadowBlur = 10; c.fillStyle = '#fff6c8'; c.beginPath();
+        for (let q = 0; q < 8; q++) { const a = q * Math.PI / 4 - Math.PI / 2, rr = q % 2 ? r * .28 : r; c.lineTo(px + Math.cos(a) * rr, py + Math.sin(a) * rr); }
+        c.closePath(); c.fill(); c.restore();
+      }
+    }
+    // nombre + serie abajo
+    const gh = 118, g2 = c.createLinearGradient(0, y + h - gh, 0, y + h); g2.addColorStop(0, 'rgba(12,10,22,0)'); g2.addColorStop(1, 'rgba(12,10,22,.95)');
+    c.fillStyle = g2; c.fillRect(x, y + h - gh, w, gh);
+    c.textAlign = 'center'; c.fillStyle = '#fff'; c.font = `800 18px ${FONT}`;
+    const words = String(it.text || 'Sin nombre').split(' '); const lines = []; let cur = '';
+    words.forEach(wd => { const tr = cur ? cur + ' ' + wd : wd; if (c.measureText(tr).width > w - 20 && cur) { lines.push(cur); cur = wd; } else cur = tr; });
+    if (cur) lines.push(cur);
+    const shown = lines.slice(0, 2); if (lines.length > 2) shown[1] = repFit(c, shown[1] + ' ' + lines.slice(2).join(' '), w - 20);
+    const hasSer = !!it.series, base = y + h - 12 - (hasSer ? 20 : 0) - (shown.length - 1) * 22;
+    shown.forEach((ln, i) => c.fillText(repFit(c, ln, w - 20), x + w / 2, base + i * 22));
+    if (hasSer) { c.fillStyle = 'rgba(255,255,255,.7)'; c.font = `700 13px ${FONT}`; c.fillText(repFit(c, it.series, w - 20), x + w / 2, y + h - 14); }
+    c.textAlign = 'left';
+    // insignias: rank y kakera
+    const badge = (bx, by, txt, color, o2) => {
+      c.font = `800 ${o2.fs || 15}px ${FONT}`; const bw = c.measureText(txt).width + 16, bh = 25;
+      c.save(); if (o2.glow) { c.shadowColor = o2.glow; c.shadowBlur = 10; }
+      if (o2.gold) { const g = c.createLinearGradient(bx, by, bx + bw, by); g.addColorStop(0, '#ffd24d'); g.addColorStop(.5, '#fffbe0'); g.addColorStop(1, '#ffd24d'); c.fillStyle = g; }
+      else c.fillStyle = o2.bg || 'rgba(12,10,22,.78)';
+      repRoundRect(c, bx, by, bw, bh, 7); c.fill(); c.restore();
+      if (o2.border) { c.strokeStyle = o2.border; c.lineWidth = 1.6; repRoundRect(c, bx, by, bw, bh, 7); c.stroke(); }
+      c.fillStyle = color; c.fillText(txt, bx + 8, by + bh - 7); return bw;
+    };
+    let by = y + 8;
+    if (it.rank) {
+      const strong = rt >= 1 && rt <= 4;
+      badge(x + 8, by, '#' + nf(num(it.rank)), rt === 1 ? '#2a1c00' : ri.c, { fs: rt === 1 ? 17 : rt === 2 ? 16 : 15, gold: rt === 1, border: rt === 1 ? '#fff6c8' : (strong ? ri.c : ri.c + '88'), glow: strong ? ri.c : null });
+      by += 30;
+      if (rt === 1) { // destellos del rank mítico
+        const rr = seeded(it.id * 104729 + 7);
+        for (let i = 0; i < 9; i++) { const a = (-50 + rr() * 180) * Math.PI / 180, d = 26 + rr() * 30; c.fillStyle = '#fff6c8'; c.beginPath(); c.arc(x + 30 + Math.cos(a) * d, y + 20 + Math.sin(a) * d, 1.2 + rr() * 1.8, 0, 7); c.fill(); }
+      }
+    }
+    if (it.kakera) badge(x + 8, by, '💎 ' + nf(num(it.kakera)), P.KA, { border: t >= 4 ? ti.c : null, glow: t >= 6 ? ti.c : null });
+    // número de posición (arriba a la derecha)
+    c.font = `800 14px ${FONT}`; const ps = '#' + pos + '', pw = c.measureText(ps).width + 14;
+    c.fillStyle = 'rgba(12,10,22,.7)'; repRoundRect(c, x + w - pw - 8, y + 8, pw, 24, 12); c.fill();
+    c.fillStyle = 'rgba(255,255,255,.85)'; c.fillText(ps, x + w - pw - 1, y + 25);
+    c.restore();
+    // borde de color según el brillo
+    c.strokeStyle = t ? ti.c : P.LINE; c.lineWidth = t >= 4 ? 3.5 : t ? 2.5 : 2; repRoundRect(c, x, y, w, h, R); c.stroke();
+  }
+
+  function drawReportPage(arr, o, pageIdx, pages, from, to) {
+    const { W, H, M } = REP, S = 1;
+    const cv = document.createElement('canvas'); cv.width = W * S; cv.height = H * S;
+    const c = cv.getContext('2d');
+    const cs = getComputedStyle(document.documentElement);
+    const col = (v, d) => (cs.getPropertyValue(v).trim() || d);
+    const BG = col('--bg', '#15131f'), PANEL = col('--panel', '#1e1b2e'), PANEL2 = col('--panel2', '#262239'), INK = col('--ink', '#efecfa'),
+          MUTED = col('--muted', '#9d98b8'), LINE = col('--line', '#332e4d'), ACC = col('--accent', '#ff6f9c'), KA = col('--ka', '#6fe0ff'), RK = col('--rank', '#ffcb5c');
+    c.fillStyle = BG; c.fillRect(0, 0, W, H);
+    c.textBaseline = 'alphabetic';
+    let y = 0;
+    if (pageIdx === 0) {
+      // Cabecera con resumen
+      c.fillStyle = PANEL; repRoundRect(c, M, M, W - 2 * M, 296, 22); c.fill();
+      c.strokeStyle = LINE; c.lineWidth = 2; c.stroke();
+      c.fillStyle = INK; c.font = `900 46px ${FONT}`; c.fillText(repFit(c, o.title, W - 2 * M - 60), M + 30, M + 70);
+      c.fillStyle = MUTED; c.font = `700 19px ${FONT}`;
+      c.fillText(o.subtitle + ' · ' + new Date().toLocaleDateString('es'), M + 30, M + 102);
+      const boxes = [['Personajes', nf(o.st.count), INK], ['Kakera total', nf(o.st.totalKa) + ' ka', KA]];
+      if (o.withRank) {
+        boxes.push([`Suma rank top ${o.st.topN || 15}`, o.st.topN ? '#' + nf(o.st.sumTop) : '—', RK]);
+        boxes.push([`Promedio rank (${nf(o.st.ranked)} con rank)`, o.st.ranked ? '#' + nf(o.st.avg) : '—', RK]);
+      }
+      const gap = 16, bw = (W - 2 * M - 60 - gap * (boxes.length - 1)) / boxes.length, by = M + 128;
+      boxes.forEach((b, i) => {
+        const bx = M + 30 + i * (bw + gap);
+        c.fillStyle = PANEL2; repRoundRect(c, bx, by, bw, 132, 16); c.fill();
+        c.fillStyle = MUTED; c.font = `800 17px ${FONT}`; c.fillText(repFit(c, b[0], bw - 30), bx + 18, by + 36);
+        c.fillStyle = b[2]; c.font = `900 ${o.withRank ? 34 : 42}px ${FONT}`; c.fillText(repFit(c, b[1], bw - 30), bx + 18, by + 92);
+      });
+      y = REP.TOP1;
+    } else {
+      c.fillStyle = INK; c.font = `900 30px ${FONT}`; c.fillText(repFit(c, o.title, 760), M, M + 38);
+      c.fillStyle = MUTED; c.font = `700 17px ${FONT}`;
+      c.fillText(`${nf(o.st.count)} personajes · ${nf(o.st.totalKa)} ka`, M, M + 66);
+      y = REP.TOPN;
+    }
+    if (o.layout === 'cards') {
+      const gx = REP.CGAP, cw = (W - 2 * M - gx * (REP.COLS - 1)) / REP.COLS, ch = Math.round(cw * 14 / 9);
+      const gy0 = pageIdx === 0 ? REP.CTOP1 : REP.CTOPN;
+      for (let n = from; n < to; n++) {
+        const k = n - from, cx = M + (k % REP.COLS) * (cw + gx), cy = gy0 + Math.floor(k / REP.COLS) * (ch + gx);
+        drawReportCard(c, arr[n], n + 1, cx, cy, cw, ch, o.imgs && o.imgs.get(arr[n].image), { PANEL2, LINE, MUTED, KA });
+      }
+    } else {
+    // Encabezado de columnas
+    const X = { pos: M + 16, img: M + 54, name: M + 140, ka: 720, rk: 830, fx1: 922, fx2: 1066 };
+    c.fillStyle = MUTED; c.font = `800 15px ${FONT}`;
+    c.fillText('#', X.pos, y - 12); c.fillText('IMG', X.img + 8, y - 12); c.fillText('PERSONAJE · SERIE', X.name, y - 12); c.fillText('KAKERA', X.ka, y - 12);
+    c.fillText('RANK', X.rk, y - 12); c.fillText('BRILLO', X.fx1, y - 12); c.fillText('NIVEL RANK', X.fx2, y - 12);
+    c.strokeStyle = LINE; c.lineWidth = 2; c.beginPath(); c.moveTo(M, y); c.lineTo(W - M, y); c.stroke();
+    // Filas
+    for (let n = from; n < to; n++) {
+      const it = arr[n], ry = y + 8 + (n - from) * REP.ROW, mid = ry + REP.ROW / 2;
+      const ti = tierInfo(it), ri = RANKS[rankTier(it)];
+      if ((n - from) % 2 === 0) { c.fillStyle = '#ffffff08'; repRoundRect(c, M, ry, W - 2 * M, REP.ROW - 6, 12); c.fill(); }
+      // franja y halo del color del brillo
+      if (ti.k) {
+        const g = c.createLinearGradient(M, 0, M + 360, 0); g.addColorStop(0, ti.c + '40'); g.addColorStop(1, ti.c + '00');
+        c.fillStyle = g; repRoundRect(c, M, ry, 360, REP.ROW - 6, 12); c.fill();
+      }
+      c.fillStyle = ti.k ? ti.c : LINE; repRoundRect(c, M, ry + 4, 6, REP.ROW - 14, 3); c.fill();
+      c.fillStyle = MUTED; c.font = `800 18px ${FONT}`; c.fillText(String(n + 1), X.pos, mid + 6);
+      // miniatura (recorte tipo 'cover' con esquinas redondeadas)
+      { const tw = 68, th = 98, tx = X.img, ty = ry + (REP.ROW - 6 - th) / 2, im = o.imgs && o.imgs.get(it.image);
+        c.save(); repRoundRect(c, tx, ty, tw, th, 9); c.clip();
+        if (im) {
+          const iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height, k = Math.max(tw / iw, th / ih), sw = tw / k, sh = th / k;
+          c.drawImage(im, (iw - sw) / 2, (ih - sh) / 2, sw, sh, tx, ty, tw, th);
+        } else {
+          c.fillStyle = PANEL2; c.fillRect(tx, ty, tw, th); c.fillStyle = MUTED; c.font = `700 11px ${FONT}`; c.textAlign = 'center';
+          c.fillText(it.image ? 'sin carga' : 'sin img', tx + tw / 2, ty + th / 2 + 4); c.textAlign = 'left';
+        }
+        c.restore();
+        c.strokeStyle = ti.k ? ti.c : LINE; c.lineWidth = 2; repRoundRect(c, tx, ty, tw, th, 9); c.stroke(); }
+      c.fillStyle = INK; c.font = `800 22px ${FONT}`; c.fillText(repFit(c, it.text || 'Sin nombre', X.ka - X.name - 20), X.name, mid - 3);
+      c.fillStyle = MUTED; c.font = `700 15px ${FONT}`; c.fillText(repFit(c, it.series || 'Sin serie', X.ka - X.name - 20), X.name, mid + 17);
+      c.font = `900 21px ${FONT}`;
+      c.fillStyle = it.kakera ? KA : MUTED; c.fillText(it.kakera ? nf(num(it.kakera)) + ' ka' : '—', X.ka, mid + 7);
+      c.fillStyle = it.rank ? RK : MUTED; c.fillText(it.rank ? '#' + nf(num(it.rank)) : '—', X.rk, mid + 7);
+      // Chips de efectos
+      const chip = (x, w, label, color, on, star) => {
+        c.fillStyle = on ? color + '26' : '#ffffff08'; repRoundRect(c, x, mid - 17, w, 34, 17); c.fill();
+        c.strokeStyle = on ? color : LINE; c.lineWidth = 2; c.stroke();
+        c.fillStyle = on ? color : MUTED; c.font = `800 15px ${FONT}`; c.textAlign = 'center';
+        c.fillText(repFit(c, (star ? '★ ' : '') + label, w - 16), x + w / 2, mid + 5); c.textAlign = 'left';
+      };
+      chip(X.fx1 - 4, 132, ti.k ? ti.n : 'Sin brillo', ti.c, !!ti.k, ti.k === 'tier-8' || ti.k === 'tier-9');
+      chip(X.fx2 - 4, 128, it.rank ? ri.n : 'Sin rank', ri.c, !!it.rank, rankTier(it) === 1);
+    }
+    }
+    // Pie
+    c.fillStyle = MUTED; c.font = `700 15px ${FONT}`;
+    c.fillText('Mudae Arranger', M, H - 26);
+    c.textAlign = 'right'; c.fillText(`Página ${pageIdx + 1} / ${pages} · ${from + 1}–${to} de ${arr.length}`, W - M, H - 26); c.textAlign = 'left';
+    return cv;
+  }
+
+  function buildReportCanvases(arr, o) {
+    let first, rest;
+    if (o.layout === 'cards') {
+      const ch = Math.round(((REP.W - 2 * REP.M - REP.CGAP * (REP.COLS - 1)) / REP.COLS) * 14 / 9), step = ch + REP.CGAP;
+      first = Math.floor((REP.H - REP.CTOP1 - REP.BOT + REP.CGAP) / step) * REP.COLS;
+      rest = Math.floor((REP.H - REP.CTOPN - REP.BOT + REP.CGAP) / step) * REP.COLS;
+    } else {
+      first = Math.floor((REP.H - REP.TOP1 - REP.BOT) / REP.ROW); rest = Math.floor((REP.H - REP.TOPN - REP.BOT) / REP.ROW);
+    }
+    const ranges = [[0, Math.min(arr.length, first)]]; let i = ranges[0][1];
+    while (i < arr.length) { ranges.push([i, Math.min(arr.length, i + rest)]); i += rest; }
+    return ranges.map((r, idx) => drawReportPage(arr, o, idx, ranges.length, r[0], r[1]));
+  }
+
+  function dlBlob(blob, name) {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }
+  const safeName = t => String(t || 'lista').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w\-]+/g, '_').replace(/^_+|_+$/g, '') || 'lista';
+  const canvasBlob = (cv, type, q) => new Promise(res => cv.toBlob(res, type, q));
+
+  // PDF mínimo: una imagen JPEG por página (A4)
+  async function buildPdf(canvases) {
+    const enc = new TextEncoder(), parts = [], offsets = [];
+    let len = 0;
+    const push = d => { const b = typeof d === 'string' ? enc.encode(d) : d; parts.push(b); len += b.length; };
+    const obj = (n, d) => { offsets[n] = len; push(`${n} 0 obj\n`); push(d); push('\nendobj\n'); };
+    const N = canvases.length, PW = 595.28, PH = 841.89;
+    push('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+    obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+    obj(2, `<< /Type /Pages /Count ${N} /Kids [${canvases.map((_, i) => `${3 + i * 3} 0 R`).join(' ')}] >>`);
+    for (let i = 0; i < N; i++) {
+      const cv = canvases[i], blob = await canvasBlob(cv, 'image/jpeg', 0.92), jpg = new Uint8Array(await blob.arrayBuffer());
+      const pg = 3 + i * 3, ct = pg + 1, im = pg + 2;
+      obj(pg, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${im} 0 R >> >> /Contents ${ct} 0 R >>`);
+      const content = `q ${PW} 0 0 ${PH} 0 0 cm /Im0 Do Q`;
+      obj(ct, `<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
+      offsets[im] = len; push(`${im} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${cv.width} /Height ${cv.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpg.length} >>\nstream\n`);
+      push(jpg); push('\nendstream\nendobj\n');
+    }
+    const total = 3 + N * 3, xref = len;
+    let x = `xref\n0 ${total}\n0000000000 65535 f \n`;
+    for (let n = 1; n < total; n++) x += String(offsets[n]).padStart(10, '0') + ' 00000 n \n';
+    push(x + `trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+    return new Blob(parts, { type: 'application/pdf' });
+  }
+
+  async function exportReport(arr, o, kind) {
+    if (!arr.length) return toast('No hay personajes para exportar.');
+    toast('Generando ' + (kind === 'pdf' ? 'PDF' : 'imagen') + '…');
+    try {
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      await new Promise(r => setTimeout(r, 30));
+      o.st = repStats(arr, o.withRank);
+      const pre = await preloadReportImages(arr); o.imgs = pre.map;
+      const cvs = buildReportCanvases(arr, o), base = safeName(o.title);
+      if (kind === 'pdf') {
+        dlBlob(await buildPdf(cvs), base + '.pdf');
+        toast(`PDF listo (${cvs.length} página${cvs.length > 1 ? 's' : ''})` + (pre.total > pre.ok ? ` · ${pre.total - pre.ok} imágenes no cargaron.` : '.'));
+      } else {
+        for (let i = 0; i < cvs.length; i++) {
+          dlBlob(await canvasBlob(cvs[i], 'image/png'), cvs.length > 1 ? `${base}_${String(i + 1).padStart(2, '0')}.png` : base + '.png');
+          if (i < cvs.length - 1) await new Promise(r => setTimeout(r, 350));
+        }
+        toast((cvs.length > 1 ? `${cvs.length} imágenes descargadas (si faltan, permite descargas múltiples)` : 'Imagen lista') + (pre.total > pre.ok ? ` · ${pre.total - pre.ok} no cargaron.` : '.'));
+      }
+    } catch (err) { console.error(err); toast('No se pudo generar el archivo.'); }
+  }
+
+  // --- Ventana de exportación (un solo botón: formato + diseño) ---
+  const expBackdrop = document.getElementById('expBackdrop');
+  let expCtx = null, expPrefs = { fmt: 'pdf', layout: 'cards', order: 'current', reverse: false };
+  try { Object.assign(expPrefs, JSON.parse(localStorage.getItem('mudae-export') || '{}')); } catch (e) {}
+  function syncExpUI() {
+    document.querySelectorAll('#expFmt .expopt').forEach(b => b.classList.toggle('active', b.dataset.fmt === expPrefs.fmt));
+    document.querySelectorAll('#expLayout .expopt').forEach(b => b.classList.toggle('active', b.dataset.lay === expPrefs.layout));
+    const so = document.getElementById('expOrder');
+    if (so) so.value = [...so.options].some(o => o.value === expPrefs.order) ? expPrefs.order : 'current';
+  }
+
+  // Ordena una copia de la lista solo para exportar (no toca el orden real de las tarjetas)
+  function sortForExport(arr, mode, reverse) {
+    const out = arr.slice();
+    const kk = i => num(i.kakera);
+    const rk = i => i.rank ? num(i.rank) : Infinity;
+    const nm = i => (i.text || '').toLowerCase();
+    if (mode && mode !== 'current') {
+      if (mode.startsWith('series-')) {
+        const sc = new Map(); out.forEach(i => { const k = serKey(i); sc.set(k, (sc.get(k) || 0) + 1); });
+        const byName = (ka, kb) => ka.localeCompare(kb, 'es', { sensitivity: 'base' });
+        out.sort((a, b) => {
+          const ka = serKey(a), kb = serKey(b);
+          if (ka === kb) return 0;                 // misma serie: se conserva el orden actual
+          if (!ka) return 1; if (!kb) return -1;   // sin serie al final
+          if (mode === 'series-az') return byName(ka, kb);
+          if (mode === 'series-za') return byName(kb, ka);
+          if (mode === 'series-desc') return (sc.get(kb) - sc.get(ka)) || byName(ka, kb);
+          return (sc.get(ka) - sc.get(kb)) || byName(ka, kb);
+        });
+      } else {
+        out.sort((a, b) => {
+          switch (mode) {
+            case 'az': return nm(a).localeCompare(nm(b));
+            case 'za': return nm(b).localeCompare(nm(a));
+            case 'kakera-desc': return kk(b) - kk(a);
+            case 'kakera-asc': return kk(a) - kk(b);
+            case 'rank-asc': { const x = rk(a), y = rk(b); return x === y ? 0 : x - y; }
+            case 'rank-desc': { const x = rk(a), y = rk(b); if (x === Infinity && y === Infinity) return 0; if (x === Infinity) return 1; if (y === Infinity) return -1; return y - x; }
+            default: return 0;
+          }
+        });
+      }
+    }
+    return reverse ? out.reverse() : out;
+  }
+  function openExport(ctx) {
+    expCtx = ctx;
+    const n = ctx.arr().length;
+    document.getElementById('expInfo').textContent = `${ctx.title} · ${n} personaje${n === 1 ? '' : 's'}` + (ctx.withRank ? ' · incluye suma del top 15 y promedio de rank' : '');
+    syncExpUI(); expBackdrop.classList.add('open');
+  }
+  document.getElementById('expFmt').addEventListener('click', e => { const b = e.target.closest('[data-fmt]'); if (!b) return; expPrefs.fmt = b.dataset.fmt; syncExpUI(); });
+  document.getElementById('expLayout').addEventListener('click', e => { const b = e.target.closest('[data-lay]'); if (!b) return; expPrefs.layout = b.dataset.lay; syncExpUI(); });
+  document.getElementById('expOrder').addEventListener('change', e => { expPrefs.order = e.target.value; });
+  document.getElementById('expCancelBtn').addEventListener('click', () => expBackdrop.classList.remove('open'));
+  expBackdrop.addEventListener('click', e => { if (e.target === expBackdrop) expBackdrop.classList.remove('open'); });
+  document.getElementById('expGoBtn').addEventListener('click', () => {
+    if (!expCtx) return;
+    try { localStorage.setItem('mudae-export', JSON.stringify(expPrefs)); } catch (e) {}
+    expBackdrop.classList.remove('open');
+    exportReport(sortForExport(expCtx.arr(), expPrefs.order, false), { title: expCtx.title, subtitle: expCtx.subtitle, withRank: expCtx.withRank, layout: expPrefs.layout }, expPrefs.fmt);
+  });
+  document.getElementById('exportOpenBtn').addEventListener('click', () =>
+    openExport({ title: 'Mi harem', subtitle: 'Orden actual', withRank: true, arr: () => items.slice() }));
+  document.getElementById('listsBox').addEventListener('click', e => {
+    const b = e.target.closest('button[data-lact="export"]'); if (!b) return;
+    const l = getList(b.dataset.list); if (!l) return;
+    openExport({ title: l.name, subtitle: 'Lista', withRank: false, arr: () => l.members.map(getItem).filter(Boolean) });
+  });
 
   // Inicializar
   (async () => {
