@@ -8,9 +8,9 @@
 <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--bg:#15131f;--panel:#1e1b2e;--panel2:#262239;--ink:#efecfa;--muted:#9d98b8;--line:#332e4d;--accent:#ff6f9c;--accent-ink:#2a0d19;--ka:#6fe0ff;--rank:#ffcb5c;--danger:#ff8494}
+:root{color-scheme:dark;--bg:#15131f;--panel:#1e1b2e;--panel2:#262239;--ink:#efecfa;--muted:#9d98b8;--line:#332e4d;--accent:#ff6f9c;--inset:#14111f;--glow:#43205a66;--scroll:#110f1a;--hover:#2f2a47;--accent-text:var(--accent);--chipbg:#0c0a1699;--danger-bg:#2c1823;--danger-bg-h:#3a1d2c;--danger-line:#5a2c3b;--ok-bg:#12281f;--ok-ink:#7ee2a8;--code:#6fe0ff;--hfade:#ffffff0d;--ph1:#2a2542;--ph2:#1c1930;--line-h:#4b4470;--accent-ink:#2a0d19;--ka:#6fe0ff;--rank:#ffcb5c;--danger:#ff8494}
 *{box-sizing:border-box}
-body{margin:0;color:var(--ink);font:14px/1.45 'Nunito','Segoe UI',system-ui,sans-serif;background:radial-gradient(900px 420px at 90% -8%,#43205a66,transparent),radial-gradient(700px 360px at -5% 0,color-mix(in srgb,var(--accent) 9%,transparent),transparent),var(--bg);min-height:100vh}
+body{margin:0;color:var(--ink);font:14px/1.45 'Nunito','Segoe UI',system-ui,sans-serif;background:radial-gradient(900px 420px at 90% -8%,var(--glow),transparent),radial-gradient(700px 360px at -5% 0,color-mix(in srgb,var(--accent) 9%,transparent),transparent),var(--bg);min-height:100vh}
 button,input,textarea,select{font:inherit}button{cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .app{max-width:1400px;margin:auto;padding:24px 20px 56px}
@@ -21,7 +21,7 @@ h1{font-size:clamp(26px,4vw,38px);font-weight:900;letter-spacing:-.03em;margin:0
 .toolbar{display:flex;flex-direction:column;gap:16px;margin-bottom:18px} 
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
 .section-title{font-weight:800;margin-bottom:10px;font-size:15px}
-textarea{display:block;width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:#14111f;color:var(--ink);font-size:13px}
+textarea{display:block;width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--inset);color:var(--ink);font-size:13px}
 textarea:focus,input:focus,select:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
 ::placeholder{color:#6f6a8d}
 .import-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
@@ -29,11 +29,11 @@ textarea:focus,input:focus,select:focus{border-color:var(--accent);outline:none;
 .actions-grid{display:flex;flex-wrap:wrap;gap:8px}
 .actions-grid .btn{padding:11px 14px;flex:1 1 150px}
 .btn{border:1px solid var(--line);border-radius:10px;padding:9px 14px;background:var(--panel2);color:var(--ink);font-weight:700;transition:.15s;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
-.btn:hover{border-color:var(--accent);background:#2f2a47}
+.btn:hover{border-color:var(--accent);background:var(--hover)}
 .btn.primary{color:var(--accent-ink);background:var(--accent);border-color:var(--accent);font-weight:800}
 .btn.primary:hover{background:var(--accent);filter:brightness(1.15)}
-.btn.danger{color:var(--danger);border-color:#5a2c3b;background:#2c1823}
-.btn.danger:hover{background:#3a1d2c;border-color:var(--danger)}
+.btn.danger{color:var(--danger);border-color:var(--danger-line);background:var(--danger-bg)}
+.btn.danger:hover{background:var(--danger-bg-h);border-color:var(--danger)}
 .btn.small{font-size:12px;padding:7px 11px}
 .mudae-commands{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
 .list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 14px;flex-wrap:wrap}
@@ -43,14 +43,14 @@ textarea:focus,input:focus,select:focus{border-color:var(--accent);outline:none;
 #list{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--cw,140px),1fr));gap:14px;align-items:start}
 .item{position:relative;border-radius:14px;overflow:hidden;background:var(--panel);border:1px solid var(--line);cursor:grab;user-select:none;transition:transform .18s,box-shadow .18s,border-color .18s}
 .item:active{cursor:grabbing}
-.item:hover{transform:translateY(-3px);border-color:#4b4470}
+.item:hover{transform:translateY(-3px);border-color:var(--line-h)}
 .item.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
 .item.over{box-shadow:0 0 0 2px var(--ka),0 12px 28px #6fe0ff30}
 .item.dragging{opacity:.55;transform:scale(.95) rotate(-2deg)}
-.image-wrap{position:relative;width:100%;aspect-ratio:9/14;background:linear-gradient(160deg,#2a2542,#1c1930)}
+.image-wrap{position:relative;width:100%;aspect-ratio:9/14;background:linear-gradient(160deg,var(--ph1),var(--ph2))}
 .image-wrap img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .image-placeholder{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;color:#6f6a8d;font-size:12px;pointer-events:none}
-.item-name{position:absolute;left:0;right:0;bottom:0;padding:30px 8px 9px;background:linear-gradient(transparent,#0c0a16f2);font-weight:800;font-size:12px;line-height:1.2;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;word-break:break-word;pointer-events:none}
+.item-name{color:#fff;position:absolute;left:0;right:0;bottom:0;padding:30px 8px 9px;background:linear-gradient(transparent,#0c0a16f2);font-weight:800;font-size:12px;line-height:1.2;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;word-break:break-word;pointer-events:none}
 .item.selected .item-name{background:linear-gradient(transparent,var(--accent) 125%);background:linear-gradient(transparent,color-mix(in srgb,var(--accent) 88%,transparent) 125%);color:var(--accent-ink);text-shadow:none}
 .item.selected .item-name::before{content:'✓ '}
 .badges{position:absolute;top:6px;left:6px;display:flex;flex-direction:column;gap:3px;align-items:flex-start;z-index:1;pointer-events:none}
@@ -67,7 +67,7 @@ textarea:focus,input:focus,select:focus{border-color:var(--accent);outline:none;
 .modal{width:min(100%,480px);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 24px 70px #000a;max-height:90vh;overflow-y:auto}
 .modal h2{margin:0 0 14px;font-size:21px;font-weight:900}
 .modal label{display:block;margin:12px 0 5px;font-size:12px;color:var(--muted);font-weight:800}
-.modal input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#14111f;color:var(--ink)}
+.modal input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--inset);color:var(--ink)}
 .modal-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .url-row-modal{display:flex;gap:8px}
 .modal-actions{display:flex;justify-content:space-between;align-items:center;margin-top:22px;flex-wrap:wrap;gap:10px;padding-top:16px;border-top:1px solid var(--line)}
@@ -83,20 +83,20 @@ textarea:focus,input:focus,select:focus{border-color:var(--accent);outline:none;
 .export-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
 footer{margin-top:28px;color:var(--muted);font-size:12px;text-align:center}
 #fileInput,#projectInput{display:none}
-.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:#1a1626;padding:10px 18px;border-radius:12px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 30px #0008;z-index:100;text-align:center}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#1a1626;color:#f4f1ff;padding:10px 18px;border-radius:12px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 30px #0008;z-index:100;text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:860px){.toolbar{grid-template-columns:1fr}}
 @media(max-width:700px){#list{--cw:108px;gap:9px}.list-head-actions{width:100%;justify-content:space-between}header{flex-direction:column;align-items:flex-start}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
 [hidden]{display:none!important}
-.tabs{display:flex;gap:6px;margin-bottom:20px;border-bottom:1px solid var(--line)}
-.tab{background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);font-weight:800;font-size:15px;padding:10px 18px;margin-bottom:-1px}
+.tabs{display:flex;gap:6px;margin-bottom:20px;box-shadow:inset 0 -1px 0 var(--line)}
+.tab{background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);font-weight:800;font-size:15px;padding:10px 18px;margin-bottom:0}
 .tab:hover{color:var(--ink)}.tab.active{color:var(--ink);border-bottom-color:var(--accent)}
 .lists-layout{display:grid;grid-template-columns:clamp(360px,36vw,480px) 1fr;gap:16px;align-items:start}
 .pool{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto}
 .pool.over{border-color:var(--accent)}
-.pool input,.newlist input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#14111f;color:var(--ink);margin:6px 0 10px}
+.pool input,.newlist input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--inset);color:var(--ink);margin:6px 0 10px}
 .newlist{display:flex;gap:10px;align-items:center;margin-bottom:16px}.newlist input{margin:0}
 .mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px;align-items:start}
 .mini .item-name{font-size:11px;padding:24px 6px 7px}
@@ -113,15 +113,36 @@ footer{margin-top:28px;color:var(--muted);font-size:12px;text-align:center}
 .vbox h3{margin:0 0 8px;font-size:14px}
 .vlist{max-height:240px;overflow-y:auto;margin:8px 0;display:flex;flex-direction:column;gap:2px}
 .vlist label{display:flex;gap:8px;align-items:center;padding:3px 4px;border-radius:6px;font-size:13px}
-.vlist label:hover{background:#ffffff0d}
-.vok{margin-top:16px;padding:14px;border-radius:12px;background:#12281f;color:#7ee2a8;font-weight:800;text-align:center}
+.vlist label:hover{background:var(--hfade)}
+.vguide{list-style:none;margin:12px 0 4px;padding:0;display:grid;gap:8px}
+.vguide li{display:flex;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.vguide .vn{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:13px}
+.vguide .vt{flex:1;min-width:0;font-size:13px;line-height:1.4;color:var(--muted)}
+.vguide .vt b{color:var(--ink)}
+.vguide code{background:var(--inset);border:1px solid var(--line);padding:1px 6px;border-radius:6px;color:var(--code);font-size:12px}
+.vstat{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.vchip{border-radius:999px;padding:5px 11px;font-size:12px;font-weight:800;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+.vchip.ok{background:var(--ok-bg);color:var(--ok-ink);border-color:transparent}
+.vchip.warn{color:var(--accent-text);border-color:var(--accent)}
+.vmode{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.vmode label{margin:0;font-size:13px;font-weight:800;color:var(--muted)}
+.vmode select{flex:1 1 200px}
+.vfull{margin-top:14px}
+.vdiff{display:flex;flex-direction:column;gap:4px;max-height:260px;overflow-y:auto;margin:8px 0}
+.vdiff label{display:flex;gap:8px;align-items:flex-start;padding:5px 6px;border-radius:8px;font-size:13px;margin:0;color:var(--ink)}
+.vdiff label:hover{background:var(--hfade)}
+.vdiff small{display:block;color:var(--muted);font-size:12px;line-height:1.35}
+.vwarn{margin-top:14px;padding:12px;border-radius:12px;background:var(--panel2);border:1px solid var(--accent);color:var(--accent-text);font-size:13px;font-weight:700}
+.modal .vlist label{margin:0;color:var(--ink)}
+.modal .vlist input[type=checkbox],.modal .vdiff input[type=checkbox]{width:auto;flex:none;padding:0;margin:2px 0 0;border-radius:4px}
+.vok{margin-top:16px;padding:14px;border-radius:12px;background:var(--ok-bg);color:var(--ok-ink);font-weight:800;text-align:center}
 @media(max-width:860px){.lists-layout,.vcols{grid-template-columns:1fr}.pool{position:static;max-height:min(60vh,460px)}#poolGrid{max-width:460px;margin-inline:auto}}
 
 *{scrollbar-width:thin;scrollbar-color:#5a5280 transparent}
 ::-webkit-scrollbar{width:12px;height:12px}
-::-webkit-scrollbar-track{background:#110f1a}
+::-webkit-scrollbar-track{background:var(--scroll)}
 .pool::-webkit-scrollbar-track,.vlist::-webkit-scrollbar-track,.modal::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#6a5f9c,#4b4470);border-radius:999px;border:3px solid #110f1a}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#6a5f9c,#4b4470);border-radius:999px;border:3px solid var(--scroll)}
 .pool::-webkit-scrollbar-thumb,.vlist::-webkit-scrollbar-thumb,.modal::-webkit-scrollbar-thumb{border-color:transparent;background-clip:padding-box}
 ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 70%,#fff),var(--accent))}
 ::-webkit-scrollbar-corner{background:transparent}
@@ -132,9 +153,9 @@ footer{margin-top:28px;color:var(--muted);font-size:12px;text-align:center}
 
 .stats{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
 .chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-weight:800;font-size:13px}
-button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
+button.chip{color:var(--accent-text);border-color:var(--accent);cursor:pointer}
 .toolrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}
-.toolrow input[type=search]{flex:1 1 200px;max-width:320px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#14111f;color:var(--ink)}
+.toolrow input[type=search]{flex:1 1 200px;max-width:320px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--inset);color:var(--ink)}
 .toolrow input[type=range]{width:110px;accent-color:var(--accent)}
 .dots{display:flex;gap:6px;margin-left:auto;align-items:center}
 .dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--panel);box-shadow:0 0 0 1px var(--line);padding:0}
@@ -147,7 +168,8 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
 .spot img{max-width:100%;max-height:360px;border-radius:14px;display:block;margin:0 auto 12px}
 .spot h3{margin:0 0 4px;font-size:20px;font-weight:900}
 
-.tabs{overflow-x:auto;white-space:nowrap}
+.tabs{overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:none;-ms-overflow-style:none}
+.tabs::-webkit-scrollbar{display:none;width:0;height:0}
 @media(pointer:coarse){.btn{min-height:42px}.btn.small{min-height:38px}.card-btn{padding:8px 9px}.tab{padding:12px 18px}.dot{width:28px;height:28px}}
 @media(hover:none){.item:hover{transform:none}}
 @media(max-width:700px){
@@ -181,7 +203,7 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
 .fpanel{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .fhead{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;min-height:50px;background:none;border:0;color:var(--ink);font-weight:800;font-size:14px;text-align:left}
 .fhead .fsum{margin-left:auto;color:var(--muted);font-size:12px;font-weight:700;text-align:right}
-.fhead .fsum b{color:var(--accent)}
+.fhead .fsum b{color:var(--accent-text)}
 .fhead .chev{flex:none;transition:transform .2s;color:var(--muted)}
 .fpanel.open .chev{transform:rotate(180deg)}
 .fbody{padding:2px 14px 14px;display:grid;gap:16px;border-top:1px solid var(--line);padding-top:14px}
@@ -204,7 +226,7 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
 .tx{min-width:0;flex:1}
 .tx b{display:block;font-size:13px;line-height:1.2;font-weight:800}
 .tx small{display:block;color:var(--muted);font-size:11px;font-weight:700;line-height:1.25;margin-top:1px}
-.tn{flex:none;font-weight:900;font-size:13px;background:#0c0a1699;border-radius:8px;padding:2px 8px;min-width:30px;text-align:center}
+.tn{flex:none;font-weight:900;font-size:13px;background:var(--chipbg);border-radius:8px;padding:2px 8px;min-width:30px;text-align:center}
 .tchk{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:11px;color:transparent;font-weight:900}
 .tchip.on .tchk{background:var(--tc);border-color:var(--tc);color:#16121f}
 @media(pointer:coarse){.tchip{min-height:58px}.fl{min-height:38px;padding:7px 14px}}
@@ -222,56 +244,249 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
 }
 .item.rk-1{--rc:#fff0a0}.item.rk-2{--rc:#ffd24d}.item.rk-3{--rc:#ffa94d}.item.rk-4{--rc:#ff7f6b}.item.rk-5{--rc:#ff8fab}.item.rk-6{--rc:#9ad0ff}.item.rk-7{--rc:#6fe0e0}.item.rk-8{--rc:#c4c0e0}.item.rk-9{--rc:#a9d8b8}.item.rk-10{--rc:#7ee2a8}
 .badge.rank{color:var(--rc,var(--rank))}
-/* ===== Brillo de kakera animado: mejora gradualmente desde >200 (Zafiro) hasta >900 (Rubí) ===== */
+/* ===== Brillo de kakera animado: mejora gradualmente desde 200 (Zafiro) hasta 900 (Rubí) ===== */
 @keyframes kbreathe{0%,100%{opacity:.15}50%{opacity:1}}
 @keyframes kstreak{0%,55%{transform:translateX(0) skewX(-20deg)}100%{transform:translateX(520%) skewX(-20deg)}}
 @keyframes ktwinkle{0%,100%{opacity:0}35%,55%{opacity:1}}
 @keyframes kshine{0%{background-position:200% 0}100%{background-position:-100% 0}}
-#list .item.tier-2{--ga:18px;--gs:5s}
-#list .item.tier-3{--ga:22px;--gs:4.4s}
-#list .item.tier-4{--ga:26px;--gs:3.8s;--ss:7.5s;--sa:.16}
-#list .item.tier-5{--ga:30px;--gs:3.3s;--ss:6.5s;--sa:.2}
-#list .item.tier-6{--ga:34px;--gs:2.9s;--ss:5.5s;--sa:.24;--bs:4s}
-#list .item.tier-7{--ga:38px;--gs:2.5s;--ss:4.6s;--sa:.28;--bs:3.4s;--ts:3.6s}
-#list .item.tier-8{--ga:43px;--gs:2.1s;--ss:3.8s;--sa:.34;--bs:2.8s;--ts:2.8s}
-#list .item.tier-9{--ga:48px;--gs:1.7s;--ss:3s;--sa:.42;--bs:2.2s;--ts:2.2s}
+:is(#list,#viewLists) .item.tier-2{--ga:18px;--gs:5s}
+:is(#list,#viewLists) .item.tier-3{--ga:22px;--gs:4.4s}
+:is(#list,#viewLists) .item.tier-4{--ga:26px;--gs:3.8s;--ss:7.5s;--sa:.16}
+:is(#list,#viewLists) .item.tier-5{--ga:30px;--gs:3.3s;--ss:6.5s;--sa:.2}
+:is(#list,#viewLists) .item.tier-6{--ga:34px;--gs:2.9s;--ss:5.5s;--sa:.24;--bs:4s}
+:is(#list,#viewLists) .item.tier-7{--ga:38px;--gs:2.5s;--ss:4.6s;--sa:.28;--bs:3.4s;--ts:3.6s}
+:is(#list,#viewLists) .item.tier-8{--ga:43px;--gs:2.1s;--ss:3.8s;--sa:.34;--bs:2.8s;--ts:2.8s}
+:is(#list,#viewLists) .item.tier-9{--ga:48px;--gs:1.7s;--ss:3s;--sa:.42;--bs:2.2s;--ts:2.2s}
 /* 1) aura que respira (tier 2+): cada nivel más ancha y rápida */
-#list .item.tier-2:not(.selected),#list .item.tier-3:not(.selected),#list .item.tier-4:not(.selected),#list .item.tier-5:not(.selected),#list .item.tier-6:not(.selected),#list .item.tier-7:not(.selected),#list .item.tier-8:not(.selected),#list .item.tier-9:not(.selected){overflow:visible}
-#list .item.tier-2 .image-wrap,#list .item.tier-3 .image-wrap,#list .item.tier-4 .image-wrap,#list .item.tier-5 .image-wrap,#list .item.tier-6 .image-wrap,#list .item.tier-7 .image-wrap,#list .item.tier-8 .image-wrap,#list .item.tier-9 .image-wrap{overflow:hidden;border-radius:13px}
-#list .item.tier-2 .item-name,#list .item.tier-3 .item-name,#list .item.tier-4 .item-name,#list .item.tier-5 .item-name,#list .item.tier-6 .item-name,#list .item.tier-7 .item-name,#list .item.tier-8 .item-name,#list .item.tier-9 .item-name{z-index:1}
-#list .item.tier-2::before,#list .item.tier-3::before,#list .item.tier-4::before,#list .item.tier-5::before,#list .item.tier-6::before,#list .item.tier-7::before,#list .item.tier-8::before,#list .item.tier-9::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 var(--ga) var(--tc),0 0 calc(var(--ga) * .4) 1px var(--tc);opacity:.15;animation:kbreathe var(--gs) ease-in-out infinite}
-#list .item.selected[class*=tier-]::before{display:none}
+:is(#list,#viewLists) .item.tier-2:not(.selected),:is(#list,#viewLists) .item.tier-3:not(.selected),:is(#list,#viewLists) .item.tier-4:not(.selected),:is(#list,#viewLists) .item.tier-5:not(.selected),:is(#list,#viewLists) .item.tier-6:not(.selected),:is(#list,#viewLists) .item.tier-7:not(.selected),:is(#list,#viewLists) .item.tier-8:not(.selected),:is(#list,#viewLists) .item.tier-9:not(.selected){overflow:visible}
+:is(#list,#viewLists) .item.tier-2 .image-wrap,:is(#list,#viewLists) .item.tier-3 .image-wrap,:is(#list,#viewLists) .item.tier-4 .image-wrap,:is(#list,#viewLists) .item.tier-5 .image-wrap,:is(#list,#viewLists) .item.tier-6 .image-wrap,:is(#list,#viewLists) .item.tier-7 .image-wrap,:is(#list,#viewLists) .item.tier-8 .image-wrap,:is(#list,#viewLists) .item.tier-9 .image-wrap{overflow:hidden;border-radius:13px}
+:is(#list,#viewLists) .item.tier-2 .item-name,:is(#list,#viewLists) .item.tier-3 .item-name,:is(#list,#viewLists) .item.tier-4 .item-name,:is(#list,#viewLists) .item.tier-5 .item-name,:is(#list,#viewLists) .item.tier-6 .item-name,:is(#list,#viewLists) .item.tier-7 .item-name,:is(#list,#viewLists) .item.tier-8 .item-name,:is(#list,#viewLists) .item.tier-9 .item-name{z-index:1}
+:is(#list,#viewLists) .item.tier-2::before,:is(#list,#viewLists) .item.tier-3::before,:is(#list,#viewLists) .item.tier-4::before,:is(#list,#viewLists) .item.tier-5::before,:is(#list,#viewLists) .item.tier-6::before,:is(#list,#viewLists) .item.tier-7::before,:is(#list,#viewLists) .item.tier-8::before,:is(#list,#viewLists) .item.tier-9::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 var(--ga) var(--tc),0 0 calc(var(--ga) * .4) 1px var(--tc);opacity:.15;animation:kbreathe var(--gs) ease-in-out infinite}
+:is(#list,#viewLists) .item.selected[class*=tier-]::before{display:none}
 /* 2) destello diagonal que cruza la tarjeta (tier 4+) */
-#list .item.tier-4 .image-wrap::after,#list .item.tier-5 .image-wrap::after,#list .item.tier-6 .image-wrap::after,#list .item.tier-7 .image-wrap::after,#list .item.tier-8 .image-wrap::after,#list .item.tier-9 .image-wrap::after{content:'';position:absolute;top:0;bottom:0;left:-100%;width:55%;z-index:0;pointer-events:none;background:linear-gradient(105deg,transparent,rgba(255,255,255,var(--sa)),transparent);transform:skewX(-20deg);animation:kstreak var(--ss) ease-in-out infinite}
+:is(#list,#viewLists) .item.tier-4 .image-wrap::after,:is(#list,#viewLists) .item.tier-5 .image-wrap::after,:is(#list,#viewLists) .item.tier-6 .image-wrap::after,:is(#list,#viewLists) .item.tier-7 .image-wrap::after,:is(#list,#viewLists) .item.tier-8 .image-wrap::after,:is(#list,#viewLists) .item.tier-9 .image-wrap::after{content:'';position:absolute;top:0;bottom:0;left:-100%;width:55%;z-index:0;pointer-events:none;background:linear-gradient(105deg,transparent,rgba(255,255,255,var(--sa)),transparent);transform:skewX(-20deg);animation:kstreak var(--ss) ease-in-out infinite}
 /* 3) brillo corriendo por la insignia de kakera (tier 6+) */
-#list .item.tier-6 .badge.kakera,#list .item.tier-7 .badge.kakera,#list .item.tier-8 .badge.kakera,#list .item.tier-9 .badge.kakera{background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.75) 48%,transparent 66%);background-size:300% 100%;animation:kshine var(--bs) linear infinite}
-/* 4) chispas titilando (tier 7+) */
-#list .item.tier-7 .image-wrap::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;animation:ktwinkle var(--ts) ease-in-out infinite;--sp:color-mix(in srgb,var(--tc) 35%,#fff);background:radial-gradient(circle at 18% 22%,var(--sp) 0,var(--sp) 1.5px,transparent 3.2px),radial-gradient(circle at 78% 15%,var(--sp) 0,var(--sp) 1.3px,transparent 3px),radial-gradient(circle at 62% 48%,var(--sp) 0,var(--sp) 1.6px,transparent 3.4px),radial-gradient(circle at 25% 66%,var(--sp) 0,var(--sp) 1.2px,transparent 2.8px),radial-gradient(circle at 85% 72%,var(--sp) 0,var(--sp) 1.5px,transparent 3.2px),radial-gradient(circle at 48% 33%,var(--sp) 0,var(--sp) 1.2px,transparent 2.8px)}
-#list .item.selected .image-wrap::after,#list .item.selected .image-wrap::before{display:none}
+:is(#list,#viewLists) .item.tier-6 .badge.kakera,:is(#list,#viewLists) .item.tier-7 .badge.kakera,:is(#list,#viewLists) .item.tier-8 .badge.kakera,:is(#list,#viewLists) .item.tier-9 .badge.kakera{background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.75) 48%,transparent 66%);background-size:300% 100%;animation:kshine var(--bs) linear infinite}
+/* 4) chispas titilando (solo tier 7, Ámbar; Topacio y Rubí tienen sus propias partículas) */
+:is(#list,#viewLists) .item.tier-7 .image-wrap::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;animation:ktwinkle var(--ts) ease-in-out infinite;--sp:color-mix(in srgb,var(--tc) 35%,#fff);background:radial-gradient(circle at 18% 22%,var(--sp) 0,var(--sp) 1.5px,transparent 3.2px),radial-gradient(circle at 78% 15%,var(--sp) 0,var(--sp) 1.3px,transparent 3px),radial-gradient(circle at 62% 48%,var(--sp) 0,var(--sp) 1.6px,transparent 3.4px),radial-gradient(circle at 25% 66%,var(--sp) 0,var(--sp) 1.2px,transparent 2.8px),radial-gradient(circle at 85% 72%,var(--sp) 0,var(--sp) 1.5px,transparent 3.2px),radial-gradient(circle at 48% 33%,var(--sp) 0,var(--sp) 1.2px,transparent 2.8px)}
+:is(#list,#viewLists) .item.selected .image-wrap::after,:is(#list,#viewLists) .item.selected .image-wrap::before{display:none}
 /* ===== Chispas (partículas): Topacio/Rubí en kakera y Mítico (rank 1 a 10) ===== */
-@keyframes ember{0%{transform:translate(0,0) scale(1);opacity:0}12%{opacity:1}70%{opacity:.9}100%{transform:translate(var(--dx),var(--dy)) scale(.25);opacity:0}}
+@keyframes ember{0%{transform:translate(0,0) scale(1);opacity:0}12%{opacity:1}70%{opacity:.9}100%{transform:translate(calc(var(--dx) * var(--ks,1)),calc(var(--dy) * var(--ks,1))) scale(.25);opacity:0}}
 @keyframes starflash{0%,100%{transform:scale(0) rotate(0);opacity:0}45%,55%{transform:scale(1) rotate(90deg);opacity:1}}
 @keyframes rspark{0%{transform:translate(-50%,-50%) scale(0);opacity:0}10%{transform:translate(-50%,-50%) scale(1.2);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.15);opacity:0}}
-#list .sparks{position:absolute;inset:0;pointer-events:none;z-index:3}
-#list .sparks i{position:absolute;bottom:3%;left:var(--x);width:var(--s);height:var(--s);border-radius:50%;background:var(--c);box-shadow:0 0 8px 2px var(--c);opacity:0;animation:ember var(--d) ease-out var(--dl) infinite}
-#list .sparks i.star{bottom:auto;left:var(--x);top:var(--y);border-radius:0;background:var(--c);box-shadow:none;filter:drop-shadow(0 0 4px var(--c));clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);animation:starflash var(--d) ease-in-out var(--dl) infinite}
-#list .item.selected .sparks{display:none}
-#list .badge.rank{position:relative}
-#list .badge.rank .rs{position:absolute;left:50%;top:50%;width:var(--s);height:var(--s);border-radius:50%;background:#fff6c8;box-shadow:0 0 8px 3px #ffd24d;opacity:0;pointer-events:none;animation:rspark var(--d) ease-out var(--dl) infinite}
-@media(prefers-reduced-motion:reduce){#list .sparks,#list .badge.rank .rs{display:none}}
+:is(#list,#viewLists) .sparks{position:absolute;inset:0;pointer-events:none;z-index:3}
+:is(#list,#viewLists) .sparks i{position:absolute;bottom:3%;left:var(--x);width:var(--s);height:var(--s);border-radius:50%;background:var(--c);box-shadow:0 0 8px 2px var(--c);opacity:0;animation:ember var(--d) ease-out var(--dl) infinite}
+:is(#list,#viewLists) .sparks i.star{bottom:auto;left:var(--x);top:var(--y);border-radius:0;background:var(--c);box-shadow:none;filter:drop-shadow(0 0 4px var(--c));clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);animation:starflash var(--d) ease-in-out var(--dl) infinite}
+:is(#list,#viewLists) .item.selected .sparks{display:none}
+:is(#list,#viewLists) .badge.rank{position:relative}
+:is(#list,#viewLists) .badge.rank .rs{position:absolute;left:50%;top:50%;width:var(--s);height:var(--s);border-radius:50%;background:#fff6c8;box-shadow:0 0 8px 3px #ffd24d;opacity:0;pointer-events:none;animation:rspark var(--d) ease-out var(--dl) infinite}
+@media(prefers-reduced-motion:reduce){:is(#list,#viewLists) .sparks,:is(#list,#viewLists) .badge.rank .rs{display:none}}
 /* Brillo del rank: solo en la lista principal, crece con el rank */
 @keyframes rkpulse{50%{box-shadow:0 0 0 1px var(--rc),0 0 18px var(--rc)}}
 @keyframes rkshine{0%{background-position:200% 0}100%{background-position:-200% 0}}
-#list .item[class*=rk-] .badge.rank{border:1px solid color-mix(in srgb,var(--rc) 35%,transparent)}
-#list .item.rk-5 .badge.rank{background:color-mix(in srgb,var(--rc) 16%,#0c0a16);border-color:color-mix(in srgb,var(--rc) 55%,transparent)}
-#list .item.rk-4 .badge.rank{background:color-mix(in srgb,var(--rc) 20%,#0c0a16);border-color:var(--rc);box-shadow:0 0 8px color-mix(in srgb,var(--rc) 55%,transparent);font-size:11.5px}
-#list .item.rk-3 .badge.rank{background:color-mix(in srgb,var(--rc) 24%,#0c0a16);border-color:var(--rc);box-shadow:0 0 0 1px var(--rc),0 0 12px color-mix(in srgb,var(--rc) 70%,transparent);font-size:12px;text-shadow:0 0 8px var(--rc)}
-#list .item.rk-2 .badge.rank{background:color-mix(in srgb,var(--rc) 28%,#0c0a16);border-color:var(--rc);font-size:12.5px;text-shadow:0 0 8px var(--rc);animation:rkpulse 2.4s ease-in-out infinite}
+:is(#list,#viewLists) .item[class*=rk-] .badge.rank{border:1px solid color-mix(in srgb,var(--rc) 35%,transparent)}
+:is(#list,#viewLists) .item.rk-5 .badge.rank{background:color-mix(in srgb,var(--rc) 16%,#0c0a16);border-color:color-mix(in srgb,var(--rc) 55%,transparent)}
+:is(#list,#viewLists) .item.rk-4 .badge.rank{background:color-mix(in srgb,var(--rc) 20%,#0c0a16);border-color:var(--rc);box-shadow:0 0 8px color-mix(in srgb,var(--rc) 55%,transparent);font-size:11.5px}
+:is(#list,#viewLists) .item.rk-3 .badge.rank{background:color-mix(in srgb,var(--rc) 24%,#0c0a16);border-color:var(--rc);box-shadow:0 0 0 1px var(--rc),0 0 12px color-mix(in srgb,var(--rc) 70%,transparent);font-size:12px;text-shadow:0 0 8px var(--rc)}
+:is(#list,#viewLists) .item.rk-2 .badge.rank{background:color-mix(in srgb,var(--rc) 28%,#0c0a16);border-color:var(--rc);font-size:12.5px;text-shadow:0 0 8px var(--rc);animation:rkpulse 2.4s ease-in-out infinite}
 @keyframes rorbit{0%{left:0;top:0}25%{left:100%;top:0}50%{left:100%;top:100%}75%{left:0;top:100%}100%{left:0;top:0}}
-#list .item.rk-2 .badge.rank::after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;background:#fff6c8;box-shadow:0 0 6px 2px var(--rc),0 0 12px 3px var(--rc);transform:translate(-50%,-50%);pointer-events:none;animation:rorbit 2.6s linear infinite}
-@media(prefers-reduced-motion:reduce){#list .item.rk-2 .badge.rank::after{display:none}}
-#list .item.rk-1 .badge.rank{color:#2a1c00;font-size:13px;font-weight:900;border-color:#fff6c8;text-shadow:none;background:linear-gradient(110deg,#ffd24d 30%,#fffbe0 48%,#ffd24d 66%) 0 0/300% 100%;animation:rkpulse 1.8s ease-in-out infinite,rkshine 3s linear infinite}
-@media(prefers-reduced-motion:reduce){#list .item .badge,.item[class*=tier-],#list .item::before,#list .item .image-wrap::before,#list .item .image-wrap::after{animation:none!important}#list .item[class*=tier-]::before{opacity:.5}}
+:is(#list,#viewLists) .item.rk-2 .badge.rank::after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;background:#fff6c8;box-shadow:0 0 6px 2px var(--rc),0 0 12px 3px var(--rc);transform:translate(-50%,-50%);pointer-events:none;animation:rorbit 2.6s linear infinite}
+@media(prefers-reduced-motion:reduce){:is(#list,#viewLists) .item.rk-2 .badge.rank::after{display:none}}
+:is(#list,#viewLists) .item.rk-1 .badge.rank{color:#2a1c00;font-size:13px;font-weight:900;border-color:#fff6c8;text-shadow:none;background:linear-gradient(110deg,#ffd24d 30%,#fffbe0 48%,#ffd24d 66%) 0 0/300% 100%;animation:rkpulse 1.8s ease-in-out infinite,rkshine 3s linear infinite}
+@media(prefers-reduced-motion:reduce){:is(#list,#viewLists) .item .badge,.item[class*=tier-],:is(#list,#viewLists) .item::before,:is(#list,#viewLists) .item .image-wrap::before,:is(#list,#viewLists) .item .image-wrap::after{animation:none!important}:is(#list,#viewLists) .item[class*=tier-]::before{opacity:.5}}
+
+/* Tarjetas pequeñas de la pestaña Listas: partículas y fuentes más contenidas */
+#viewLists .item.mini{--ks:.55}
+#viewLists .item.mini.rk-1 .badge.rank{font-size:11px}
+#viewLists .item.mini.rk-2 .badge.rank{font-size:10.5px}
+#viewLists .item.mini.rk-3 .badge.rank,#viewLists .item.mini.rk-4 .badge.rank{font-size:10px}
+/* ===== Serie, tutorial, comandos ===== */
+.sbar{margin:8px 0 4px}
+.slist{display:flex;flex-direction:column;gap:3px;max-height:320px;overflow-y:auto;margin-top:10px;padding-right:4px}
+.srow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 10px;min-height:40px;border-radius:10px;border:1px solid transparent;background:var(--panel2);color:var(--ink);font-weight:700;font-size:13px}
+.srow:hover{border-color:var(--accent)}
+.srow.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel2))}
+.srow .sn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srow .sc{flex:none;background:var(--chipbg);border-radius:8px;padding:1px 8px;font-weight:900;font-size:12px}
+.srow .tchk{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:11px;color:transparent;font-weight:900}
+.srow.on .tchk{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.fpanel .sfind{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--inset);color:var(--ink)}
+.cmd-order{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);font-size:13px}
+.cmd-order ol{margin:6px 0 0;padding-left:20px}.cmd-order li{margin:3px 0}
+.cmd-order code,.tut code{background:var(--inset);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--code)}
+.tut{display:grid;gap:12px;max-width:900px}
+.tut details{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.tut summary{cursor:pointer;list-style:none;padding:15px 18px;font-weight:900;font-size:16px;display:flex;align-items:center;gap:10px;min-height:52px}
+.tut summary::-webkit-details-marker{display:none}
+.tut summary::after{content:'▾';margin-left:auto;color:var(--muted);transition:transform .2s}
+.tut details[open] summary::after{transform:rotate(180deg)}
+.tut details[open] summary{border-bottom:1px solid var(--line)}
+.tut .tbody{padding:14px 18px 18px;color:var(--ink);line-height:1.6}
+.tut .tbody p{margin:0 0 10px}.tut .tbody ol,.tut .tbody ul{margin:0 0 10px;padding-left:22px}.tut .tbody li{margin:5px 0}
+.tut .note{margin-top:10px;padding:10px 12px;border-left:3px solid var(--accent);background:var(--panel2);border-radius:8px;color:var(--muted);font-size:13px}
+.tut h4{margin:14px 0 6px;font-size:14px;font-weight:900}
+.tut table{border-collapse:collapse;width:100%;font-size:13px;margin:8px 0 12px;display:block;overflow-x:auto}
+.tut th,.tut td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+.tut th{background:var(--panel2)}
+
+/* ===== Interruptores de efectos ===== */
+body.fx-no-shine .item[class*=tier-]{border-color:var(--line)!important;box-shadow:none!important;animation:none!important}
+body.fx-no-shine .item.selected[class*=tier-]{border-color:var(--accent)!important;box-shadow:0 0 0 2px var(--accent)!important}
+body.fx-no-shine .item[class*=tier-] .badge.kakera{background:#0c0a16c4!important;background-image:none!important;color:var(--ka)!important;animation:none!important}
+body.fx-no-shine :is(#list,#viewLists) .item::before,body.fx-no-shine :is(#list,#viewLists) .item .image-wrap::before,body.fx-no-shine :is(#list,#viewLists) .item .image-wrap::after,body.fx-no-shine :is(#list,#viewLists) .item .sparks{display:none!important}
+body.fx-no-rank .badge.rank{color:var(--rank)!important;background:#0c0a16c4!important;background-image:none!important;border:0!important;box-shadow:none!important;text-shadow:none!important;animation:none!important;font-weight:800!important;font-size:11px!important}
+body.fx-no-rank .mini .badge.rank{font-size:10px!important}
+body.fx-no-rank .badge.rank::after,body.fx-no-rank .badge.rank .rs{display:none!important}
+/* Zonas con efectos apagados desde Configuración (Principal / Listas) */
+body.fx-off-main #list .item[class*=tier-]{border-color:var(--line)!important;box-shadow:none!important;animation:none!important}
+body.fx-off-main #list .item.selected[class*=tier-]{border-color:var(--accent)!important;box-shadow:0 0 0 2px var(--accent)!important}
+body.fx-off-main #list .item[class*=tier-] .badge.kakera{background:#0c0a16c4!important;background-image:none!important;color:var(--ka)!important;animation:none!important}
+body.fx-off-main #list .item::before,body.fx-off-main #list .item .image-wrap::before,body.fx-off-main #list .item .image-wrap::after,body.fx-off-main #list .item .sparks{display:none!important}
+body.fx-off-main #list .badge.rank{color:var(--rank)!important;background:#0c0a16c4!important;background-image:none!important;border:0!important;box-shadow:none!important;text-shadow:none!important;animation:none!important;font-weight:800!important;font-size:11px!important}
+body.fx-off-main #list .mini .badge.rank{font-size:10px!important}
+body.fx-off-main #list .badge.rank::after,body.fx-off-main #list .badge.rank .rs{display:none!important}
+body.fx-off-lists #viewLists .item[class*=tier-]{border-color:var(--line)!important;box-shadow:none!important;animation:none!important}
+body.fx-off-lists #viewLists .item.selected[class*=tier-]{border-color:var(--accent)!important;box-shadow:0 0 0 2px var(--accent)!important}
+body.fx-off-lists #viewLists .item[class*=tier-] .badge.kakera{background:#0c0a16c4!important;background-image:none!important;color:var(--ka)!important;animation:none!important}
+body.fx-off-lists #viewLists .item::before,body.fx-off-lists #viewLists .item .image-wrap::before,body.fx-off-lists #viewLists .item .image-wrap::after,body.fx-off-lists #viewLists .item .sparks{display:none!important}
+body.fx-off-lists #viewLists .badge.rank{color:var(--rank)!important;background:#0c0a16c4!important;background-image:none!important;border:0!important;box-shadow:none!important;text-shadow:none!important;animation:none!important;font-weight:800!important;font-size:11px!important}
+body.fx-off-lists #viewLists .mini .badge.rank{font-size:10px!important}
+body.fx-off-lists #viewLists .badge.rank::after,body.fx-off-lists #viewLists .badge.rank .rs{display:none!important}
+
+/* ===== Configuración ===== */
+.set-group{padding:14px 0;border-top:1px solid var(--line)}
+.set-group:first-of-type{border-top:0;padding-top:0}
+.set-group h3{margin:0 0 4px;font-size:14px;font-weight:900}
+.set-group .hint{margin-bottom:10px}
+.set-group .dots{margin-left:0;width:auto;flex-wrap:wrap;gap:12px}
+.set-group .dot{width:30px;height:30px}
+.dot.active{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--ink)}
+.modal input.colorpick{width:30px;height:30px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer}
+.themes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.theme-btn{display:flex;align-items:center;gap:8px;padding:8px 10px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-weight:800;font-size:12px;text-align:left}
+.theme-btn:hover{border-color:var(--accent)}
+.theme-btn.active{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel2))}
+.theme-btn i{flex:none;width:22px;height:22px;border-radius:6px;border:1px solid #88889966}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 12px;margin:0 0 8px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;cursor:pointer;color:var(--ink);font-size:14px}
+.set-row span{min-width:0}
+.set-row b{display:block;font-weight:800}
+.set-row small{display:block;color:var(--muted);font-size:12px;font-weight:600;margin-top:2px}
+.modal input.sw{appearance:none;-webkit-appearance:none;flex:none;width:44px;height:26px;padding:0;border-radius:999px;border:1px solid var(--line);background:var(--inset);position:relative;cursor:pointer;transition:.15s}
+.modal input.sw::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--muted);transition:.15s}
+.modal input.sw:checked{background:var(--accent);border-color:var(--accent)}
+.modal input.sw:checked::after{left:21px;background:var(--accent-ink)}
+
+/* ===== Temas claros ===== */
+html.light{--accent-text:color-mix(in srgb,var(--accent) 50%,#000);--chipbg:#0000000f;--danger:#c0304a;--danger-bg:#fdecef;--danger-bg-h:#fadce2;--danger-line:#f0b5c0;--ok-bg:#e1f5e9;--ok-ink:#17703f;--code:#0a6a8c;--hfade:#00000008;--ph1:#e9e7f3;--ph2:#d7d4e8;--line-h:#b9b3d3}
+html.light ::placeholder{color:#8f8aa8}
+/* Brillos de kakera: colores más oscuros para que se vean sobre fondo claro (la insignia conserva el color vivo) */
+html.light .item.tier-1{--tc:#8391d6;--tcb:#cfd8ff}
+html.light .item.tier-2{--tc:#1ea6d6;--tcb:#6fe0ff}
+html.light .item.tier-3{--tc:#1fb56d;--tcb:#5fe3a1}
+html.light .item.tier-4{--tc:#8a4fe0;--tcb:#b98cff}
+html.light .item.tier-5{--tc:#7aa81a;--tcb:#c6f56a}
+html.light .item.tier-6{--tc:#e0409f;--tcb:#ff7ad9}
+html.light .item.tier-7{--tc:#f07a00;--tcb:#ff9f43}
+html.light .item.tier-8{--tc:#dba000;--tcb:#ffcb5c}
+html.light .item.tier-9{--tc:#e03a2a;--tcb:#ff6b5c}
+html.light .item[class*=tier-] .badge.kakera{background-color:var(--tcb)}
+html.light .item[class*=tier-]{box-shadow:0 0 0 1px var(--tc),0 0 16px color-mix(in srgb,var(--tc) 70%,transparent)}
+html.light .item.selected[class*=tier-]{box-shadow:0 0 0 2px var(--accent)}
+html.light :is(#list,#viewLists) .item[class*=tier-]:not(.selected)::before{opacity:.35}
+/* Mismos ajustes en los filtros de brillo y rank */
+html.light .tchip[data-key="k:tier-1"]{--tc:#8391d6!important}
+html.light .tchip[data-key="k:tier-2"]{--tc:#1ea6d6!important}
+html.light .tchip[data-key="k:tier-3"]{--tc:#1fb56d!important}
+html.light .tchip[data-key="k:tier-4"]{--tc:#8a4fe0!important}
+html.light .tchip[data-key="k:tier-5"]{--tc:#7aa81a!important}
+html.light .tchip[data-key="k:tier-6"]{--tc:#e0409f!important}
+html.light .tchip[data-key="k:tier-7"]{--tc:#f07a00!important}
+html.light .tchip[data-key="k:tier-8"]{--tc:#dba000!important}
+html.light .tchip[data-key="k:tier-9"]{--tc:#e03a2a!important}
+html.light .tchip[data-key="r:1"]{--tc:#c9a100!important}
+html.light .tchip[data-key="r:2"]{--tc:#d99200!important}
+html.light .tchip[data-key="r:3"]{--tc:#e07a00!important}
+html.light .tchip[data-key="r:4"]{--tc:#e0584a!important}
+html.light .tchip[data-key="r:5"]{--tc:#e0587f!important}
+html.light .tchip[data-key="r:6"]{--tc:#3d8fd9!important}
+html.light .tchip[data-key="r:7"]{--tc:#1aa3a3!important}
+html.light .tchip[data-key="r:8"]{--tc:#8a86b0!important}
+html.light .tchip[data-key="r:9"]{--tc:#4fa272!important}
+html.light .tchip[data-key="r:10"]{--tc:#1fa866!important}
+html.light .tchip[data-key="k:"],html.light .tchip[data-key="r:0"]{--tc:#8f8aa8!important}
+
+/* ===== Tarjetas de serie (agrupar) ===== */
+.btn.on{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.btn.on:hover{background:var(--accent);filter:brightness(1.12)}
+.item.group{margin:0 10px 10px 0;border-color:var(--accent);box-shadow:5px 5px 0 -1px var(--panel2),5px 5px 0 0 var(--line),10px 10px 0 -1px var(--panel2),10px 10px 0 0 var(--line)}
+.item.group.selected{box-shadow:0 0 0 2px var(--accent),5px 5px 0 -1px var(--panel2),5px 5px 0 0 var(--accent),10px 10px 0 -1px var(--panel2),10px 10px 0 0 var(--accent)}
+.item.group.over{box-shadow:0 0 0 2px var(--ka),5px 5px 0 -1px var(--panel2),5px 5px 0 0 var(--line),10px 10px 0 -1px var(--panel2),10px 10px 0 0 var(--line)}
+.gcover{position:absolute;inset:0;display:grid;gap:2px;background:var(--line);grid-template-columns:1fr;grid-template-rows:1fr}
+.gcover.n2{grid-template-columns:1fr 1fr}
+.gcover.n3,.gcover.n4{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.gcover.n3 img:first-child{grid-row:1/3}
+.gcover img{width:100%;height:100%;min-width:0;min-height:0;object-fit:cover;display:block;pointer-events:none}
+.item.group .badge.gcount{color:var(--ink)}
+@media(max-width:700px){.item.group{margin:0 8px 8px 0;box-shadow:4px 4px 0 -1px var(--panel2),4px 4px 0 0 var(--line),8px 8px 0 -1px var(--panel2),8px 8px 0 0 var(--line)}}
+
+/* ===== Pruebas automáticas ===== */
+.tsum{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 12px}
+.tsum .chip{font-weight:800}
+.tsum .bad{color:var(--danger)}.tsum .good{color:var(--ok-ink)}
+.trow{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;padding:7px 10px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);margin:6px 0;font-size:12.5px}
+.trow .g{color:var(--muted);font-weight:800}
+.trow.fail{border-color:var(--danger-line);background:var(--danger-bg)}
+.trow .d{grid-column:1/-1;color:var(--muted);font-family:ui-monospace,Consolas,monospace;font-size:11.5px;overflow-wrap:anywhere}
+#testAll{margin-top:10px}#testAll summary{cursor:pointer;font-weight:800;padding:6px 0}
+#testAllBox{max-height:260px;overflow:auto;padding-right:4px}
+.test-running{position:fixed;left:50%;top:16px;transform:translateX(-50%);z-index:120;background:var(--accent);color:var(--accent-ink);padding:10px 18px;border-radius:12px;font-weight:900;box-shadow:0 8px 30px #0008}
+
+/* ===== Opciones de tarjetas ===== */
+.item-name{transition:opacity .15s}
+@media(hover:hover){body.hide-names .item:not(:hover):not(.selected) .item-name{opacity:0}}
+body.hide-rank .badge.rank,body.hide-ka .badge.kakera{display:none}
+body.show-actions .card-actions{opacity:1!important}
+.fl.active{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.ssort{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px}
+.ssort .hint{margin-right:2px;font-weight:800}
+.theme-label{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:12px 0 6px}
+.theme-label:first-child{margin-top:0}
+
+/* ===== Animaciones de filtros y tutorial ===== */
+.fbody.opening,.fbody.closing{overflow:hidden}
+.fbody.opening{animation:fopen .32s cubic-bezier(.2,.8,.2,1) both}
+.fbody.closing{animation:fclose .24s ease both}
+@keyframes fopen{from{max-height:0;opacity:0;padding-top:0;padding-bottom:0}to{max-height:var(--h);opacity:1}}
+@keyframes fclose{from{max-height:var(--h);opacity:1}to{max-height:0;opacity:0;padding-top:0;padding-bottom:0}}
+@keyframes fchild{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.fbody.opening>*{animation:fchild .38s cubic-bezier(.2,.8,.2,1) both}
+.fbody.opening>*:nth-child(2){animation-delay:.06s}
+.fbody.opening>*:nth-child(3){animation-delay:.12s}
+.tut details.closing summary::after{transform:rotate(0)}
+.tut details.closing summary{border-bottom:1px solid var(--line)}
+.tut details summary:hover{background:var(--hfade)}
+body.no-ui-anim .fbody.opening,body.no-ui-anim .fbody.closing,body.no-ui-anim .fbody.opening>*{animation:none!important}
+
+/* ===== Mejoras: selector, slider, verificador compacto, rendimiento de ventanas ===== */
+select option,select optgroup{background:var(--panel2);color:var(--ink)}
+.sort-select{cursor:pointer}
+#targetList{padding:10px 12px}
+.toolrow input[type=range]{-webkit-appearance:none;appearance:none;height:6px;border-radius:99px;cursor:pointer;background:linear-gradient(to right,var(--accent) var(--pct,25%),var(--line) var(--pct,25%))}
+.toolrow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid var(--panel);box-shadow:0 0 0 1px var(--accent)}
+.toolrow input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--accent);border:3px solid var(--panel)}
+.toolrow input[type=range]::-moz-range-track{background:var(--line);height:6px;border-radius:99px}
+.toolrow input[type=range]::-moz-range-progress{background:var(--accent);height:6px;border-radius:99px}
+.item-name .ser{display:block;font-size:10px;font-weight:700;opacity:.78;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vguide{gap:5px;margin:8px 0 2px}
+.vguide li{padding:5px 9px;gap:8px;border-radius:10px}
+.vguide .vn{width:20px;height:20px;font-size:11px}
+.vguide .vt{font-size:12px;line-height:1.3}
+.vguide .btn.small{padding:3px 10px;font-size:11px;min-height:0;border-radius:8px}
+@media(pointer:coarse){.vguide .btn.small{min-height:30px}}
+.modal-backdrop{backdrop-filter:none;-webkit-backdrop-filter:none;background:#08060ff2}
+.modal{contain:layout style;overscroll-behavior:contain;transform:translateZ(0)}
+body.modal-open :is(#list,#viewLists),body.modal-open :is(#list,#viewLists) *,body.modal-open :is(#list,#viewLists) *::before,body.modal-open :is(#list,#viewLists) *::after,body.modal-open #list::before{animation-play-state:paused!important}
+body.modal-open :is(#list,#viewLists) .item{transition:none!important}
 </style>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:; img-src 'self' data: blob: https: http:;">
 </head>
@@ -282,10 +497,10 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
       <h1>Mudae Arranger</h1>
       <p class="sub">Importa tu lista, selecciona con un clic, arrastra para ordenar y copia los comandos listos para Discord.</p>
     </div>
-    <div class="count" id="count">0 personajes</div>
+    <button class="btn" id="settingsBtn" title="Color de la página, efectos y más">⚙️ Configuración</button>
   </header>
 
-  <nav class="tabs"><button class="tab active" data-tab="main">Principal</button><button class="tab" data-tab="lists">Listas</button></nav>
+  <nav class="tabs"><button class="tab active" data-tab="main">Principal</button><button class="tab" data-tab="lists">Listas</button><button class="tab" data-tab="tutorial">Tutorial</button></nav>
 
   <div id="viewMain">
   <section class="toolbar">
@@ -302,7 +517,16 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn small" onclick="copyText('$mmsii-k')">$mmsii-k · Kakera</button>
           <button class="btn small" onclick="copyText('$mmsii-kr')">$mmsii-kr · Rank + Ka</button>
-          <button class="btn small" onclick="copyText('$mmsii')">$mmsii · Normal</button>
+          <button class="btn small" onclick="copyText('$mmsa+-k')">$mmsa+-k · Serie + Ka</button>
+        </div>
+        <div class="cmd-order">
+          <strong>Para exportar tus personajes en el orden que tienes en Mudae, usa los comandos en este orden:</strong>
+          <ol>
+            <li><code>$mmsii-k</code> · Kakera: nombre, kakera e imagen. Importa este primero: define el orden de tus tarjetas.</li>
+            <li><code>$mmsii-kr</code> · Rank + Ka: completa el rank de cada personaje.</li>
+            <li><code>$mmsa+-k</code>: completa de qué serie viene cada personaje (alimenta el filtro por serie).</li>
+          </ol>
+          <div class="hint" style="margin-top:6px">Las importaciones siguientes no cambian el orden: solo actualizan los datos de los personajes que ya existen. Más detalles en la pestaña Tutorial.</div>
         </div>
       </div>
     </div>
@@ -313,6 +537,7 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
         <button class="btn" id="addBtn">➕ Añadir manual</button>
         <button class="btn primary" id="toggleExportBtn">📝 Comandos $sm</button>
         <button class="btn" id="verifyBtn">🔍 Verificar lista</button>
+        <button class="btn" id="orderBtn">↕️ Editar orden</button>
         <button class="btn" id="importProjectBtn">📂 Cargar proyecto</button>
         <button class="btn" id="exportProjectBtn">💾 Guardar proyecto</button>
         <button class="btn danger" id="clearBtn">🗑️ Borrar todo</button>
@@ -331,6 +556,7 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
 
   <div class="stats" id="stats"></div>
   <div class="tierbar" id="tierBar"></div>
+  <div class="sbar" id="seriesBar"></div>
   <div class="hint touch-only">Mantén presionada una tarjeta para arrastrarla.</div>
   <div class="toolrow">
     <input type="search" id="filterInput" placeholder="Filtrar por nombre ( / )">
@@ -338,16 +564,10 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
     <button class="btn small" id="shuffleBtn">🔀 Mezclar</button>
     <button class="btn small" id="spotBtn">✨ Sorpréndeme</button>
     <button class="btn small" id="selCopyBtn" hidden>📋 Copiar seleccionados</button>
+    <button class="btn small" id="selSeriesBtn" hidden>📚 Asignar serie</button>
     <button class="btn small" id="selTopBtn" hidden>⬆️ Al inicio</button>
     <button class="btn small" id="selBottomBtn" hidden>⬇️ Al final</button>
     <label class="hint">Tamaño <input type="range" id="sizeRange" min="100" max="260" value="140"></label>
-    <div class="dots" id="dots" title="Color de acento">
-      <button class="dot" data-a="#ff6f9c" data-i="#2a0d19" style="background:#ff6f9c"></button>
-      <button class="dot" data-a="#6fe0ff" data-i="#06222b" style="background:#6fe0ff"></button>
-      <button class="dot" data-a="#ffcb5c" data-i="#2b1e00" style="background:#ffcb5c"></button>
-      <button class="dot" data-a="#9af0a8" data-i="#0b2412" style="background:#9af0a8"></button>
-      <button class="dot" data-a="#b98cff" data-i="#1d0f35" style="background:#b98cff"></button>
-    </div>
   </div>
 
   <div class="list-head">
@@ -361,10 +581,16 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
         <option value="kakera-asc">💎 Kakera (menor a mayor)</option>
         <option value="rank-asc">🏆 Rank (mejor a peor)</option>
         <option value="rank-desc">🏆 Rank (peor a mejor)</option>
+        <option value="series-az">📚 Serie (A - Z)</option>
+        <option value="series-za">📚 Serie (Z - A)</option>
+        <option value="series-desc">📚 Serie (más personajes primero)</option>
+        <option value="series-asc">📚 Serie (menos personajes primero)</option>
       </select>
+      <button class="btn small" id="groupBtn" type="button" aria-pressed="false" title="Junta en una sola tarjeta a los personajes de cada serie (los que no tienen serie van juntos en «Sin serie»). Vuelve a pulsarlo para abrirlas.">📚 Agrupar series</button>
       <label style="cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:700;">
         <input type="checkbox" id="selectAllCb" style="accent-color:var(--accent);"> Seleccionar todo
       </label>
+      <button class="btn small" id="deselectBtn" style="display:none;">Deseleccionar</button>
       <button class="btn small danger" id="deleteSelectedBtn" style="display:none;">Borrar seleccionados</button>
     </div>
   </div>
@@ -387,6 +613,7 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
       <aside class="panel pool" id="poolDrop">
         <div class="section-title">Personajes</div>
         <input id="poolSearch" type="search" placeholder="Buscar personaje...">
+        <label class="hint" for="targetList" style="display:block;margin-bottom:4px;font-weight:800">Lista destino del botón ➕</label>
         <select id="targetList" class="sort-select" style="width:100%;margin-bottom:8px"></select>
         <div class="hint" style="margin-bottom:10px">Arrastra una tarjeta a una lista, o toca ➕ para añadirla a la lista elegida arriba. Suéltala aquí para quitarla de una lista.</div>
         <div id="poolGrid" class="mgrid"></div>
@@ -403,11 +630,340 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
       </section>
     </div>
   </div>
+  <div id="viewTutorial" hidden>
+    <div class="tut">
+      <details open>
+        <summary>🚀 Inicio rápido</summary>
+        <div class="tbody">
+          <ol>
+            <li>En Discord, ejecuta los comandos de Mudae (<code>$mmsii-k</code>, <code>$mmsii-kr</code> y <code>$mmsa+-k</code>) y copia lo que te muestra.</li>
+            <li>Pégalo en el campo <strong>Importar o actualizar personajes</strong> y pulsa <strong>Importar</strong>.</li>
+            <li>Haz clic en las tarjetas para seleccionarlas y arrástralas para ordenarlas.</li>
+            <li>Pulsa <strong>📝 Comandos $sm</strong>, copia cada parte y pégala en Discord en el orden indicado.</li>
+          </ol>
+          <div class="note">Todo se guarda automáticamente en tu navegador. Para llevarte tus datos a otro dispositivo usa <strong>💾 Guardar proyecto</strong>.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>📥 Cómo obtener tus personajes de Mudae (orden recomendado)</summary>
+        <div class="tbody">
+          <p>Para exportar tus personajes en el mismo orden que tienes en Mudae, usa los comandos en este orden. Los tres botones están en la pestaña Principal, bajo «Comandos para ver tu harem».</p>
+          <table>
+            <tr><th>#</th><th>Comando</th><th>Qué entrega</th></tr>
+            <tr><td>1</td><td><code>$mmsii-k</code></td><td>Nombre, kakera e imagen. Se importa primero porque define el orden de tus tarjetas.</td></tr>
+            <tr><td>2</td><td><code>$mmsii-kr</code></td><td>Rank, nombre, kakera e imagen. Completa el rank de cada personaje.</td></tr>
+            <tr><td>3</td><td><code>$mmsa+-k</code></td><td>Nombre, serie y kakera. Completa de dónde viene cada personaje.</td></tr>
+          </table>
+          <h4>Cómo responde Mudae</h4>
+          <p>Mudae te envía la lista por <strong>mensaje privado (DM)</strong>, dividida en varios mensajes. Solo el <strong>primer mensaje</strong> trae una cabecera; los siguientes traen únicamente personajes:</p>
+          <table>
+            <tr><th>Línea de la cabecera</th><th>Cuándo aparece</th></tr>
+            <tr><td><code>tuUsuario's harem</code></td><td>Siempre</td></tr>
+            <tr><td><code>AVG: 10,142</code></td><td>Solo con <code>$mmsii-kr</code></td></tr>
+            <tr><td><code>Top 15 value: 7,479</code></td><td>Solo con <code>$mmsii-kr</code></td></tr>
+            <tr><td><code>Total value: 9,216</code></td><td>Siempre</td></tr>
+          </table>
+          <p>Copia todos los mensajes y pégalos juntos. La página <strong>ignora automáticamente la cabecera</strong>, así que no se importa como personaje, ni en Importar ni en Verificar lista.</p>
+          <div class="note">En <code>$mmsa+-k</code> la serie puede contener emojis (por ejemplo <code>Derp - 😒 59 ka</code>); se importa igual.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>📋 El campo de importación: cómo funciona</summary>
+        <div class="tbody">
+          <p>El campo <strong>Importar o actualizar personajes</strong> reconoce estos formatos, incluso mezclados:</p>
+          <ul>
+            <li><code>#1,072 - Ghostface 268 ka - https://mudae.net/...</code> (rank, kakera e imagen)</li>
+            <li><code>Ghostface 268 ka - https://mudae.net/...</code> (kakera e imagen)</li>
+            <li><code>Ghostface - Scream 268 ka</code> (serie y kakera)</li>
+            <li><code>$sm Wallace Wells $Matt $Rigby</code> (uno o varios comandos $sm; se importa solo el nombre)</li>
+          </ul>
+          <h4>Reglas al importar</h4>
+          <ul>
+            <li><strong>Personajes nuevos:</strong> se añaden al final de la lista, en el orden en que aparecen.</li>
+            <li><strong>Personajes que ya existen:</strong> se buscan por nombre y solo se actualizan sus datos (kakera, rank, imagen y serie). No cambian de posición.</li>
+            <li>Por eso conviene importar primero <code>$mmsii-k</code>: ese orden es el que queda.</li>
+            <li>La kakera acepta separador de miles: <code>1.052</code>, <code>1,052</code> o <code>1052</code> se leen igual.</li>
+            <li>Si falta algún dato (por ejemplo la serie), no se borra el que ya tenías.</li>
+          </ul>
+          <h4>Otras funciones de esa sección</h4>
+          <ul>
+            <li><strong>➕ Añadir manual:</strong> crea una tarjeta vacía y abre el editor.</li>
+            <li><strong>📂 Cargar proyecto / 💾 Guardar proyecto:</strong> importa o descarga todo (personajes, imágenes y listas) en un archivo .json.</li>
+            <li><strong>🗑️ Borrar todo:</strong> elimina todas las tarjetas (pide confirmación).</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>🔍 Verificar lista: cómo funciona la comparación</summary>
+        <div class="tbody">
+          <p>Sirve para comprobar que la página tiene exactamente los mismos personajes que tu harem en Mudae.</p>
+          <ol>
+            <li>Pulsa <strong>🔍 Verificar lista</strong>.</li>
+            <li>Pega la salida de <code>$mmsii-k</code>, <code>$mmsii-kr</code>, <code>$mmsa+-k</code> o tus comandos <code>$sm</code> (puedes pegar varios juntos).</li>
+            <li>Pulsa <strong>Comparar</strong>.</li>
+          </ol>
+          <p><strong>Los personajes se emparejan por nombre</strong> (no importan mayúsculas ni espacios extra). Además se comparan los datos que traiga lo pegado: kakera, rank, serie e imagen. Arriba verás qué paso te falta (por ejemplo, cuántos personajes aún no tienen rank o serie).</p>
+          <ul>
+            <li><strong>Faltan en la página:</strong> están en tu lista pero no tienes tarjeta. Puedes copiar los nombres o pulsar <em>Añadir faltantes</em>.</li>
+            <li><strong>Sobran en la página:</strong> tienes la tarjeta pero no está en tu lista. Marca o desmarca con las casillas y pulsa <em>Eliminar seleccionados</em>.</li>
+            <li><strong>Datos distintos o incompletos:</strong> el mismo personaje con otra kakera, rank o serie, o sin imagen. Pulsa <em>Actualizar tarjetas con lo pegado</em>.</li>
+            <li><strong>Orden:</strong> si el orden de tus tarjetas difiere del pegado, puedes pulsar <em>Ordenar como la lista pegada</em>.</li>
+            <li>Si todo coincide verás «✓ La página coincide con lo que pegaste».</li>
+          </ul>
+          <div class="note">Si «Sobran» muestra personajes que sí tienes, revisa que la lista pegada esté completa: debe incluir el mensaje completo que te entrego Mudae.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>🖼️ Cómo agregar o cambiar imágenes</summary>
+        <div class="tbody">
+          <ol>
+            <li>Entra a la página oficial de Mudae (mudae.net) y busca el personaje.</li>
+            <li>Dentro de las imágenes del personaje, elige la que quieres.</li>
+            <li>Haz <strong>clic derecho sobre la imagen</strong> y elige <strong>Copiar dirección de la imagen</strong> (o «copiar vínculo de la imagen»).</li>
+            <li>Anota el <strong>número que aparece debajo de la imagen</strong> que elegiste.</li>
+            <li>Vuelve a Mudae Arranger, pasa el cursor por la tarjeta y pulsa <strong>✏️ Editar</strong> (en celular, toca la tarjeta y luego ✏️).</li>
+            <li>Pega el vínculo en <strong>URL de la Imagen</strong> y el número en <strong>Número de la imagen</strong>. Pulsa <strong>Guardar Cambios</strong>.</li>
+            <li>Pulsa el botón <strong>🎭</strong> de la tarjeta: copia el comando <code>$changeimg Nombre $número</code>.</li>
+            <li>Pégalo en Discord para que Mudae cambie la imagen de ese personaje.</li>
+          </ol>
+          <div class="note">También puedes usar «Subir local» para ver una imagen de tu equipo, pero cuando copies el comando esta imagen no se reflejará en Mudae.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>↕️ Ordenar y seleccionar tarjetas</summary>
+        <div class="tbody">
+          <ul>
+            <li><strong>Seleccionar:</strong> haz clic en una tarjeta. Con <strong>Seleccionar todo</strong> marcas todas y con <strong>Deseleccionar</strong> quitas la selección (el botón aparece cuando hay tarjetas seleccionadas).</li>
+            <li><strong>Mover:</strong> arrastra una tarjeta. Si hay varias seleccionadas y arrastras una de ellas, se mueven todas juntas. En celular, mantén presionada la tarjeta.</li>
+            <li><strong>Al inicio / Al final:</strong> mueve las seleccionadas de una vez.</li>
+            <li><strong>Orden automático:</strong> el menú ofrece A-Z, kakera, rank o <strong>Serie</strong> (A-Z, Z-A, más o menos personajes primero; los que no tienen serie quedan al final y dentro de cada serie se conserva el orden que ya tenías). Al arrastrar vuelve a «Orden manual».</li>
+            <li><strong>📚 Agrupar series:</strong> junta en una sola tarjeta a los personajes de cada serie, con el nombre de la serie y cuántos personajes tiene. Las series de un solo personaje también tienen su tarjeta y los personajes sin serie van juntos en una tarjeta <strong>«Sin serie»</strong>, así todas se ven igual. Cada tarjeta se mueve y se selecciona como cualquier otra (un clic selecciona a todos sus personajes). Al pulsar <strong>📂 Abrir series</strong> los personajes reaparecen en la posición donde dejaste la tarjeta; si no moviste nada, vuelven a donde estaban.</li>
+            <li><strong>Copiar seleccionados:</strong> copia los nombres separados por « - ». En la pestaña Listas, <strong>📋 Copiar todos</strong> copia toda la lista.</li>
+            <li><strong>Borrar seleccionados:</strong> elimina las tarjetas marcadas (pide confirmación).</li>
+            <li><strong>♊ Repetidos:</strong> el aviso de repetidos selecciona las copias para borrarlas.</li>
+            <li><strong>↩️ Deshacer</strong> (o Ctrl+Z) revierte tus últimos cambios; <strong>🔀 Mezclar</strong> desordena la lista.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>📝 Exportar el orden a Mudae ($sm)</summary>
+        <div class="tbody">
+          <p>Cuando tengas el orden que quieres, pulsa <strong>📝 Comandos $sm</strong>. La página genera comandos <code>$sm Nombre1 $Nombre2 $Nombre3...</code> con los nombres de tus personajes.</p>
+          <ol>
+            <li>Los comandos se dividen en <strong>partes</strong> de máximo 1900 caracteres, para que quepan en un mensaje de Discord.</li>
+            <li>Copia la <strong>Parte 1</strong> con su botón y pégala en Discord. Después la 2, y así sucesivamente.</li>
+            <li>Respeta el orden: Mudae pone cada $sm al principio de tu lista, así que lo último que pegas queda arriba. La página ya invierte las partes por ti.</li>
+          </ol>
+          <p>También puedes bajar todas las partes con <strong>Descargar .txt</strong>.</p>
+          <div class="note">Después de pegar todo, usa <strong>Verificar lista</strong> con tu harem actual para confirmar que no falta ni sobra nadie.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>🎚️ Filtros y búsqueda</summary>
+        <div class="tbody">
+          <ul>
+            <li><strong>Filtrar por nombre:</strong> escribe en el buscador (atajo: tecla <code>/</code>).</li>
+            <li><strong>📚 Filtrar por serie:</strong> lista vertical con todas las series y cuántos personajes tiene cada una. Haz clic en una o varias para ver solo esas; con «Limpiar» vuelves a ver todo. El campo de arriba busca dentro de la lista de series y los botones «Ordenar» la acomodan de A - Z, de Z - A, de mayor a menor cantidad de personajes o de menor a mayor (tu elección se guarda; «Sin serie» siempre queda al final). Las series salen de <code>$mmsa+-k</code> o del campo Serie al editar.</li>
+            <li><strong>↕️ Editar orden:</strong> pega el texto que entrega Mudae y las tarjetas se reordenan igual; los personajes que no aparecen se quedan al final. Se puede deshacer con Ctrl+Z.</li>
+            <li><strong>🎚️ Filtrar por brillo y rank:</strong> oculta o muestra niveles de kakera (Ópalo a Rubí) y de rank (Mítico a «Wey quien eres»).</li>
+            <li>Los filtros se combinan entre sí. El contador muestra cuántas tarjetas ves.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>🗂️ Pestaña Listas</summary>
+        <div class="tbody">
+          <ul>
+            <li>Crea listas (Favoritos, Para eliminar, etc.) con un nombre y <strong>Crear lista</strong>.</li>
+            <li>Arrastra personajes desde el panel izquierdo a una lista, o usa ➕ con la lista elegida arriba.</li>
+            <li>Para quitar un personaje de una lista, suéltalo en el panel de personajes.</li>
+            <li><strong>Guardar listas / Cargar listas</strong> exportan e importan tus listas en un archivo .json.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>✨ Efectos de brillo y rank</summary>
+        <div class="tbody">
+          <p>Cada tarjeta puede lucir un efecto según su kakera (brillo) y otro según su rank. Se ven en la pestaña <strong>Principal</strong> y en la pestaña <strong>Listas</strong>. En <strong>⚙️ Configuración → Efectos y animaciones</strong> puedes elegir dónde mostrarlos (ambas, solo Principal, solo Listas o desactivados). Las tarjetas seleccionadas no muestran efectos.</p>
+          <h4>✨ Brillo (según kakera)</h4>
+          <p>Los efectos <strong>se acumulan</strong>: cada nivel conserva lo del anterior y lo hace más intenso. Se aplican al borde de la tarjeta y a la insignia 💎.</p>
+          <table>
+            <tr><th>Nivel</th><th>Kakera</th><th>Efecto</th></tr>
+            <tr><td><span style="color:#6f6a8d">●</span> Sin brillo</td><td>Menos de 100</td><td>Ninguno.</td></tr>
+            <tr><td><span style="color:#cfd8ff">●</span> Ópalo</td><td>100 a 199</td><td>Borde fino y halo fijo del color del nivel. La insignia de kakera (💎) toma ese color.</td></tr>
+            <tr><td><span style="color:#6fe0ff">●</span> Zafiro</td><td>200 a 299</td><td>Todo lo anterior + aura que «respira»: un resplandor amplio que se enciende y se apaga despacio.</td></tr>
+            <tr><td><span style="color:#5fe3a1">●</span> Esmeralda</td><td>300 a 399</td><td>Aura más ancha y con ciclo más rápido.</td></tr>
+            <tr><td><span style="color:#b98cff">●</span> Amatista</td><td>400 a 499</td><td>+ destello diagonal suave que cruza la imagen de lado a lado cada pocos segundos.</td></tr>
+            <tr><td><span style="color:#c6f56a">●</span> Peridoto</td><td>500 a 599</td><td>Aura y destello más intensos, y el destello pasa con más frecuencia.</td></tr>
+            <tr><td><span style="color:#ff7ad9">●</span> Cuarzo rosa</td><td>600 a 699</td><td>+ reflejo de luz que recorre la insignia de kakera.</td></tr>
+            <tr><td><span style="color:#ff9f43">●</span> Ámbar</td><td>700 a 799</td><td>+ chispitas que titilan sobre la imagen.</td></tr>
+            <tr><td><span style="color:#ffcb5c">●</span> Topacio</td><td>800 a 899</td><td>Aura grande y reflejos rápidos. Las chispitas se reemplazan por 5 estrellas de cuatro puntas que destellan sobre la tarjeta.</td></tr>
+            <tr><td><span style="color:#ff6b5c">●</span> Rubí</td><td>900 o más</td><td>Aura máxima y todos los efectos al tope. Las estrellas se reemplazan por 18 brasas que suben desde la base de la tarjeta.</td></tr>
+          </table>
+          <h4>🏆 Rank (según popularidad, afecta a la insignia #)</h4>
+          <p>Mientras más bajo el número de rank, más famoso es el personaje y más llamativo el efecto. En total hay 152,836 personajes en Mudae.</p>
+          <table>
+            <tr><th>Nivel</th><th>Rank</th><th>Efecto</th></tr>
+            <tr><td><span style="color:#6f6a8d">●</span> Sin rank</td><td>Sin rank</td><td>Ninguno.</td></tr>
+            <tr><td><span style="color:#fff0a0">●</span> Mítico</td><td>1 a 10</td><td>Insignia dorada con un brillo que la recorre sin parar, pulso de luz y chispas que salen alrededor del número.</td></tr>
+            <tr><td><span style="color:#ffd24d">●</span> Superestrella</td><td>11 a 100</td><td>Pulso de luz y un punto luminoso que da vueltas por el borde de la insignia.</td></tr>
+            <tr><td><span style="color:#ffa94d">●</span> Estrella</td><td>101 a 500</td><td>Doble borde con resplandor fijo, fondo tintado y texto brillante.</td></tr>
+            <tr><td><span style="color:#ff7f6b">●</span> Famoso</td><td>501 a 1,000</td><td>Borde del color del nivel con resplandor suave y número un poco más grande.</td></tr>
+            <tr><td><span style="color:#ff8fab">●</span> Popular</td><td>1,001 a 5,000</td><td>Fondo y borde tenues del color del nivel.</td></tr>
+            <tr><td><span style="color:#9ad0ff">●</span> Conocido</td><td>5,001 a 15,000</td><td>Sin efecto: solo el color del número y un borde fino.</td></tr>
+            <tr><td><span style="color:#6fe0e0">●</span> Poco visto</td><td>15,001 a 40,000</td><td>Sin efecto: solo el color del número y un borde fino.</td></tr>
+            <tr><td><span style="color:#c4c0e0">●</span> Desconocido</td><td>40,001 a 80,000</td><td>Sin efecto: solo el color del número y un borde fino.</td></tr>
+            <tr><td><span style="color:#a9d8b8">●</span> De nicho</td><td>80,001 a 120,000</td><td>Sin efecto: solo el color del número y un borde fino.</td></tr>
+            <tr><td><span style="color:#7ee2a8">●</span> Wey quien eres</td><td>120,001 en adelante</td><td>Sin efecto: solo el color del número y un borde fino.</td></tr>
+          </table>
+          <h4>Desactivar los efectos</h4>
+          <p>Abre <strong>⚙️ Configuración</strong> (arriba a la derecha) y usa los interruptores <strong>Efectos de brillo</strong> y <strong>Efectos de rank</strong>. Apaga uno, el otro o ambos; tu elección se guarda en el navegador. Con los efectos apagados puedes seguir usando los filtros por nivel de brillo y rank. En los temas claros, los colores de los brillos se oscurecen automáticamente para que se vean sobre el fondo blanco.</p>
+          <div class="note">Si tu dispositivo tiene activada la opción «reducir movimiento», las animaciones ya se desactivan solas.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>🧪 Pruebas automáticas</summary>
+        <div class="tbody">
+          <p>En <strong>⚙️ Configuración → 🧪 Pruebas automáticas</strong> puedes comprobar que todo funciona: brillos y rank, efectos en Principal y Listas, filtros, listas, orden, orden por serie y agrupar series. Las pruebas crean personajes y listas llamados «🧪TEST …» y nunca tocan los tuyos.</p>
+          <ul>
+            <li><strong>↩️ Revertir todo:</strong> al terminar deja tu lista exactamente como estaba (orden, listas y datos).</li>
+            <li><strong>🧹 Borrar solo las pruebas:</strong> elimina los personajes y listas de prueba.</li>
+            <li><strong>📌 Conservar para verlas:</strong> deja los personajes y listas de prueba para que veas cada brillo y rank. Después puedes pulsar <strong>↩️ Revertir cambios</strong> o <strong>🧹 Borrar pruebas</strong> en la ventana de resultados.</li>
+          </ul>
+          <div class="note">El resultado muestra cuántas comprobaciones pasaron, cuáles fallaron y por qué; con «Copiar resultado» puedes compartirlo.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>⚙️ Otros detalles útiles</summary>
+        <div class="tbody">
+          <ul>
+            <li><strong>Brillo y rank:</strong> mira la sección «✨ Efectos de brillo y rank» para ver qué efecto corresponde a cada nivel.</li>
+            <li><strong>⚙️ Configuración</strong> (arriba, junto al título):
+              <ul>
+                <li><strong>Color de acento:</strong> cinco colores o uno personalizado.</li>
+                <li><strong>Tema:</strong> oscuros (Noche, Negro, Océano, Bosque, Vino), claros (Blanco, Crema, Cielo, Menta, Lavanda) o «Sistema», que sigue el modo de tu dispositivo. En los temas claros los brillos usan colores más oscuros para que se vean.</li>
+                <li><strong>Efectos y animaciones:</strong> brillo, rank y animaciones de menús (filtros y este tutorial).</li>
+                <li><strong>Tarjetas:</strong> mostrar u ocultar el nombre, la insignia de rank, la de kakera y dejar siempre visibles los botones ✏️ y 🎭.</li>
+                <li><strong>Seguridad:</strong> pedir o no confirmación al borrar («Borrar todo» siempre pregunta).</li>
+                <li><strong>Restablecer</strong> vuelve a los valores originales.</li>
+              </ul></li>
+            <li>El <strong>tamaño</strong> de las tarjetas se ajusta con el control de la barra de herramientas.</li>
+            <li>El número de personajes y la kakera total aparecen en los chips encima de las tarjetas.</li>
+            <li><strong>✨ Sorpréndeme</strong> muestra un personaje al azar.</li>
+            <li><strong>Atajos:</strong> <code>/</code> enfoca el buscador, <code>Ctrl+Z</code> deshace y <code>Esc</code> cierra ventanas.</li>
+            <li><strong>Privacidad:</strong> tus datos se guardan solo en tu navegador. Si limpias los datos del sitio los perderás, así que guarda un proyecto de vez en cuando.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+  </div>
 </div>
 
 <input type="file" id="fileInput" accept="image/*">
 <input type="file" id="projectInput" accept=".json,application/json">
 <div class="toast" id="toast"></div>
+
+<div class="modal-backdrop" id="settingsBackdrop">
+  <div class="modal">
+    <h2>⚙️ Configuración</h2>
+
+    <div class="set-group">
+      <h3>🎨 Color de acento</h3>
+      <div class="hint">Botones, bordes y selección.</div>
+      <div class="dots" id="dots">
+        <button class="dot" data-a="#ff6f9c" data-i="#2a0d19" style="background:#ff6f9c" title="Rosa"></button>
+        <button class="dot" data-a="#6fe0ff" data-i="#06222b" style="background:#6fe0ff" title="Celeste"></button>
+        <button class="dot" data-a="#ffcb5c" data-i="#2b1e00" style="background:#ffcb5c" title="Dorado"></button>
+        <button class="dot" data-a="#9af0a8" data-i="#0b2412" style="background:#9af0a8" title="Menta"></button>
+        <button class="dot" data-a="#b98cff" data-i="#1d0f35" style="background:#b98cff" title="Violeta"></button>
+        <input type="color" class="colorpick" id="accentCustom" value="#ff6f9c" title="Color personalizado" aria-label="Color personalizado">
+      </div>
+    </div>
+
+    <div class="set-group">
+      <h3>🌌 Fondo de la página</h3>
+      <div class="hint">Elige un tema oscuro, uno claro o deja que siga al sistema.</div>
+      <div class="themes" id="themes"></div>
+    </div>
+
+    <div class="set-group">
+      <h3>✨ Efectos y animaciones</h3>
+      <div class="hint">Apaga lo que no quieras ver. Los filtros por nivel siguen funcionando.</div>
+      <div class="theme-label">📍 Dónde mostrar los efectos</div>
+      <div class="ssort fxwhere" id="fxWhere" role="group" aria-label="Dónde mostrar los efectos">
+        <button class="fl" type="button" data-fxw="both" aria-pressed="false">Principal y Listas</button>
+        <button class="fl" type="button" data-fxw="main" aria-pressed="false">Solo Principal</button>
+        <button class="fl" type="button" data-fxw="lists" aria-pressed="false">Solo Listas</button>
+        <button class="fl" type="button" data-fxw="none" aria-pressed="false">Desactivados</button>
+      </div>
+      <label class="set-row"><span><b>✨ Efectos de brillo</b><small>Halo, aura, destellos y partículas según la kakera</small></span><input type="checkbox" class="sw" id="fxShine"></label>
+      <label class="set-row"><span><b>🏆 Efectos de rank</b><small>Brillo y animación de la insignia #rank</small></span><input type="checkbox" class="sw" id="fxRank"></label>
+      <label class="set-row"><span><b>🎞️ Animaciones de menús</b><small>Al abrir y cerrar los filtros y los apartados del tutorial</small></span><input type="checkbox" class="sw" data-opt="ui"></label>
+    </div>
+
+    <div class="set-group">
+      <h3>🃏 Tarjetas</h3>
+      <div class="hint">Qué se muestra en cada tarjeta de la lista.</div>
+      <label class="set-row"><span><b>Mostrar siempre el nombre</b><small>Apagado: aparece solo al pasar el cursor (en pantallas táctiles siempre se ve)</small></span><input type="checkbox" class="sw" data-opt="names"></label>
+      <label class="set-row"><span><b>Mostrar insignia de rank</b><small>El número # en la esquina de la tarjeta</small></span><input type="checkbox" class="sw" data-opt="rank"></label>
+      <label class="set-row"><span><b>Mostrar insignia de kakera</b><small>El valor 💎 en la esquina de la tarjeta</small></span><input type="checkbox" class="sw" data-opt="ka"></label>
+      <label class="set-row"><span><b>Botones ✏️ y 🎭 siempre visibles</b><small>Apagado: aparecen al pasar el cursor</small></span><input type="checkbox" class="sw" data-opt="actions"></label>
+    </div>
+
+    <div class="set-group">
+      <h3>🧪 Pruebas automáticas</h3>
+      <div class="hint">Crea personajes y listas «🧪TEST …» y comprueba brillos, rank, filtros, listas, orden y agrupación. No toca tus personajes reales. Elige qué hacer al terminar:</div>
+      <div class="ssort" id="testMode" role="group" aria-label="Al terminar la prueba">
+        <button class="fl" type="button" data-tm="revert" aria-pressed="false" title="Deja tu lista exactamente como estaba antes de la prueba">↩️ Revertir todo</button>
+        <button class="fl" type="button" data-tm="clean" aria-pressed="false" title="Borra solo los personajes y listas de prueba">🧹 Borrar solo las pruebas</button>
+        <button class="fl" type="button" data-tm="keep" aria-pressed="false" title="Deja los personajes y listas de prueba para verlos; después puedes revertir o borrarlos">📌 Conservar para verlas</button>
+      </div>
+      <div style="margin-top:10px"><button class="btn primary" id="runTestsBtn" type="button">▶ Ejecutar pruebas</button></div>
+    </div>
+
+    <div class="set-group">
+      <h3>🛡️ Seguridad</h3>
+      <label class="set-row"><span><b>Pedir confirmación al borrar</b><small>Al borrar tarjetas, listas o personajes sobrantes. «Borrar todo» siempre pregunta</small></span><input type="checkbox" class="sw" data-opt="confirm"></label>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn danger" id="settingsResetBtn" type="button">Restablecer</button>
+      <div class="modal-actions-right"><button class="btn primary" id="settingsCloseBtn" type="button">Listo</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="testBackdrop">
+  <div class="modal wide">
+    <h2>🧪 Resultado de las pruebas</h2>
+    <div id="testSummary" class="tsum"></div>
+    <div id="testFails"></div>
+    <details id="testAll"><summary>Ver todas las comprobaciones</summary><div id="testAllBox"></div></details>
+    <div class="hint" id="testNote" style="margin-top:10px"></div>
+    <div class="modal-actions">
+      <div class="modal-actions-right" style="flex-wrap:wrap">
+        <button class="btn small" id="testCopyBtn" type="button">📋 Copiar resultado</button>
+        <button class="btn small" id="testRevertBtn" type="button" hidden>↩️ Revertir cambios</button>
+        <button class="btn small danger" id="testCleanBtn" type="button" hidden>🧹 Borrar pruebas</button>
+        <button class="btn small" id="testAgainBtn" type="button">🔁 Ejecutar de nuevo</button>
+        <button class="btn primary" id="testCloseBtn" type="button">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="test-running" id="testRunning" hidden>🧪 Ejecutando pruebas… no toques la página</div>
 
 <div class="modal-backdrop" id="spotBackdrop">
   <div class="modal spot" style="width:min(100%,360px);text-align:center">
@@ -420,11 +976,31 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
   </div>
 </div>
 
+<div class="modal-backdrop" id="orderBackdrop">
+  <div class="modal wide">
+    <h2>Editar orden con texto de Mudae</h2>
+    <div class="hint">Pega el texto que entrega Mudae (por ejemplo la salida de <code>$mmsii-k</code> o <code>$mmsii-kr</code>, o un comando <code>$sm</code>) y las tarjetas se reordenan igual que el texto. Los personajes que no aparezcan se quedan al final, en su orden actual. Se puede deshacer con Ctrl+Z.</div>
+    <textarea id="orderText" style="margin-top:10px" placeholder="#1,072 - Ghostface 268 ka&#10;#2,500 - Wallace Wells 80 ka&#10;..."></textarea>
+    <div class="vstat" id="orderInfo"></div>
+    <div class="modal-actions" style="margin-top:6px">
+      <button class="btn" id="orderCloseBtn">Cerrar</button>
+      <button class="btn primary" id="orderApplyBtn" disabled>Aplicar orden</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="verifyBackdrop">
   <div class="modal wide">
     <h2>Verificar lista</h2>
-    <div class="hint">Pega tu lista de Mudae o comandos $sm y se compara con las tarjetas de esta página.</div>
-    <textarea id="verifyText" style="margin-top:10px" placeholder="#1,072 - Ghostface 268 ka - https://...&#10;o $sm Personaje 1 $Personaje 2"></textarea>
+    <div class="hint">Pega la salida de cualquiera de estos comandos (o varias juntas) y se compara con las tarjetas de esta página: faltantes, sobrantes, datos distintos y orden.</div>
+    <ol class="vguide">
+      <li><span class="vn">1</span><div class="vt"><b><code>$mmsii-k</code> · Kakera:</b> nombre, kakera e imagen. Importa este primero: define el orden de tus tarjetas.</div><button class="btn small" onclick="copyText('$mmsii-k')">Copiar</button></li>
+      <li><span class="vn">2</span><div class="vt"><b><code>$mmsii-kr</code> · Rank + Ka:</b> completa el rank de cada personaje.</div><button class="btn small" onclick="copyText('$mmsii-kr')">Copiar</button></li>
+      <li><span class="vn">3</span><div class="vt"><b><code>$mmsa+-k</code>:</b> completa de qué serie viene cada personaje (alimenta el filtro por serie).</div><button class="btn small" onclick="copyText('$mmsa+-k')">Copiar</button></li>
+    </ol>
+    <div class="vstat" id="verifyCoverage"></div>
+    <input type="hidden" id="verifyMode" value="auto">
+    <textarea id="verifyText" style="margin-top:10px" placeholder="#1,072 - Ghostface 268 ka - https://...&#10;Ghostface - Scream 268 ka&#10;o $sm Personaje 1 $Personaje 2"></textarea>
     <div class="modal-actions" style="margin-top:14px">
       <button class="btn" id="verifyCloseBtn">Cerrar</button>
       <button class="btn primary" id="verifyRunBtn">Comparar</button>
@@ -433,7 +1009,6 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
   </div>
 </div>
 
-<!-- VENTANA MODAL DE EDICIÓN -->
 <div class="modal-backdrop" id="editModalBackdrop">
   <div class="modal">
     <h2 id="modalTitle">Editar Elemento</h2>
@@ -445,7 +1020,7 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
     <div class="modal-row">
         <div>
             <label>Kakera (💎)</label>
-            <input id="editKakera" type="text" placeholder="Ej: 58">
+            <input id="editKakera" type="text" placeholder="Ej: 1,052 o 1.052">
         </div>
         <div>
             <label>Rank (#)</label>
@@ -453,14 +1028,17 @@ button.chip{color:var(--accent);border-color:var(--accent);cursor:pointer}
         </div>
     </div>
 
+    <label>Serie</label>
+    <input id="editSeries" type="text" list="seriesOptions" autocomplete="off" placeholder="Ej: Adventure Time"><datalist id="seriesOptions"></datalist>
+
     <label>URL de la Imagen</label>
     <div class="url-row-modal">
         <input id="editImage" type="text" placeholder="https://mudae.net/uploads/...">
         <button class="btn" id="uploadImgBtn" type="button">Subir local</button>
     </div>
     
-    <label>Valor identificador (Para comando $changeimg individual)</label>
-    <input id="editValue" type="text" placeholder="Ej: ID del personaje o comando exacto">
+    <label>Número de la imagen (para el comando $changeimg)</label>
+    <input id="editValue" type="text" placeholder="Ej: el número que está debajo de la imagen en mudae.net">
 
     <div class="modal-actions">
       <button class="btn danger" id="deleteInModalBtn" type="button">Eliminar esta tarjeta</button>
@@ -514,6 +1092,7 @@ function escapeHTML(value) {
   let spotId = null;
 
   const list = document.getElementById('list');
+  const ask = msg => (typeof opts === 'undefined' || opts.confirm) ? confirm(msg) : true;
   const fileInput = document.getElementById('fileInput');
   const projectInput = document.getElementById('projectInput');
   
@@ -587,8 +1166,9 @@ function escapeHTML(value) {
       value: String(item.value ?? ''),
       kakera: String(item.kakera ?? ''),
       rank: String(item.rank ?? ''),
+      series: String(item.series ?? ''),
       selected: !!item.selected
-    }));
+    })).map(fixItem);
     nextId = Math.max(Number(saved.nextId) || 1, ...items.map(x => x.id + 1), 1);
     loadLists(saved);
     return true;
@@ -604,43 +1184,96 @@ function escapeHTML(value) {
 
   function getItem(id) { return items.find(i => i.id === Number(id)); }
 
-  // PARSER DE LÍNEAS MEJORADO
-  function parseImportLine(line) {
-    let text = line.trim();
-    if (!text) return null;
-    let image = '', kakera = '', rank = '';
+  // Números con separador de miles: 1.000, 1,000, 1 000 -> "1000"
+  const digitsOnly = v => String(v ?? '').replace(/\D/g, '');
+  const fmtNum = v => { const d = digitsOnly(v); return d ? Number(d).toLocaleString('en-US') : ''; };
+  // Comparación solo por nombre: sin mayúsculas, espacios dobles ni caracteres invisibles
+  const normName = t => String(t ?? '').normalize('NFKC').replace(/[\u200b-\u200f\u2060\ufeff]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
 
-    const urlMatch = text.match(/\s*-\s*(https?:\/\/\S+)$/);
+  // PARSER DE LÍNEAS: soporta rank, kakera con separador de miles, imagen y serie
+  //   #1,072 - Nombre 1,268 ka - https://...      ($mmsii-kr)
+  //   Nombre 1.268 ka - https://...               ($mmsii-k)
+  //   Nombre - Serie 1,268 ka                     ($mmsa+-k)
+  function parseImportLine(line) {
+    let text = String(line ?? '').replace(/[\u200b-\u200f\u2060\ufeff]/g, '').replace(/\*\*/g, '').trim();
+    if (!text) return null;
+    let image = '', kakera = '', rank = '', series = '';
+
+    const urlMatch = text.match(/\s*[-–—]?\s*(https?:\/\/\S+)\s*$/);
     if (urlMatch) {
         image = urlMatch[1];
         text = text.slice(0, urlMatch.index).trim();
     }
 
-    const kaMatch = text.match(/\s+(\d+)\s*ka$/i);
+    const kaMatch = text.match(/\s+(\d[\d.,\u00a0\u202f]*)\s*ka\s*$/i);
     if (kaMatch) {
-        kakera = kaMatch[1];
+        kakera = digitsOnly(kaMatch[1]);
         text = text.slice(0, kaMatch.index).trim();
     }
 
-    const rankMatch = text.match(/^#([\d,]+)\s*-\s*/);
+    const rankMatch = text.match(/^#\s*(\d[\d.,\u00a0\u202f]*)\s*[-–—:]\s*/);
     if (rankMatch) {
-        rank = rankMatch[1]; 
+        rank = fmtNum(rankMatch[1]);
         text = text.slice(rankMatch[0].length).trim();
     }
 
-    return { text, image, kakera, rank, value: '', selected: false };
+    // Serie: lo que va después del primer " - " (formato $mmsa+-k)
+    const serMatch = text.match(/^(.+?)\s+[-–—]\s+(.+)$/);
+    if (serMatch) {
+        text = serMatch[1].trim();
+        series = serMatch[2].trim();
+    }
+
+    return { text, image, kakera, rank, series, value: '', selected: false };
   }
 
-  function render() {
-    document.getElementById('count').textContent = `${items.length} personajes`;
-    if (!items.length) {
-      list.innerHTML = '<div class="empty"><strong>Tu lista está vacía</strong>Importa la lista de Mudae para empezar.</div>';
-      saveItems();
-      return;
-    }
-    
-    computeCuts();
-    list.innerHTML = items.map(item => `
+  // Corrige personajes guardados con el error anterior ("Nombre 1,052 ka" dentro del nombre)
+  function fixItem(it) {
+    const m = String(it.text).match(/^(.*\S)\s+(\d[\d.,]*)\s*ka$/i);
+    if (m) { it.text = m[1].trim(); if (!it.kakera) it.kakera = digitsOnly(m[2]); }
+    it.kakera = digitsOnly(it.kakera);
+    return it;
+  }
+
+  // --- AGRUPAR POR SERIE (vista) ---
+  // items sigue siendo la lista real; la vista agrupada solo junta en una tarjeta a los personajes de
+  // una misma serie (también los que no tienen serie y las series de un solo personaje).
+  // Al mover una tarjeta de serie, sus personajes se reubican juntos.
+  let groupMode = false;
+  const groupMap = new Map();
+  let groupOrderAtStart = '';
+  function buildSlots() {
+    const slots = [], byKey = new Map();
+    items.forEach(i => {
+      const k = serKey(i);
+      let g = byKey.get(k);
+      if (!g) { g = { group: true, key: k, name: (i.series || '').trim() || 'Sin serie', members: [], id: -(byKey.size + 1) }; byKey.set(k, g); slots.push(g); groupMap.set(g.id, g); }
+      g.members.push(i);
+    });
+    return slots;
+  }
+  function groupCardHTML(g) {
+    const imgs = g.members.filter(m => m.image).slice(0, 4);
+    const cover = imgs.length
+      ? `<div class="gcover n${imgs.length}">${imgs.map(m => `<img referrerpolicy="no-referrer" src="${escapeHTML(m.image)}" loading="lazy" onerror="this.style.visibility='hidden'">`).join('')}</div>`
+      : `<div class="image-placeholder">Sin imagen</div>`;
+    const ka = g.members.reduce((a, m) => a + num(m.kakera), 0);
+    const all = g.members.every(m => m.selected);
+    return `
+      <article class="item group ${all ? 'selected' : ''}" draggable="true" data-id="${g.id}" data-gkey="${escapeHTML(g.key)}" data-n="${g.members.length}">
+        <div class="image-wrap">
+          ${cover}
+          <div class="badges">
+            <span class="badge gcount" title="Personajes en esta serie">👥 ${g.members.length}</span>
+            ${ka ? `<span class="badge kakera" title="Kakera total de la serie">💎 ${escapeHTML(fmtNum(ka))}</span>` : ''}
+          </div>
+          <div class="item-name" title="${escapeHTML(g.name)}">${escapeHTML(g.name)}<span class="ser">📚 ${g.members.length} ${g.members.length === 1 ? 'personaje' : 'personajes'}</span></div>
+        </div>
+      </article>`;
+  }
+  function itemCardHTML(item) {
+    return `
+
       <article class="item ${item.selected ? 'selected' : ''} ${tierOf(item)} rk-${rankTier(item)}" draggable="true" data-id="${item.id}">
         <div class="image-wrap">
           ${item.image
@@ -649,16 +1282,48 @@ function escapeHTML(value) {
             : `<div class="image-placeholder">Sin imagen</div>`}
           <div class="badges">
             ${item.rank ? `<span class="badge rank" title="${escapeHTML(rankTitle(item))}">#${escapeHTML(item.rank)}${rankSparks(item)}</span>` : ''}
-            ${item.kakera ? `<span class="badge kakera">💎 ${escapeHTML(item.kakera)}</span>` : ''}
+            ${item.kakera ? `<span class="badge kakera">💎 ${escapeHTML(fmtNum(item.kakera))}</span>` : ''}
           </div>
           <div class="card-actions">
             <button class="card-btn" data-action="copy-changeimg" data-id="${item.id}" title="Copiar comando $changeimg individual">🎭</button>
             <button class="card-btn" data-action="open-edit" data-id="${item.id}" title="Editar">✏️</button>
           </div>
-          <div class="item-name" title="${escapeHTML(item.text)}">${escapeHTML(item.text) || 'Sin nombre'}</div>
+          <div class="item-name" title="${escapeHTML(item.text)}">${escapeHTML(item.text) || 'Sin nombre'}${item.series ? `<span class="ser" title="${escapeHTML(item.series)}">📚 ${escapeHTML(item.series)}</span>` : ''}</div>
         </div>
         ${sparksHTML(item)}
-      </article>`).join('');
+      </article>`;
+  }
+  function syncGroupBtn() {
+    const b = document.getElementById('groupBtn');
+    b.classList.toggle('on', groupMode); b.setAttribute('aria-pressed', String(groupMode));
+    b.textContent = groupMode ? '📂 Abrir series' : '📚 Agrupar series';
+  }
+  document.getElementById('groupBtn').addEventListener('click', () => {
+    if (!groupMode) {
+      if (!items.length) return toast('No hay personajes para agrupar.');
+      groupMode = true; syncGroupBtn(); render();
+      const n = groupMap.size;
+      toast(`${n} grupo${n > 1 ? 's' : ''} de serie. Muévelos como cualquier tarjeta y pulsa «Abrir series».`);
+    } else {
+      groupMode = false; syncGroupBtn(); render();
+      toast('Series abiertas.');
+    }
+  });
+
+  function render() {
+    if (!items.length) {
+      list.innerHTML = '<div class="empty"><strong>Tu lista está vacía</strong>Importa la lista de Mudae para empezar.</div>';
+      saveItems();
+      return;
+    }
+    
+    computeCuts();
+    if (groupMode) {
+      groupMap.clear();
+      list.innerHTML = buildSlots().map(sl => sl.group ? groupCardHTML(sl) : itemCardHTML(sl.item)).join('');
+    } else {
+      list.innerHTML = items.map(itemCardHTML).join('');
+    }
       
     saveItems();
   }
@@ -692,6 +1357,17 @@ function escapeHTML(value) {
     }
     
     const card = e.target.closest('.item');
+    if(card && card.classList.contains('group')) {
+        const g = groupMap.get(Number(card.dataset.id));
+        if (g) {
+            const on = !g.members.every(m => m.selected);
+            g.members.forEach(m => { m.selected = on; });
+            card.classList.toggle('selected', on);
+            updateSelectionUI();
+            saveItems();
+        }
+        return;
+    }
     if(card) {
         const id = Number(card.dataset.id);
         const item = getItem(id);
@@ -709,6 +1385,7 @@ function escapeHTML(value) {
     const selectedCount = items.filter(i => i.selected).length;
     const btn = document.getElementById('deleteSelectedBtn');
     const cb = document.getElementById('selectAllCb');
+    document.getElementById('deselectBtn').style.display = selectedCount > 0 ? 'inline-flex' : 'none';
     
     if(selectedCount > 0) {
         btn.style.display = 'inline-flex';
@@ -729,9 +1406,16 @@ function escapeHTML(value) {
     }
   }
 
+  document.getElementById('deselectBtn').addEventListener('click', () => {
+    items.forEach(i => i.selected = false);
+    document.getElementById('selectAllCb').checked = false;
+    render();
+    toast('Selección quitada.');
+  });
+
   document.getElementById('deleteSelectedBtn').addEventListener('click', () => {
     const toDelete = items.filter(i => i.selected).length;
-    if(confirm(`¿Eliminar ${toDelete} tarjetas seleccionadas?`)) {
+    if(ask(`¿Eliminar ${toDelete} tarjetas seleccionadas?`)) {
         items = items.filter(i => !i.selected);
         document.getElementById('selectAllCb').checked = false;
         render();
@@ -744,7 +1428,21 @@ function escapeHTML(value) {
      const criteria = e.target.value;
      if (criteria === 'manual') return;
 
+     const sc = new Map(); items.forEach(i => { const k = serKey(i); sc.set(k, (sc.get(k) || 0) + 1); });
+     const serCmp = (a, b) => {
+         const ka = serKey(a), kb = serKey(b);
+         if (ka === kb) return 0;                 // misma serie: se conserva el orden actual
+         if (!ka) return 1; if (!kb) return -1;   // sin serie siempre al final
+         const byName = ka.localeCompare(kb, 'es', { sensitivity: 'base' });
+         switch (criteria) {
+             case 'series-az': return byName;
+             case 'series-za': return -byName;
+             case 'series-desc': return (sc.get(kb) - sc.get(ka)) || byName;
+             default: return (sc.get(ka) - sc.get(kb)) || byName;
+         }
+     };
      items.sort((a, b) => {
+         if (criteria.startsWith('series-')) return serCmp(a, b);
          const nameA = (a.text || '').toLowerCase();
          const nameB = (b.text || '').toLowerCase();
          const kakeraA = parseInt((a.kakera || '').replace(/\D/g, '')) || 0;
@@ -785,6 +1483,8 @@ function escapeHTML(value) {
     document.getElementById('editKakera').value = item.kakera || '';
     document.getElementById('editRank').value = item.rank || '';
     document.getElementById('editImage').value = item.image || '';
+    document.getElementById('editSeries').value = item.series || '';
+    document.getElementById('seriesOptions').innerHTML = [...new Set(items.map(i => (i.series || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b)).map(v => `<option value="${escapeHTML(v)}">`).join('');
     document.getElementById('editValue').value = item.value || '';
     
     modalBackdrop.classList.add('open');
@@ -802,8 +1502,9 @@ function escapeHTML(value) {
     const item = getItem(currentEditId);
     if(item) {
         item.text = document.getElementById('editName').value.trim();
-        item.kakera = document.getElementById('editKakera').value.trim();
-        item.rank = document.getElementById('editRank').value.trim();
+        item.kakera = digitsOnly(document.getElementById('editKakera').value);
+        item.rank = fmtNum(document.getElementById('editRank').value);
+        item.series = document.getElementById('editSeries').value.trim();
         item.image = document.getElementById('editImage').value.trim();
         item.value = document.getElementById('editValue').value.trim();
         render();
@@ -813,7 +1514,7 @@ function escapeHTML(value) {
   });
 
   document.getElementById('deleteInModalBtn').addEventListener('click', () => {
-    if(confirm('¿Eliminar esta tarjeta?')) {
+    if(ask('¿Eliminar esta tarjeta?')) {
         items = items.filter(i => i.id !== Number(currentEditId));
         render();
         closeEditModal();
@@ -843,7 +1544,21 @@ function escapeHTML(value) {
       const blocks = rawText.split(/^\s*\$sm\s+/m).map(b => b.trim()).filter(Boolean).reverse();
       return blocks.flatMap(b => b.split(/\s+\$/)).map(n => n.trim()).filter(Boolean);
     }
-    return rawText.split(/\r?\n/).filter(Boolean);
+    return rawText.split(/\r?\n/).filter(l => l.trim() && !isHeaderLine(l));
+  }
+
+  // Cabecera que Mudae envía solo en el primer mensaje del DM; no son personajes
+  //   ferch0m's harem / AVG: 10,142 / Top 15 value: 7,479 / Total value: 9,216
+  const HEADER_RES = [
+    /^.{1,80}['\u2019\u2018`]s\s+harem\s*$/i,
+    /^(avg|average|promedio)\s*:/i,
+    /^top\s*\d+\s*value\s*:/i,
+    /^(total\s*value|valor\s*total)\s*:/i,
+    /^page\s+\d+\s*(\/|of)\s*\d+\s*$/i
+  ];
+  function isHeaderLine(line) {
+    const t = String(line).replace(/[\u200b-\u200f\u2060\ufeff*_`>]/g, '').trim();
+    return HEADER_RES.some(re => re.test(t));
   }
 
   // --- BOTONES PRINCIPALES (IMPORTAR y ACTUALIZAR) ---
@@ -859,12 +1574,13 @@ function escapeHTML(value) {
     lines.forEach(line => {
       const parsed = parseImportLine(line);
       if(parsed) {
-          const existingItem = items.find(i => i.text.toLowerCase() === parsed.text.toLowerCase());
+          const existingItem = items.find(i => normName(i.text) === normName(parsed.text));
           
           if (existingItem) {
               if (parsed.kakera) existingItem.kakera = parsed.kakera;
               if (parsed.rank) existingItem.rank = parsed.rank;
               if (parsed.image) existingItem.image = parsed.image;
+              if (parsed.series) existingItem.series = parsed.series;
               countUpdated++;
           } else {
               items.push({ id: nextId++, ...parsed });
@@ -889,7 +1605,7 @@ function escapeHTML(value) {
 
   document.getElementById('addBtn').addEventListener('click', () => {
     const id = nextId++;
-    items.push({ id, text: 'Nuevo Personaje', image: '', kakera: '', rank: '', value: '', selected:false });
+    items.push({ id, text: 'Nuevo Personaje', image: '', kakera: '', rank: '', series: '', value: '', selected:false });
     render();
     openEditModal(id);
   });
@@ -957,7 +1673,12 @@ function escapeHTML(value) {
     const id = Number(card.dataset.id);
     const item = getItem(id);
 
-    if (item && item.selected) {
+    if (groupMode) {
+        groupOrderAtStart = [...list.querySelectorAll('.item')].map(c => c.dataset.id).join();
+        draggedIds = card.classList.contains('selected')
+            ? [...list.querySelectorAll('.item.selected')].map(c => Number(c.dataset.id))
+            : [id];
+    } else if (item && item.selected) {
         draggedIds = items.filter(i => i.selected).map(i => i.id);
     } else {
         draggedIds = [id];
@@ -1009,8 +1730,21 @@ function escapeHTML(value) {
     list.querySelectorAll('.item').forEach(c => c.classList.remove('dragging', 'over'));
     draggedIds = [];
     
-    const currentItems = [...list.querySelectorAll('.item')].map(card => getItem(card.dataset.id)).filter(Boolean);
-    const orderChanged = items.some((item, i) => item.id !== currentItems[i]?.id);
+    let currentItems, orderChanged;
+    if (groupMode) {
+        const cards = [...list.querySelectorAll('.item')];
+        orderChanged = cards.map(c => c.dataset.id).join() !== groupOrderAtStart;
+        const flat = cards.flatMap(c => {
+            if (c.classList.contains('group')) { const g = groupMap.get(Number(c.dataset.id)); return g ? g.members : []; }
+            const it = getItem(c.dataset.id); return it ? [it] : [];
+        });
+        // solo se reubican los personajes si realmente se movió una tarjeta
+        currentItems = orderChanged && flat.length === items.length ? flat : items;
+        if (currentItems === items) orderChanged = false;
+    } else {
+        currentItems = [...list.querySelectorAll('.item')].map(card => getItem(card.dataset.id)).filter(Boolean);
+        orderChanged = items.some((item, i) => item.id !== currentItems[i]?.id);
+    }
     items = currentItems;
     render(); 
     if (orderChanged) toast('Orden actualizado y guardado.');
@@ -1091,8 +1825,8 @@ function escapeHTML(value) {
         if (!saved || !Array.isArray(saved.items)) throw new Error("Inválido");
         items = saved.items.map((item, i) => ({
           id: Number(item.id) || i+1, text: String(item.text||''), image: String(item.image||''),
-          value: String(item.value||''), kakera: String(item.kakera||''), rank: String(item.rank||''), selected: false
-        }));
+          value: String(item.value||''), kakera: String(item.kakera||''), rank: String(item.rank||''), series: String(item.series||''), selected: false
+        })).map(fixItem);
         nextId = Math.max(saved.nextId || 1, ...items.map(i => i.id+1), 1);
         loadLists(saved);
         document.getElementById('sortSelect').value = 'manual';
@@ -1109,23 +1843,24 @@ function escapeHTML(value) {
     document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
     document.getElementById('viewMain').hidden = t.dataset.tab !== 'main';
     document.getElementById('viewLists').hidden = t.dataset.tab !== 'lists';
+    document.getElementById('viewTutorial').hidden = t.dataset.tab !== 'tutorial';
     if (t.dataset.tab === 'lists') renderLists();
   }));
 
   // --- LISTAS PERSONALIZADAS ---
   const lSel = new Set(); // selección dentro de listas: 'idLista:idPersonaje'
   function miniCard(item, listId) {
-    return `<article class="item mini ${listId ? tierOf(item) : ''} rk-${rankTier(item)}${listId && lSel.has(listId + ':' + item.id) ? ' selected' : ''}" draggable="true" data-id="${item.id}" data-src="${listId}">
+    return `<article class="item mini ${tierOf(item)} rk-${rankTier(item)}${listId && lSel.has(listId + ':' + item.id) ? ' selected' : ''}" draggable="true" data-id="${item.id}" data-src="${listId}">
       <div class="image-wrap">
         ${item.image ? `<img referrerpolicy="no-referrer" src="${escapeHTML(item.image)}" loading="lazy" onerror="this.style.display='none'">` : `<div class="image-placeholder">Sin imagen</div>`}
-        <div class="badges">${item.rank ? `<span class="badge rank" title="${escapeHTML(rankTitle(item))}">#${escapeHTML(item.rank)}</span>` : ''}${item.kakera ? `<span class="badge kakera">💎 ${escapeHTML(item.kakera)}</span>` : ''}</div>
+        <div class="badges">${item.rank ? `<span class="badge rank" title="${escapeHTML(rankTitle(item))}">#${escapeHTML(item.rank)}${rankSparks(item)}</span>` : ''}${item.kakera ? `<span class="badge kakera">💎 ${escapeHTML(fmtNum(item.kakera))}</span>` : ''}</div>
         <div class="card-actions">
           <button class="card-btn" data-act="copy" data-id="${item.id}" title="Copiar nombre">📋</button>
           ${listId ? '' : `<button class="card-btn" data-act="add" data-id="${item.id}" title="Añadir a la lista elegida">➕</button>`}
           ${listId ? `<button class="card-btn" data-act="remove" data-id="${item.id}" data-list="${listId}" title="Quitar de la lista">✖</button>` : ''}
         </div>
         <div class="item-name">${escapeHTML(item.text) || 'Sin nombre'}</div>
-      </div></article>`;
+      </div>${sparksHTML(item)}</article>`;
   }
 
   function pruneSel() {
@@ -1144,7 +1879,7 @@ function escapeHTML(value) {
   function renderLists() {
     computeCuts(); pruneSel();
     const tl = document.getElementById('targetList'), prev = tl.value;
-    tl.innerHTML = lists.map(l => `<option value="${l.id}">➕ ${escapeHTML(l.name)}</option>`).join('') || '<option value="">Crea una lista primero</option>';
+    tl.innerHTML = lists.map(l => `<option value="${l.id}">${escapeHTML(l.name)}</option>`).join('') || '<option value="">Crea una lista primero</option>';
     if (prev && getList(prev)) tl.value = prev;
     const q = document.getElementById('poolSearch').value.trim().toLowerCase();
     document.getElementById('poolGrid').innerHTML = items.filter(i => i.text.toLowerCase().includes(q)).map(i => miniCard(i, 0)).join('') || '<div class="hint">Sin personajes.</div>';
@@ -1155,6 +1890,7 @@ function escapeHTML(value) {
         <div class="lhead"><h3>${escapeHTML(l.name)} <span class="hint">${mem.length}</span></h3>
           <div class="lhead-actions">
             <button class="btn small" data-lact="selall" data-list="${l.id}">${nsel && nsel === mem.length ? 'Deseleccionar' : 'Seleccionar todo'}</button>
+            <button class="btn small" data-lact="copyall" data-list="${l.id}" title="Copia los nombres de toda la lista separados por ' - '">📋 Copiar todos</button>
             <button class="btn small danger" data-lact="unsel" data-list="${l.id}" ${nsel ? '' : 'hidden'}>Quitar seleccionados (${nsel})</button>
             <button class="btn small" data-lact="rename" data-list="${l.id}">Renombrar</button>
             <button class="btn small danger" data-lact="delete" data-list="${l.id}">Eliminar lista</button>
@@ -1206,6 +1942,11 @@ function escapeHTML(value) {
     if (!lb) return;
     const l = getList(lb.dataset.list);
     if (!l) return;
+    if (lb.dataset.lact === 'copyall') {
+      const names = l.members.map(getItem).filter(Boolean).map(i => i.text);
+      names.length ? copyText(names.join(' - ')) : toast('La lista está vacía.');
+      return;
+    }
     if (lb.dataset.lact === 'selall') {
       const all = l.members.length && selCountOf(l.id) === l.members.length;
       l.members.forEach(m => { const k = l.id + ':' + m; if (all) lSel.delete(k); else lSel.add(k); });
@@ -1220,7 +1961,7 @@ function escapeHTML(value) {
     if (lb.dataset.lact === 'rename') {
       const name = (prompt('Nuevo nombre de la lista:', l.name) || '').trim();
       if (name) { l.name = name; saveItems(); }
-    } else if (confirm(`¿Eliminar la lista "${l.name}"? Los personajes no se borran.`)) {
+    } else if (ask(`¿Eliminar la lista "${l.name}"? Los personajes no se borran.`)) {
       lists = lists.filter(x => x.id !== l.id);
       saveItems();
     }
@@ -1340,7 +2081,7 @@ function escapeHTML(value) {
   // --- GUARDAR / CARGAR LISTAS (por nombre de personaje) ---
   document.getElementById('saveListsBtn').addEventListener('click', () => {
     if (!lists.length) return toast('No hay listas para guardar.');
-    const data = { type: 'mudae-listas', lists: lists.map(l => ({ name: l.name, members: l.members.map(getItem).filter(Boolean).map(i => i.text) })) };
+    const data = { type: 'mudae-listas', lists: lists.map(l => ({ name: l.name, members: l.members.map(getItem).filter(Boolean).map(i => ({ name: i.text, image: i.image || '', kakera: i.kakera || '', rank: i.rank || '' })) })) };
     const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' }));
     const a = document.createElement('a'); a.href = url; a.download = 'listas_mudae.json'; a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
@@ -1357,50 +2098,118 @@ function escapeHTML(value) {
         const data = JSON.parse(ev.target.result);
         if (!data || !Array.isArray(data.lists)) throw new Error('Inválido');
         const key = t => String(t || '').trim().toLowerCase();
-        let added = 0, merged = 0, missing = 0;
+        let added = 0, merged = 0, created = 0, filled = 0;
         data.lists.forEach(l => {
           const name = String(l.name || '').trim();
           if (!name) return;
-          const ids = (l.members || []).map(n => {
-            const it = items.find(i => key(i.text) === key(n));
-            if (!it) missing++;
-            return it ? it.id : null;
+          const ids = (l.members || []).map(m => {
+            const o = typeof m === 'string' ? { name: m } : (m || {});
+            const nm = String(o.name || '').trim();
+            if (!nm) return null;
+            const img = String(o.image || '').trim(), ka = digitsOnly(o.kakera), rk = o.rank ? fmtNum(o.rank) : '';
+            let it = items.find(i => key(i.text) === key(nm));
+            if (!it) {
+              it = { id: nextId++, text: nm, image: img, kakera: ka, rank: rk, series: '', value: '', selected: false };
+              items.push(it); created++;
+            } else {
+              let f = false;
+              if (!it.image && img) { it.image = img; f = true; }
+              if (!it.kakera && ka) { it.kakera = ka; f = true; }
+              if (!it.rank && rk) { it.rank = rk; f = true; }
+              if (f) filled++;
+            }
+            return it.id;
           }).filter(id => id !== null);
           let target = lists.find(x => key(x.name) === key(name));
           if (target) merged++; else { target = { id: nextListId++, name, members: [] }; lists.push(target); added++; }
           ids.forEach(id => { if (!target.members.includes(id)) target.members.push(id); });
         });
-        saveItems();
-        toast(`Listas nuevas: ${added} · combinadas: ${merged}` + (missing ? ` · ${missing} personajes no están en la página` : ''));
+        render();
+        toast(`Listas nuevas: ${added} · combinadas: ${merged}` + (created ? ` · ${created} personajes creados` : '') + (filled ? ` · ${filled} completados` : ''));
       } catch (err) { toast('Error al leer el archivo de listas.'); }
     };
     reader.readAsText(file);
     listsInput.value = '';
   });
 
-  // --- VERIFICAR LISTA ---
+  // --- VERIFICAR LISTA (acepta $mmsii-k, $mmsii-kr, $mmsa+-k y $sm) ---
   const verifyBackdrop = document.getElementById('verifyBackdrop');
-  const norm = t => String(t || '').trim().toLowerCase();
-  document.getElementById('verifyBtn').addEventListener('click', () => verifyBackdrop.classList.add('open'));
+  const norm = normName;
+  function coverageHTML() {
+    const n = items.length;
+    if (!n) return '<span class="vchip">Tu página está vacía: empieza con el paso 1.</span>';
+    const c = f => items.filter(i => i[f]).length;
+    return [
+      ['1', '$mmsii-k', 'kakera e imagen', Math.min(c('kakera'), c('image'))],
+      ['2', '$mmsii-kr', 'rank', c('rank')],
+      ['3', '$mmsa+-k', 'serie', c('series')]
+    ].map(([k, cmd, what, have]) => `<span class="vchip ${have === n ? 'ok' : 'warn'}">${have === n ? '✓' : '⚠'} ${k} · ${escapeHTML(cmd)} · ${what} ${have}/${n}${have < n ? ` (faltan ${n - have})` : ''}</span>`).join('');
+  }
+  function refreshCoverage() { document.getElementById('verifyCoverage').innerHTML = coverageHTML(); }
+  document.getElementById('verifyBtn').addEventListener('click', () => { refreshCoverage(); verifyBackdrop.classList.add('open'); });
   document.getElementById('verifyCloseBtn').addEventListener('click', () => verifyBackdrop.classList.remove('open'));
   verifyBackdrop.addEventListener('click', e => { if (e.target === verifyBackdrop) verifyBackdrop.classList.remove('open'); });
 
+  function detectKind(st) {
+    if (st.rank) return '$mmsii-kr';
+    if (st.series) return '$mmsa+-k';
+    if (st.kakera || st.image) return '$mmsii-k';
+    return '$sm (solo nombres)';
+  }
+
   let verifyMissing = [];
   function runVerify() {
-    const raw = document.getElementById('verifyText').value.trim();
-    const pasted = extractLines(raw).map(parseImportLine).filter(Boolean);
+    let raw = document.getElementById('verifyText').value.trim();
+    const mode = document.getElementById('verifyMode').value;
+    if (mode === 'sm' && raw && !/^\$sm\s/.test(raw)) raw = '$sm ' + raw;
+    const pasted = extractLines(raw).map(parseImportLine).filter(p => p && p.text);
+    refreshCoverage();
     if (!pasted.length) return toast('Pega una lista para verificar.');
-    const inPasted = new Set(pasted.map(p => norm(p.text)));
+
+    // juntar por nombre (se pueden pegar varios comandos a la vez)
+    const map = new Map(), order = [];
+    pasted.forEach(p => {
+      const k = norm(p.text);
+      if (!map.has(k)) { map.set(k, { ...p }); order.push(k); return; }
+      const m = map.get(k);
+      ['kakera', 'rank', 'series', 'image'].forEach(f => { if (!m[f] && p[f]) m[f] = p[f]; });
+    });
+    const st = { lines: pasted.length, kakera: 0, rank: 0, series: 0, image: 0 };
+    map.forEach(m => ['kakera', 'rank', 'series', 'image'].forEach(f => { if (m[f]) st[f]++; }));
+
     const inPage = new Set(items.map(i => norm(i.text)));
-    const seen = new Set();
-    verifyMissing = pasted.filter(p => { const k = norm(p.text); if (inPage.has(k) || seen.has(k)) return false; seen.add(k); return true; });
-    const extra = items.filter(i => !inPasted.has(norm(i.text)));
+    verifyMissing = order.filter(k => !inPage.has(k)).map(k => map.get(k));
+    const extra = items.filter(i => !map.has(norm(i.text)));
+
+    // datos distintos o incompletos
+    const diffs = [];
+    items.forEach(it => {
+      const p = map.get(norm(it.text)); if (!p) return;
+      const ch = [];
+      if (p.kakera && digitsOnly(p.kakera) !== digitsOnly(it.kakera)) ch.push({ f: 'kakera', t: `💎 ${it.kakera || '—'} → ${p.kakera}` });
+      if (p.rank && digitsOnly(p.rank) !== digitsOnly(it.rank)) ch.push({ f: 'rank', t: `# ${it.rank || '—'} → ${p.rank}` });
+      if (p.series && p.series !== it.series) ch.push({ f: 'series', t: `📚 ${it.series || '—'} → ${p.series}` });
+      if (p.image && !it.image) ch.push({ f: 'image', t: '🖼️ sin imagen → se completa' });
+      if (ch.length) diffs.push({ it, p, ch });
+    });
+
+    // orden
+    const pageKeys = items.filter(i => map.has(norm(i.text))).map(i => norm(i.text));
+    const pastedKeys = order.filter(k => inPage.has(k));
+    const hasDup = new Set(pageKeys).size !== pageKeys.length;
+    const orderDiffers = !hasDup && pageKeys.length >= 2 && pageKeys.join('\n') !== pastedKeys.join('\n');
+
     const box = document.getElementById('verifyResults');
-    if (!verifyMissing.length && !extra.length) {
-      box.innerHTML = `<div class="vok">✓ La página coincide con tu lista (${items.length} personajes)</div>`;
-      return;
-    }
-    box.innerHTML = `<div class="hint" style="margin-top:14px">Lista pegada: ${inPasted.size} · Página: ${items.length}</div>
+    const detected = `<div class="vstat vfull"><span class="vchip">Detectado: ${detectKind(st)}</span><span class="vchip">${st.lines} líneas</span><span class="vchip">💎 ${st.kakera}</span><span class="vchip"># ${st.rank}</span><span class="vchip">📚 ${st.series}</span><span class="vchip">🖼️ ${st.image}</span></div>`;
+    const expect = { k: ['kakera', '$mmsii-k'], kr: ['rank', '$mmsii-kr'], series: ['series', '$mmsa+-k'] }[mode];
+    const warn = expect && !st[expect[0]] ? `<div class="vwarn">No encontré ${expect[0] === 'rank' ? 'ranks (#)' : expect[0] === 'series' ? 'series' : 'kakera'} en lo que pegaste. ¿Seguro que es la salida de ${expect[1]}? Si tu formato es distinto, elige "Detectar automáticamente".</div>` : '';
+
+    const allGood = !verifyMissing.length && !extra.length && !diffs.length && !orderDiffers;
+    let html = detected + warn;
+    if (allGood) {
+      html += `<div class="vok">✓ La página coincide con lo que pegaste (${pastedKeys.length} personajes, mismo orden)</div>`;
+    } else {
+      html += `<div class="hint" style="margin-top:6px">Pegados: ${map.size} · Página: ${items.length}</div>
       <div class="vcols">
         <div class="vbox"><h3>Faltan en la página (${verifyMissing.length})</h3>
           <div class="vlist">${verifyMissing.map(p => `<span>${escapeHTML(p.text)}</span>`).join('') || '<span class="hint">Ninguno</span>'}</div>
@@ -1410,7 +2219,17 @@ function escapeHTML(value) {
           <div class="vlist">${extra.map(i => `<label><input type="checkbox" class="vx" value="${i.id}" checked style="accent-color:var(--accent)"> ${escapeHTML(i.text)}</label>`).join('') || '<span class="hint">Ninguno</span>'}</div>
           ${extra.length ? `<button class="btn small danger" id="vDelExtra">Eliminar seleccionados</button>` : ''}
         </div>
+      </div>
+      <div class="vbox vfull"><h3>Datos distintos o incompletos (${diffs.length})</h3>
+        <div class="vdiff">${diffs.map(d => `<label><input type="checkbox" class="vd" value="${d.it.id}" checked style="accent-color:var(--accent)"><span>${escapeHTML(d.it.text)}<small>${d.ch.map(c => escapeHTML(c.t)).join(' · ')}</small></span></label>`).join('') || '<span class="hint">Todos los datos coinciden</span>'}</div>
+        ${diffs.length ? `<button class="btn small primary" id="vApplyDiff">Actualizar tarjetas con lo pegado</button>` : ''}
+      </div>
+      <div class="vbox vfull"><h3>Orden</h3>
+        ${orderDiffers ? `<div class="hint" style="margin:6px 0 10px">El orden de tus tarjetas es distinto al de la lista pegada.</div><button class="btn small primary" id="vApplyOrder">Ordenar como la lista pegada</button>` : '<span class="hint">El orden coincide</span>'}
       </div>`;
+    }
+    box.innerHTML = html;
+
     document.getElementById('vCopyMissing')?.addEventListener('click', () => copyText(verifyMissing.map(p => p.text).join('\n')));
     document.getElementById('vAddMissing')?.addEventListener('click', () => {
       verifyMissing.forEach(p => items.push({ id: nextId++, ...p }));
@@ -1419,15 +2238,35 @@ function escapeHTML(value) {
     document.getElementById('vDelExtra')?.addEventListener('click', () => {
       const ids = [...box.querySelectorAll('.vx:checked')].map(c => Number(c.value));
       if (!ids.length) return toast('No hay personajes seleccionados.');
-      if (!confirm(`¿Eliminar ${ids.length} personajes de la página?`)) return;
+      if (!ask(`¿Eliminar ${ids.length} personajes de la página?`)) return;
       items = items.filter(i => !ids.includes(i.id));
       render(); runVerify(); toast('Personajes eliminados.');
+    });
+    document.getElementById('vApplyDiff')?.addEventListener('click', () => {
+      const ids = new Set([...box.querySelectorAll('.vd:checked')].map(c => Number(c.value)));
+      let n = 0;
+      diffs.forEach(d => {
+        if (!ids.has(d.it.id)) return;
+        d.ch.forEach(c => { d.it[c.f] = d.p[c.f]; });
+        n++;
+      });
+      if (!n) return toast('No hay personajes seleccionados.');
+      render(); runVerify(); toast(`${n} tarjetas actualizadas.`);
+    });
+    document.getElementById('vApplyOrder')?.addEventListener('click', () => {
+      const slots = [], byKey = new Map();
+      items.forEach((it, ix) => { const k = norm(it.text); if (map.has(k)) { slots.push(ix); byKey.set(k, it); } });
+      const ordered = pastedKeys.map(k => byKey.get(k)).filter(Boolean);
+      if (ordered.length !== slots.length) return toast('No se pudo ordenar (nombres repetidos).');
+      slots.forEach((ix, n) => { items[ix] = ordered[n]; });
+      const ss = document.getElementById('sortSelect'); if (ss) ss.value = 'manual';
+      render(); runVerify(); toast('Orden actualizado.');
     });
   }
   document.getElementById('verifyRunBtn').addEventListener('click', runVerify);
 
   // --- EXTRAS: deshacer, estadísticas, filtro, diversión ---
-  const num = v => Number(String(v || '').replace(/[^\d.]/g, '')) || 0;
+  const num = v => Number(String(v || '').replace(/\D/g, '')) || 0;
   // Brillo por kakera: de 100 a 199, de 200 a 299 ... 900 o más
   function computeCuts() {}
   const KCUTS = [100, 200, 300, 400, 500, 600, 700, 800, 900];
@@ -1511,26 +2350,39 @@ function escapeHTML(value) {
     toast('Deshecho ↩️');
   }
   $('undoBtn').addEventListener('click', undo);
+  // Usado por el botón «Pruebas» de Configuración: foto exacta de tu lista y restauración
+  window.__mudaeState = {
+    snapshot: () => JSON.stringify({ items: items.map(({ selected, ...r }) => r), lists, nextId, nextListId }),
+    restore: snap => {
+      const st = JSON.parse(snap);
+      items = st.items.map(i => ({ ...i, selected: false }));
+      nextId = st.nextId; lists = st.lists; nextListId = st.nextListId;
+      if (groupMode) { groupMode = false; syncGroupBtn(); }
+      $('sortSelect').value = 'manual';
+      render();
+    }
+  };
 
   function dupIds() {
     const seen = new Set(), d = [];
-    items.forEach(i => { const k = String(i.text).trim().toLowerCase(); if (seen.has(k)) d.push(i.id); else seen.add(k); });
+    items.forEach(i => { const k = normName(i.text); if (seen.has(k)) d.push(i.id); else seen.add(k); });
     return d;
   }
   function updateStats() {
     const tot = items.reduce((a, i) => a + num(i.kakera), 0);
     const noImg = items.filter(i => !i.image).length, dups = dupIds().length;
-    $('stats').innerHTML = items.length ? [
-      `<span class="chip">👥 ${items.length}</span>`,
-      `<span class="chip">💎 ${tot.toLocaleString('es')} kakera</span>`,
-      noImg ? `<span class="chip">🖼️ ${noImg} sin imagen</span>` : '',
+    $('stats').innerHTML = [
+      `<span class="chip">👥 ${items.length} ${items.length === 1 ? 'Personaje' : 'Personajes'}</span>`,
+      `<span class="chip">💎 ${tot.toLocaleString('es')} Kakera</span>`,
+      noImg ? `<span class="chip">🖼️ ${noImg} Sin Imagen</span>` : '',
       dups ? `<button class="chip" id="dupBtn" title="Selecciona las copias repetidas">♊ ${dups} repetidos · seleccionar</button>` : '',
-    ].join('') : '';
+    ].join('');
     const any = items.some(i => i.selected);
-    ['selCopyBtn', 'selTopBtn', 'selBottomBtn'].forEach(id => { $(id).hidden = !any; });
+    ['selCopyBtn', 'selSeriesBtn', 'selTopBtn', 'selBottomBtn'].forEach(id => { $(id).hidden = !any; });
     $('selBar').classList.toggle('on', any);
     $('selCount').textContent = items.filter(i => i.selected).length;
     try { renderTierBar(); } catch (e) {}
+    try { renderSeriesList(); } catch (e) {}
   }
   $('stats').addEventListener('click', e => {
     if (!e.target.closest('#dupBtn')) return;
@@ -1540,12 +2392,20 @@ function escapeHTML(value) {
   });
 
   let hiddenTiers = new Set();
+  const seriesSel = new Set();
+  const serKey = i => normName(i.series);
   try { hiddenTiers = new Set(JSON.parse(localStorage.getItem('mudae-hidden-v2') || '[]')); } catch (e) {}
   function applyFilter() {
     const q = $('filterInput').value.trim().toLowerCase();
+    const hide = it => !it || (!!q && !it.text.toLowerCase().includes(q)) || hiddenTiers.has('k:' + tierOf(it)) || hiddenTiers.has('r:' + rankTier(it)) || (seriesSel.size > 0 && !seriesSel.has(serKey(it)));
     document.querySelectorAll('#list .item').forEach(c => {
-      const it = getItem(c.dataset.id);
-      c.hidden = !it || (!!q && !it.text.toLowerCase().includes(q)) || hiddenTiers.has('k:' + tierOf(it)) || hiddenTiers.has('r:' + rankTier(it));
+      if (c.classList.contains('group')) {
+        const g = groupMap.get(Number(c.dataset.id));
+        const n = g ? g.members.filter(m => !hide(m)).length : 0;
+        c.hidden = !n; c.dataset.vis = String(n);
+        return;
+      }
+      c.hidden = hide(getItem(c.dataset.id));
     });
     updateTierSummary();
   }
@@ -1559,9 +2419,9 @@ function escapeHTML(value) {
   }
   function tierSummaryHTML() {
     const total = items.length;
-    const shown = [...document.querySelectorAll('#list .item')].filter(c => !c.hidden).length;
+    const shown = [...document.querySelectorAll('#list .item')].filter(c => !c.hidden).reduce((a, c) => a + (c.classList.contains('group') ? Number(c.dataset.vis || c.dataset.n) : 1), 0);
     const filtered = hiddenTiers.size > 0 || $('filterInput').value.trim();
-    return `<span class="lbl">Mostrando </span><b>${shown}</b> de ${total}${hiddenTiers.size ? ` · ${hiddenTiers.size} oculto${hiddenTiers.size > 1 ? 's' : ''}` : ''}`;
+    return `<span class="lbl">Mostrando </span><b>${shown}</b> de ${total}${seriesSel.size ? ` · ${seriesSel.size} serie${seriesSel.size > 1 ? 's' : ''}` : ''}${hiddenTiers.size ? ` · ${hiddenTiers.size} oculto${hiddenTiers.size > 1 ? 's' : ''}` : ''}`;
   }
   function updateTierSummary() { const el = $('tierSum'); if (el) el.innerHTML = tierSummaryHTML(); }
   function renderTierBar() {
@@ -1590,7 +2450,7 @@ function escapeHTML(value) {
   }
   $('tierBar').addEventListener('click', e => {
     if (e.target.closest('#tierToggle')) {
-      tierOpen = !tierOpen; store0.set('mudae-tier-open', tierOpen ? '1' : '0'); renderTierBar(); return;
+      tierOpen = !tierOpen; store0.set('mudae-tier-open', tierOpen ? '1' : '0'); togglePanel($('tierBar').querySelector('.fpanel'), tierOpen, $('tierToggle')); return;
     }
     const all = e.target.closest('[data-all]'), none = e.target.closest('[data-none]');
     if (all || none) {
@@ -1606,9 +2466,168 @@ function escapeHTML(value) {
     renderTierBar(); applyFilter();
   });
   renderTierBar();
+
+  // --- FILTRO POR SERIE (lista vertical) ---
+  let seriesOpen = store0.get('mudae-series-open') === '1';
+  let seriesQuery = '';
+  const SORTS = { az: 'A - Z', za: 'Z - A', desc: 'Mayor a menor', asc: 'Menor a mayor' };
+  let seriesSort = store0.get('mudae-series-sort');
+  if (!SORTS[seriesSort]) seriesSort = 'az';
+  function seriesCounts() {
+    const m = new Map();
+    items.forEach(i => {
+      const k = serKey(i);
+      const e = m.get(k) || { key: k, name: (i.series || '').trim() || 'Sin serie', n: 0 };
+      e.n++; m.set(k, e);
+    });
+    const byName = (a, b) => a.name.localeCompare(b.name, 'es', { sensitivity: 'base' });
+    const cmp = { az: byName, za: (a, b) => byName(b, a), desc: (a, b) => b.n - a.n || byName(a, b), asc: (a, b) => a.n - b.n || byName(a, b) }[seriesSort];
+    // «Sin serie» siempre queda al final
+    return [...m.values()].sort((a, b) => (a.key === '') - (b.key === '') || cmp(a, b));
+  }
+  function seriesSummary() {
+    return seriesSel.size ? `<b>${seriesSel.size}</b> seleccionada${seriesSel.size > 1 ? 's' : ''}` : 'Todas';
+  }
+  function renderSeriesList() {
+    const box = $('seriesList'); if (!box) return;
+    const all = seriesCounts();
+    [...seriesSel].forEach(k => { if (!all.some(s => s.key === k)) seriesSel.delete(k); });
+    const q = normName(seriesQuery);
+    const rows = all.filter(s => !q || normName(s.name).includes(q));
+    const top = box.scrollTop;
+    box.innerHTML = rows.map(s => `<button class="srow${seriesSel.has(s.key) ? ' on' : ''}" data-skey="${escapeHTML(s.key)}" aria-pressed="${seriesSel.has(s.key)}"><span class="tchk">✓</span><span class="sn" title="${escapeHTML(s.name)}">${escapeHTML(s.name)}</span><span class="sc">${s.n}</span></button>`).join('')
+      || '<div class="hint" style="padding:8px">No hay series que coincidan.</div>';
+    box.scrollTop = top;
+    const sum = $('seriesSum'); if (sum) sum.innerHTML = seriesSummary();
+    const clr = $('seriesClear'); if (clr) clr.hidden = !seriesSel.size;
+  }
+  function renderSeriesBar() {
+    const bar = $('seriesBar'); if (!bar) return;
+    bar.innerHTML = `<div class="fpanel${seriesOpen ? ' open' : ''}" id="seriesPanel">
+      <button class="fhead" id="seriesToggle" aria-expanded="${seriesOpen}">
+        <span>📚 Filtrar por serie</span>
+        <span class="fsum" id="seriesSum">${seriesSummary()}</span>
+        <span class="chev">▾</span></button>
+      <div class="fbody" ${seriesOpen ? '' : 'hidden'}>
+        <div class="fgroup-head" style="margin:0"><input type="search" class="sfind" id="seriesFind" placeholder="Buscar serie..." value="${escapeHTML(seriesQuery)}">
+          <div class="fmini"><button class="fl" id="seriesClear" ${seriesSel.size ? '' : 'hidden'}>Limpiar</button></div></div>
+        <div class="ssort" id="seriesSortBar"><span class="hint">Ordenar:</span>${Object.entries(SORTS).map(([k, n]) => `<button class="fl${k === seriesSort ? ' active' : ''}" data-ssort="${k}" aria-pressed="${k === seriesSort}" title="${k === 'desc' ? 'Más personajes primero' : k === 'asc' ? 'Menos personajes primero' : 'Orden alfabético'}">${k === 'desc' || k === 'asc' ? '🔢 ' : '🔤 '}${n}</button>`).join('')}</div>
+        <div class="slist" id="seriesList"></div>
+      </div></div>`;
+    renderSeriesList();
+  }
+  $('seriesBar').addEventListener('click', e => {
+    if (e.target.closest('#seriesToggle')) { seriesOpen = !seriesOpen; store0.set('mudae-series-open', seriesOpen ? '1' : '0'); togglePanel($('seriesPanel'), seriesOpen, $('seriesToggle')); return; }
+    const so = e.target.closest('[data-ssort]');
+    if (so) {
+      seriesSort = so.dataset.ssort; store0.set('mudae-series-sort', seriesSort);
+      $('seriesSortBar').querySelectorAll('[data-ssort]').forEach(b => { const on = b.dataset.ssort === seriesSort; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on)); });
+      const l = $('seriesList'); if (l) l.scrollTop = 0;
+      renderSeriesList(); return;
+    }
+    if (e.target.closest('#seriesClear')) { seriesSel.clear(); renderSeriesList(); applyFilter(); return; }
+    const row = e.target.closest('.srow'); if (!row) return;
+    const k = row.dataset.skey;
+    if (seriesSel.has(k)) seriesSel.delete(k); else seriesSel.add(k);
+    renderSeriesList(); applyFilter();
+  });
+  $('seriesBar').addEventListener('input', e => {
+    if (e.target.id !== 'seriesFind') return;
+    seriesQuery = e.target.value; renderSeriesList();
+  });
+  renderSeriesBar();
+
+  // --- ANIMACIONES: abrir/cerrar paneles de filtros y apartados del tutorial ---
+  const animOn = () => !document.body.classList.contains('no-ui-anim') && !window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function togglePanel(panel, open, btn) {
+    const body = panel && panel.querySelector('.fbody'); if (!body) return;
+    if (btn) btn.setAttribute('aria-expanded', String(open));
+    body.classList.remove('opening', 'closing');
+    if (!animOn()) { panel.classList.toggle('open', open); body.hidden = !open; return; }
+    if (open) {
+      panel.classList.add('open'); body.hidden = false;
+      body.style.setProperty('--h', (body.scrollHeight + 2) + 'px');
+      body.classList.add('opening');
+      const fin = e => { if (e.target !== body) return; body.removeEventListener('animationend', fin); body.classList.remove('opening'); };
+      body.addEventListener('animationend', fin);
+    } else {
+      body.style.setProperty('--h', body.offsetHeight + 'px');
+      panel.classList.remove('open');
+      body.classList.add('closing');
+      const done = e => { if (e.target !== body) return; body.removeEventListener('animationend', done); body.classList.remove('closing'); if (!panel.classList.contains('open')) body.hidden = true; };
+      body.addEventListener('animationend', done);
+    }
+  }
+  document.querySelectorAll('.tut details').forEach(d => {
+    const sum = d.querySelector('summary'), body = d.querySelector('.tbody');
+    sum.addEventListener('click', e => {
+      e.preventDefault();
+      if (!animOn()) { d.open = !d.open; return; }
+      if (d._a) { const wasClosing = d._closing; d._a.cancel(); d._a = null; d._closing = false; d.classList.remove('closing'); body.style.overflow = ''; if (wasClosing) return; }
+      const st = getComputedStyle(body), pt = st.paddingTop, pb = st.paddingBottom;
+      body.style.overflow = 'hidden';
+      if (!d.open) {
+        d.open = true;
+        const h = body.offsetHeight;
+        const a = d._a = body.animate([{ height: '0px', opacity: 0, paddingTop: '0px', paddingBottom: '0px' }, { height: h + 'px', opacity: 1, paddingTop: pt, paddingBottom: pb }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' });
+        a.onfinish = a.oncancel = () => { body.style.overflow = ''; if (d._a === a) d._a = null; };
+      } else {
+        const h = body.offsetHeight;
+        d._closing = true; d.classList.add('closing');
+        const a = d._a = body.animate([{ height: h + 'px', opacity: 1, paddingTop: pt, paddingBottom: pb }, { height: '0px', opacity: 0, paddingTop: '0px', paddingBottom: '0px' }], { duration: 250, easing: 'ease', fill: 'forwards' });
+        a.onfinish = () => { d.open = false; d._closing = false; d.classList.remove('closing'); if (d._a === a) d._a = null; a.cancel(); body.style.overflow = ''; };
+      }
+    });
+  });
   $('filterInput').addEventListener('input', applyFilter);
 
-  $('selCopyBtn').addEventListener('click', () => copyText(items.filter(i => i.selected).map(i => i.text).join('\n')));
+  $('selCopyBtn').addEventListener('click', () => copyText(items.filter(i => i.selected).map(i => i.text).join(' - ')));
+  // --- EDITAR ORDEN CON TEXTO DE MUDAE ---
+  function orderPlan() {
+    const raw = $('orderText').value.trim();
+    const pasted = raw ? extractLines(raw).map(parseImportLine).filter(Boolean) : [];
+    const idx = new Map();
+    items.forEach(i => { const k = normName(i.text); if (!idx.has(k)) idx.set(k, []); idx.get(k).push(i); });
+    const used = new Set(), ordered = [], missing = [];
+    pasted.forEach(p => {
+      const arr = idx.get(normName(p.text));
+      if (!arr) { missing.push(p.text); return; }
+      const it = arr.find(x => !used.has(x.id));
+      if (it) { used.add(it.id); ordered.push(it); }
+    });
+    return { lines: pasted.length, ordered, missing, rest: items.filter(i => !used.has(i.id)) };
+  }
+  function renderOrderInfo() {
+    const pl = orderPlan();
+    $('orderApplyBtn').disabled = !pl.ordered.length;
+    $('orderInfo').innerHTML = !pl.lines ? '' :
+      `<span class="vchip">✓ ${pl.ordered.length} coinciden</span>` +
+      (pl.missing.length ? `<span class="vchip" title="${escapeHTML(pl.missing.slice(0, 15).join(', '))}">⚠️ ${pl.missing.length} del texto no están en la página</span>` : '') +
+      (pl.rest.length ? `<span class="vchip">↘️ ${pl.rest.length} irán al final</span>` : '');
+  }
+  $('orderBtn').addEventListener('click', () => { $('orderBackdrop').classList.add('open'); renderOrderInfo(); });
+  $('orderText').addEventListener('input', renderOrderInfo);
+  $('orderCloseBtn').addEventListener('click', () => $('orderBackdrop').classList.remove('open'));
+  $('orderBackdrop').addEventListener('click', e => { if (e.target.id === 'orderBackdrop') e.target.classList.remove('open'); });
+  $('orderApplyBtn').addEventListener('click', () => {
+    const pl = orderPlan();
+    if (!pl.ordered.length) return toast('No encontré personajes del texto en la página.');
+    items = [...pl.ordered, ...pl.rest];
+    const so = $('sortSelect'); if (so) so.value = 'manual';
+    $('orderBackdrop').classList.remove('open');
+    render();
+    toast(`Orden aplicado a ${pl.ordered.length} personajes (Ctrl+Z para deshacer)`);
+  });
+
+  $('selSeriesBtn').addEventListener('click', () => {
+    const sel = items.filter(i => i.selected);
+    if (!sel.length) return;
+    const v = prompt(`Serie para ${sel.length} personaje${sel.length > 1 ? 's' : ''} seleccionado${sel.length > 1 ? 's' : ''} (déjalo vacío para quitar la serie):`, sel[0].series || '');
+    if (v === null) return;
+    sel.forEach(i => { i.series = v.trim(); });
+    render(); toast(v.trim() ? `Serie asignada: ${v.trim()}` : 'Serie quitada');
+  });
+  (() => { const mo = new MutationObserver(() => document.body.classList.toggle('modal-open', !!document.querySelector('.modal-backdrop.open'))); document.querySelectorAll('.modal-backdrop').forEach(b => mo.observe(b, { attributes: true, attributeFilter: ['class'] })); })();
   const moveSel = top => {
     const sel = items.filter(i => i.selected), rest = items.filter(i => !i.selected);
     items = top ? [...sel, ...rest] : [...rest, ...sel];
@@ -1629,7 +2648,7 @@ function escapeHTML(value) {
     let it; do { it = items[Math.floor(Math.random() * items.length)]; } while (items.length > 1 && it.id === spotId);
     spotId = it.id;
     $('spotCard').innerHTML = `${it.image ? `<img referrerpolicy="no-referrer" src="${escapeHTML(it.image)}" alt="">` : ''}<h3>${escapeHTML(it.text)}</h3>
-      <div class="hint">${it.rank ? '🏆 #' + escapeHTML(it.rank) + ' · ' + escapeHTML(rankTitle(it)) + '  ' : ''}${it.kakera ? '💎 ' + escapeHTML(it.kakera) : ''}</div>`;
+      <div class="hint">${it.rank ? '🏆 #' + escapeHTML(it.rank) + ' · ' + escapeHTML(rankTitle(it)) + '  ' : ''}${it.kakera ? '💎 ' + escapeHTML(fmtNum(it.kakera)) : ''}${it.series ? '<br>📚 ' + escapeHTML(it.series) : ''}</div>`;
     $('spotBackdrop').classList.add('open');
   }
   $('spotBtn').addEventListener('click', spotlight);
@@ -1639,7 +2658,7 @@ function escapeHTML(value) {
   $('spotBackdrop').addEventListener('click', e => { if (e.target.id === 'spotBackdrop') e.target.classList.remove('open'); });
 
   const store = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
-  const setSize = v => { $('list').style.setProperty('--cw', v + 'px'); $('sizeRange').value = v; };
+  const setSize = v => { $('list').style.setProperty('--cw', v + 'px'); $('sizeRange').value = v; $('sizeRange').style.setProperty('--pct', ((v - 100) / 160 * 100) + '%'); };
   $('sizeRange').addEventListener('input', e => { setSize(e.target.value); store.set('mudae-size', e.target.value); });
   const setAccent = (a, i) => { document.documentElement.style.setProperty('--accent', a); document.documentElement.style.setProperty('--accent-ink', i); };
   $('dots').addEventListener('click', e => {
@@ -1648,6 +2667,108 @@ function escapeHTML(value) {
   });
   if (store.get('mudae-size')) setSize(store.get('mudae-size'));
   if (store.get('mudae-accent')) setAccent(...store.get('mudae-accent').split('|'));
+
+  // --- CONFIGURACIÓN: tema, color de acento y efectos ---
+  const DEFAULT_ACCENT = ['#ff6f9c', '#2a0d19'];
+  const D = { '--ink': '#efecfa', '--muted': '#9d98b8' };
+  const THEMES = {
+    noche:  { n: 'Noche',  v: { ...D, '--bg': '#15131f', '--panel': '#1e1b2e', '--panel2': '#262239', '--line': '#332e4d', '--inset': '#14111f', '--glow': '#43205a66', '--scroll': '#110f1a', '--hover': '#2f2a47' } },
+    negro:  { n: 'Negro',  v: { ...D, '--bg': '#09090d', '--panel': '#131319', '--panel2': '#1b1b24', '--line': '#2a2a38', '--inset': '#0b0b10', '--glow': '#20203a55', '--scroll': '#08080b', '--hover': '#24242f' } },
+    oceano: { n: 'Océano', v: { ...D, '--bg': '#0e1520', '--panel': '#152131', '--panel2': '#1c2c42', '--line': '#2a3f5c', '--inset': '#0c131c', '--glow': '#1a4a6e66', '--scroll': '#0a1018', '--hover': '#243750' } },
+    bosque: { n: 'Bosque', v: { ...D, '--bg': '#111a15', '--panel': '#19261f', '--panel2': '#203229', '--line': '#2d4638', '--inset': '#0e1511', '--glow': '#1d5a3a66', '--scroll': '#0b110e', '--hover': '#294036' } },
+    vino:   { n: 'Vino',   v: { ...D, '--bg': '#1a1115', '--panel': '#251920', '--panel2': '#30212a', '--line': '#4a2f3f', '--inset': '#150d11', '--glow': '#5a1d3a66', '--scroll': '#110a0d', '--hover': '#3b2833' } },
+    blanco:   { n: 'Blanco',   light: 1, v: { '--ink': '#1d1a2b', '--muted': '#6a6682', '--bg': '#f5f5f9', '--panel': '#ffffff', '--panel2': '#eeeef5', '--line': '#d9d8e6', '--inset': '#fafafd', '--glow': '#ffd6e655', '--scroll': '#e6e5ef', '--hover': '#e4e3ef' } },
+    crema:    { n: 'Crema',    light: 1, v: { '--ink': '#2b2418', '--muted': '#7a6f58', '--bg': '#f7f1e6', '--panel': '#fffaf0', '--panel2': '#f0e8d8', '--line': '#ddd0b8', '--inset': '#fffdf7', '--glow': '#ffe2a855', '--scroll': '#ebe2d0', '--hover': '#e8dec9' } },
+    cielo:    { n: 'Cielo',    light: 1, v: { '--ink': '#14243a', '--muted': '#5a6d86', '--bg': '#eef4fb', '--panel': '#ffffff', '--panel2': '#e6eef8', '--line': '#cddbed', '--inset': '#f7faff', '--glow': '#bfe0ff66', '--scroll': '#dde7f3', '--hover': '#dce7f5' } },
+    menta:    { n: 'Menta',    light: 1, v: { '--ink': '#14281e', '--muted': '#5a7566', '--bg': '#eef6f1', '--panel': '#ffffff', '--panel2': '#e4f0e8', '--line': '#c9ddd0', '--inset': '#f7fcf9', '--glow': '#bff0d466', '--scroll': '#dbeae1', '--hover': '#d9eadf' } },
+    lavanda:  { n: 'Lavanda',  light: 1, v: { '--ink': '#231a3a', '--muted': '#6b5f88', '--bg': '#f3effa', '--panel': '#ffffff', '--panel2': '#ebe5f6', '--line': '#d8cdec', '--inset': '#faf8fe', '--glow': '#dcc8ff66', '--scroll': '#e3dcf0', '--hover': '#e1d9f1' } }
+  };
+  const themeBtn = (k, t) => `<button class="theme-btn" data-theme="${k}"><i style="background:linear-gradient(135deg,${t.v['--bg']} 50%,${t.v['--panel2']} 50%)"></i>${t.n}</button>`;
+  $('themes').innerHTML =
+    `<div class="theme-label">Automático</div><div class="themes-grid"><button class="theme-btn" data-theme="auto"><i style="background:linear-gradient(135deg,#15131f 50%,#f5f5f9 50%)"></i>Sistema</button></div>` +
+    `<div class="theme-label">Oscuros</div><div class="themes-grid">${Object.entries(THEMES).filter(([, t]) => !t.light).map(([k, t]) => themeBtn(k, t)).join('')}</div>` +
+    `<div class="theme-label">Claros</div><div class="themes-grid">${Object.entries(THEMES).filter(([, t]) => t.light).map(([k, t]) => themeBtn(k, t)).join('')}</div>`;
+  const lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+  let currentTheme = 'noche';
+  function setTheme(name) {
+    currentTheme = (name === 'auto' || THEMES[name]) ? name : 'noche';
+    const key = currentTheme === 'auto' ? (lightQuery.matches ? 'blanco' : 'noche') : currentTheme;
+    const t = THEMES[key];
+    Object.entries(t.v).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+    document.documentElement.classList.toggle('light', !!t.light);
+    document.documentElement.style.colorScheme = t.light ? 'light' : 'dark';
+    $('themes').querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === currentTheme));
+  }
+  $('themes').addEventListener('click', e => {
+    const b = e.target.closest('.theme-btn'); if (!b) return;
+    setTheme(b.dataset.theme); store.set('mudae-theme', b.dataset.theme);
+  });
+  if (lightQuery.addEventListener) lightQuery.addEventListener('change', () => { if (currentTheme === 'auto') setTheme('auto'); });
+  setTheme(store.get('mudae-theme') || 'noche');
+
+  // Color de acento: marcar el activo y permitir uno personalizado
+  const inkFor = hex => {
+    const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+    return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#1a1020' : '#ffffff';
+  };
+  function markAccent() {
+    const cur = (document.documentElement.style.getPropertyValue('--accent').trim() || DEFAULT_ACCENT[0]).toLowerCase();
+    $('dots').querySelectorAll('.dot').forEach(d => d.classList.toggle('active', d.dataset.a === cur));
+    if (/^#[0-9a-f]{6}$/.test(cur)) $('accentCustom').value = cur;
+  }
+  $('dots').addEventListener('click', e => { if (e.target.closest('.dot')) markAccent(); });
+  $('accentCustom').addEventListener('input', e => {
+    const c = e.target.value; setAccent(c, inkFor(c)); store.set('mudae-accent', c + '|' + inkFor(c)); markAccent();
+  });
+  markAccent();
+
+  // Efectos de brillo (kakera) y de rank: se pueden apagar por separado o ambos
+  const fx = { shine: true, rank: true, where: 'both' };
+  try { const v = JSON.parse(store.get('mudae-fx') || 'null'); if (v) { fx.shine = v.shine !== false; fx.rank = v.rank !== false; if (['both', 'main', 'lists', 'none'].includes(v.where)) fx.where = v.where; } } catch (e) {}
+  function applyFx() {
+    document.body.classList.toggle('fx-no-shine', !fx.shine);
+    document.body.classList.toggle('fx-no-rank', !fx.rank);
+    document.body.classList.toggle('fx-off-main', fx.where === 'lists' || fx.where === 'none');
+    document.body.classList.toggle('fx-off-lists', fx.where === 'main' || fx.where === 'none');
+    $('fxShine').checked = fx.shine; $('fxRank').checked = fx.rank;
+    document.querySelectorAll('#fxWhere [data-fxw]').forEach(b => { const on = b.dataset.fxw === fx.where; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on)); });
+  }
+  $('fxWhere').addEventListener('click', e => {
+    const b = e.target.closest('[data-fxw]'); if (!b) return;
+    fx.where = b.dataset.fxw; store.set('mudae-fx', JSON.stringify(fx)); applyFx();
+  });
+  [['fxShine', 'shine'], ['fxRank', 'rank']].forEach(([id, k]) => $(id).addEventListener('change', () => {
+    fx[k] = $(id).checked; store.set('mudae-fx', JSON.stringify(fx)); applyFx();
+  }));
+  applyFx();
+
+  // Opciones generales (tarjetas, animaciones, confirmaciones)
+  const OPT_DEFAULTS = { ui: true, names: true, rank: true, ka: true, actions: false, confirm: true };
+  const opts = { ...OPT_DEFAULTS };
+  try { Object.assign(opts, JSON.parse(store.get('mudae-opts') || '{}')); } catch (e) {}
+  function applyOpts() {
+    const c = document.body.classList;
+    c.toggle('no-ui-anim', !opts.ui); c.toggle('hide-names', !opts.names);
+    c.toggle('hide-rank', !opts.rank); c.toggle('hide-ka', !opts.ka); c.toggle('show-actions', !!opts.actions);
+    document.querySelectorAll('input[data-opt]').forEach(i => { i.checked = !!opts[i.dataset.opt]; });
+  }
+  document.querySelectorAll('input[data-opt]').forEach(i => i.addEventListener('change', () => {
+    opts[i.dataset.opt] = i.checked; store.set('mudae-opts', JSON.stringify(opts)); applyOpts();
+  }));
+  applyOpts();
+
+  // Abrir / cerrar / restablecer
+  const settingsBackdrop = $('settingsBackdrop');
+  $('settingsBtn').addEventListener('click', () => { markAccent(); settingsBackdrop.classList.add('open'); });
+  $('settingsCloseBtn').addEventListener('click', () => settingsBackdrop.classList.remove('open'));
+  settingsBackdrop.addEventListener('click', e => { if (e.target === settingsBackdrop) settingsBackdrop.classList.remove('open'); });
+  $('settingsResetBtn').addEventListener('click', () => {
+    ['mudae-theme', 'mudae-accent', 'mudae-fx'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+    try { localStorage.removeItem('mudae-opts'); } catch (e) {}
+    setAccent(...DEFAULT_ACCENT); setTheme('noche'); fx.shine = fx.rank = true; fx.where = 'both'; applyFx(); markAccent();
+    Object.assign(opts, OPT_DEFAULTS); applyOpts();
+    toast('Configuración restablecida');
+  });
 
   document.addEventListener('keydown', e => {
     const typing = /INPUT|TEXTAREA|SELECT/.test(e.target.tagName);
@@ -1723,6 +2844,518 @@ function escapeHTML(value) {
     await loadSavedState();
     render();
   })();
+})();
+</script>
+<script>
+// ===== Pruebas automáticas (mismo código que mudae-tests.js) =====
+window.runMudaeTests = async function (opts = {}) {
+  const PFX = '🧪TEST ';
+  const $ = id => document.getElementById(id);
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const rows = []; let ok = 0, fail = 0, skip = 0;
+  const rec = (g, n, st, info = '') => { rows.push({ grupo: g, prueba: n, estado: st, detalle: info }); if (st === 'OK') ok++; else if (st === 'FALLA') fail++; else skip++; };
+  const check = (g, n, cond, info = '') => rec(g, n, cond ? 'OK' : 'FALLA', cond ? '' : String(info));
+  const skipT = (g, n, why) => rec(g, n, 'OMITIDA', why);
+  const safe = async (g, n, fn) => { try { await fn(); } catch (e) { rec(g, n, 'FALLA', 'Error: ' + (e && e.message || e)); } };
+
+  // --- entorno: respuestas automáticas a confirm/prompt y portapapeles capturado ---
+  const origConfirm = window.confirm, origPrompt = window.prompt;
+  const keep = opts.keep !== undefined ? !!opts.keep : origConfirm.call(window, '¿Quieres CONSERVAR los personajes y listas de prueba al terminar para verlos tú mismo?\n\nAceptar = conservar (página principal y pestaña Listas)\nCancelar = borrarlos al terminar');
+  const clipDesc = Object.getOwnPropertyDescriptor(Navigator.prototype, 'clipboard');
+  let clip = null, nextPrompt = null;
+  window.confirm = () => true;
+  window.prompt = () => nextPrompt;
+  try { Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async t => { clip = t; } } }); } catch (e) {}
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fxOff = [...document.body.classList].filter(c => c.startsWith('fx-'));
+  const noAnim = reduce || fxOff.length ? (reduce ? 'movimiento reducido activado' : 'efectos desactivados en Configuración (' + fxOff.join(', ') + ')') : '';
+  const cards = () => [...document.querySelectorAll('#list .item')];
+  const byName = n => cards().find(c => c.querySelector('.item-name').title === n);
+  const cs = (el, ps) => getComputedStyle(el, ps || null);
+  const anim = (el, ps) => cs(el, ps).animationName || '';
+  const tab = t => { document.querySelector(`.tab[data-tab="${t}"]`).click(); return sleep(60); };
+  const esc = () => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+  async function addChar(o) {
+    $('addBtn').click(); await sleep(25);
+    $('editName').value = o.name; $('editKakera').value = o.kakera ?? ''; $('editRank').value = o.rank ?? '';
+    $('editSeries').value = o.series ?? ''; $('editImage').value = o.image ?? ''; $('editValue').value = o.value ?? '';
+    $('saveEditBtn').click(); await sleep(25);
+    return byName(o.name);
+  }
+  async function deleteCard(c) {
+    c.querySelector('[data-action="open-edit"]').click(); await sleep(15);
+    $('deleteInModalBtn').click(); await sleep(15);
+  }
+  async function cleanup() {
+    await tab('lists');
+    for (let g = 0; g < 50; g++) { const b = [...document.querySelectorAll('#listsBox .lcard')].find(s => s.querySelector('h3').textContent.includes(PFX)); if (!b) break; b.querySelector('[data-lact="delete"]').click(); await sleep(20); }
+    await tab('main');
+    for (let g = 0; g < 300; g++) { const c = cards().find(x => x.querySelector('.item-name').title.startsWith(PFX)); if (!c) break; await deleteCard(c); }
+    document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+  }
+
+  async function showcase(name, prefix) {
+    await tab('lists');
+    $('newListName').value = PFX + name; $('newListBtn').click(); await sleep(40);
+    const sec = [...document.querySelectorAll('#listsBox .lcard')].find(s => s.querySelector('h3').textContent.includes(PFX + name));
+    if (!sec) return;
+    $('targetList').value = sec.dataset.list;
+    const ids = cards().filter(c => c.querySelector('.item-name').title.startsWith(PFX + prefix)).map(c => c.dataset.id);
+    for (const id of ids) { const b = document.querySelector(`#poolGrid [data-act="add"][data-id="${id}"]`); if (b) { b.click(); await sleep(12); } }
+    await tab('main');
+  }
+  window.mudaeLimpiarPruebas = async () => { const c = window.confirm; window.confirm = () => true; try { await cleanup(); console.log('🧹 Personajes y listas de prueba borrados.'); } finally { window.confirm = c; } };
+
+  console.log('%c🧪 Iniciando validaciones…', 'font-weight:bold;font-size:14px');
+  await cleanup(); // restos de ejecuciones anteriores
+  if (cards().some(c => c.hidden)) console.warn('Hay filtros activos: algunas pruebas de filtros se omitirán.');
+
+  // ================= 1. ESTRUCTURA =================
+  const need = ['addBtn', 'bulkText', 'importBtn', 'editName', 'editKakera', 'editRank', 'editSeries', 'editImage', 'editValue', 'saveEditBtn', 'deleteInModalBtn',
+    'newListName', 'newListBtn', 'targetList', 'poolGrid', 'listsBox', 'verifyBtn', 'verifyBackdrop', 'sizeRange', 'selCopyBtn', 'selSeriesBtn', 'seriesList', 'tierBar', 'groupBtn', 'runTestsBtn', 'testBackdrop', 'testMode'];
+  need.forEach(id => check('Estructura', '#' + id + ' existe', !!$(id), 'no se encontró'));
+  ['main', 'lists', 'tutorial'].forEach(t => check('Estructura', 'pestaña ' + t, !!document.querySelector(`.tab[data-tab="${t}"]`)));
+
+  // ================= 2. CREAR / EDITAR PERSONAJES =================
+  await safe('Personajes', 'crear manual', async () => {
+    const c = await addChar({ name: PFX + 'Alfa', kakera: '1,234', rank: '4567', series: 'Serie Uno', image: 'https://example.com/a.png', value: '77' });
+    check('Personajes', 'la tarjeta aparece', !!c);
+    check('Personajes', 'kakera con separador de miles', c && c.querySelector('.badge.kakera').textContent.includes('1,234'), c && c.querySelector('.badge.kakera').textContent);
+    check('Personajes', 'rank con #', c && c.querySelector('.badge.rank').textContent.includes('#4,567'), c && c.querySelector('.badge.rank').textContent);
+    check('Personajes', 'la serie se ve en la tarjeta', c && !!c.querySelector('.ser') && c.querySelector('.ser').textContent.includes('Serie Uno'));
+    check('Personajes', 'imagen asignada', c && !!c.querySelector('img'));
+    c.querySelector('[data-action="open-edit"]').click(); await sleep(15);
+    check('Personajes', 'editar: nombre persiste', $('editName').value === PFX + 'Alfa');
+    check('Personajes', 'editar: serie persiste', $('editSeries').value === 'Serie Uno', $('editSeries').value);
+    check('Personajes', 'editar: número de imagen persiste', $('editValue').value === '77');
+    check('Personajes', 'sugerencias de serie (datalist)', !![...document.querySelectorAll('#seriesOptions option')].find(o => o.value === 'Serie Uno'));
+    $('editSeries').value = 'Serie Dos'; $('saveEditBtn').click(); await sleep(25);
+    const c2 = byName(PFX + 'Alfa');
+    check('Personajes', 'cambiar la serie funciona', c2 && c2.querySelector('.ser').textContent.includes('Serie Dos'));
+    check('Personajes', 'la serie nueva aparece en el filtro de series', $('seriesList').textContent.includes('Serie Dos'));
+    c2.querySelector('[data-action="open-edit"]').click(); await sleep(15);
+    $('editSeries').value = ''; $('saveEditBtn').click(); await sleep(25);
+    check('Personajes', 'quitar la serie funciona', !byName(PFX + 'Alfa').querySelector('.ser'));
+  });
+  await safe('Personajes', 'añadir sin guardar y borrar', async () => {
+    const before = cards().length;
+    $('addBtn').click(); await sleep(25);
+    check('Personajes', 'el modal de añadir se abre', $('editModalBackdrop').classList.contains('open'));
+    $('deleteInModalBtn').click(); await sleep(25);
+    check('Personajes', 'eliminar desde el modal', cards().length === before, `antes ${before}, ahora ${cards().length}`);
+  });
+  await safe('Personajes', 'importar texto', async () => {
+    $('bulkText').value = `${PFX}Imp1 - Serie Imp 120 ka\n#2,500 - ${PFX}Imp2 345 ka - https://example.com/i2.png`;
+    $('importBtn').click(); await sleep(60);
+    check('Personajes', 'importa 2 personajes', !!byName(PFX + 'Imp1') && !!byName(PFX + 'Imp2'));
+    const c = byName(PFX + 'Imp2');
+    check('Personajes', 'importa rank y kakera', c && c.querySelector('.badge.rank')?.textContent.includes('2,500') && c.querySelector('.badge.kakera')?.textContent.includes('345'));
+  });
+
+  // ================= 3. BRILLOS (kakera) =================
+  const KT = [[0, 0], [99, 0], [100, 1], [199, 1], [200, 2], [299, 2], [300, 3], [399, 3], [400, 4], [499, 4], [500, 5], [599, 5], [600, 6], [699, 6], [700, 7], [799, 7], [800, 8], [899, 8], [900, 9], [1500, 9]];
+  for (const [k, t] of KT) await addChar({ name: `${PFX}K${k}`, kakera: String(k), rank: '' });
+  KT.forEach(([k, t]) => {
+    const c = byName(`${PFX}K${k}`), m = c && (c.className.match(/tier-(\d)/) || [])[1];
+    check('Brillos', `${k} kakera → nivel ${t}`, c && (Number(m || 0) === t), `clase: ${c && c.className}`);
+  });
+  for (let t = 1; t <= 9; t++) {
+    const c = byName(`${PFX}K${t * 100}`); if (!c) continue;
+    const g = `Efectos nivel ${t}`;
+    check(g, 'borde/halo', cs(c).boxShadow !== 'none');
+    check(g, 'insignia 💎 coloreada', cs(c.querySelector('.badge.kakera')).backgroundColor !== 'rgba(12, 10, 22, 0.769)');
+    if (noAnim) { skipT(g, 'animaciones', noAnim); continue; }
+    if (t >= 2) check(g, 'aura que respira', anim(c, '::before').includes('kbreathe'), anim(c, '::before'));
+    if (t >= 4) check(g, 'destello diagonal', anim(c.querySelector('.image-wrap'), '::after').includes('kstreak'));
+    if (t >= 6) check(g, 'reflejo en la insignia', anim(c.querySelector('.badge.kakera')).includes('kshine'));
+    if (t === 7) check(g, 'chispitas titilando', anim(c.querySelector('.image-wrap'), '::before').includes('ktwinkle'));
+    if (t === 8) check(g, '5 estrellas', c.querySelectorAll('.sparks i.star').length === 5, c.querySelectorAll('.sparks i.star').length);
+    if (t === 9) check(g, '18 brasas', c.querySelectorAll('.sparks i:not(.star)').length === 18, c.querySelectorAll('.sparks i:not(.star)').length);
+    if (t < 8) check(g, 'sin partículas', !c.querySelector('.sparks i'));
+  }
+
+  // ================= 4. RANK =================
+  const RT = [[1, 1], [10, 1], [11, 2], [100, 2], [101, 3], [500, 3], [501, 4], [1000, 4], [1001, 5], [5000, 5], [5001, 6], [15000, 6], [15001, 7], [40000, 7], [40001, 8], [80000, 8], [80001, 9], [120000, 9], [120001, 10], [152836, 10]];
+  for (const [r] of RT) await addChar({ name: `${PFX}R${r}`, rank: String(r), kakera: '' });
+  RT.forEach(([r, t]) => {
+    const c = byName(`${PFX}R${r}`), m = c && (c.className.match(/rk-(\d+)/) || [])[1];
+    check('Rank', `rank ${r.toLocaleString('en')} → nivel ${t}`, c && Number(m) === t, `clase: ${c && c.className}`);
+  });
+  const rankRep = { 1: 1, 2: 11, 3: 101, 4: 501, 5: 1001, 6: 5001, 7: 15001, 8: 40001, 9: 80001, 10: 120001 };
+  for (const t of Object.keys(rankRep).map(Number)) {
+    const c = byName(`${PFX}R${rankRep[t]}`); if (!c) continue;
+    const b = c.querySelector('.badge.rank'), g = `Efectos rank ${t}`;
+    check(g, 'insignia con tooltip «Top %»', /Top/.test(b.title), b.title);
+    check(g, 'borde fino', parseFloat(cs(b).borderTopWidth) > 0, cs(b).borderTopWidth);
+    if (t === 5) check(g, 'fondo tintado', cs(b).backgroundColor !== 'rgba(12, 10, 22, 0.769)', cs(b).backgroundColor);
+    if (t === 3 || t === 4) check(g, 'resplandor fijo', cs(b).boxShadow !== 'none');
+    if (noAnim) { if (t <= 2) skipT(g, 'animaciones', noAnim); continue; }
+    if (t === 1) { check(g, 'pulso de luz', anim(b).includes('rkpulse'), anim(b)); check(g, 'chispas alrededor', b.querySelectorAll('.rs').length > 0); }
+    if (t === 2) { check(g, 'pulso de luz', anim(b).includes('rkpulse'), anim(b)); check(g, 'punto que orbita', anim(b, '::after').includes('rorbit'), anim(b, '::after')); }
+  }
+  check('Rank', 'tutorial lista los 10 niveles', ['Mítico', 'Superestrella', 'Estrella', 'Famoso', 'Popular', 'Conocido', 'Poco visto', 'Desconocido', 'De nicho', 'Wey quien eres'].every(n => $('viewTutorial').textContent.includes(n)));
+  check('Brillos', 'tutorial lista los 10 niveles', ['Ópalo', 'Zafiro', 'Esmeralda', 'Amatista', 'Peridoto', 'Cuarzo rosa', 'Ámbar', 'Topacio', 'Rubí'].every(n => $('viewTutorial').textContent.includes(n)));
+
+  if (keep) { await safe('Demo', 'listas de ejemplo', async () => { await showcase('Demo brillos', 'K'); await showcase('Demo rank', 'R'); }); }
+
+  // ================= 5. SELECCIÓN, COPIAR Y SERIE MASIVA =================
+  await safe('Selección', 'copiar con « - »', async () => {
+    byName(PFX + 'K100').click(); await sleep(20); byName(PFX + 'K200').click(); await sleep(20);
+    check('Selección', 'aparece Copiar seleccionados', !$('selCopyBtn').hidden);
+    clip = null; $('selCopyBtn').click(); await sleep(30);
+    check('Selección', 'nombres separados por « - »', clip === `${PFX}K100 - ${PFX}K200`, JSON.stringify(clip));
+    nextPrompt = 'Serie Masiva'; $('selSeriesBtn').click(); await sleep(30);
+    check('Selección', 'asignar serie a seleccionados', byName(PFX + 'K100')?.querySelector('.ser')?.textContent.includes('Serie Masiva') && byName(PFX + 'K200')?.querySelector('.ser')?.textContent.includes('Serie Masiva'));
+    byName(PFX + 'K100').click(); await sleep(15); byName(PFX + 'K200').click(); await sleep(15);
+  });
+
+  // ================= 6. FILTROS =================
+  await safe('Filtros', 'ocultar y mostrar por brillo', async () => {
+    if (cards().some(c => c.hidden)) return skipT('Filtros', 'brillo', 'hay filtros activos');
+    const chip = document.querySelector('#tierBar [data-key="k:tier-3"]');
+    if (!chip) return skipT('Filtros', 'brillo', 'no encontré el botón del filtro');
+    chip.click(); await sleep(40);
+    check('Filtros', 'oculta el nivel 3', cards().filter(c => /tier-3\b/.test(c.className)).every(c => c.hidden) && !byName(PFX + 'K100').hidden);
+    document.querySelector('#tierBar [data-key="k:tier-3"]').click(); await sleep(40);
+    check('Filtros', 'vuelve a mostrarlo', cards().every(c => !c.hidden));
+    const r = document.querySelector('#tierBar [data-key="r:1"]');
+    if (r) { r.click(); await sleep(40); check('Filtros', 'oculta rank 1', cards().filter(c => /rk-1\b/.test(c.className)).every(c => c.hidden)); document.querySelector('#tierBar [data-key="r:1"]').click(); await sleep(40); check('Filtros', 'rank 1 vuelve', cards().every(c => !c.hidden)); }
+  });
+  await safe('Filtros', 'buscador por nombre', async () => {
+    const f = $('filterInput'); f.value = PFX + 'K900'; f.dispatchEvent(new Event('input', { bubbles: true })); await sleep(40);
+    check('Filtros', 'filtra por nombre', cards().filter(c => !c.hidden).length === 1);
+    f.value = ''; f.dispatchEvent(new Event('input', { bubbles: true })); await sleep(40);
+    check('Filtros', 'limpiar muestra todo', cards().every(c => !c.hidden));
+  });
+
+  // ================= 7. LISTAS =================
+  await safe('Listas', 'ciclo completo', async () => {
+    await tab('lists');
+    $('newListName').value = PFX + 'Lista A'; $('newListBtn').click(); await sleep(50);
+    const sec = () => [...document.querySelectorAll('#listsBox .lcard')].find(s => s.querySelector('h3').textContent.includes(PFX + 'Lista A'));
+    check('Listas', 'se crea la lista', !!sec());
+    $('newListName').value = ''; $('newListBtn').click(); await sleep(20);
+    const n0 = document.querySelectorAll('#listsBox .lcard').length;
+    check('Listas', 'nombre vacío no crea lista', document.querySelectorAll('#listsBox .lcard').length === n0);
+    const lid = sec().dataset.list; $('targetList').value = lid;
+    const ids = ['K100', 'K200', 'K300'].map(k => { const c = byName(PFX + k); return c && c.dataset.id; });
+    for (const id of ids) { const b = document.querySelector(`#poolGrid [data-act="add"][data-id="${id}"]`); if (b) { b.click(); await sleep(30); } }
+    const zone = () => sec().querySelector('.dropzone');
+    check('Listas', 'agregar con ➕ (3 personajes)', zone().querySelectorAll('.item.mini').length === 3, zone().querySelectorAll('.item.mini').length);
+    document.querySelector(`#poolGrid [data-act="add"][data-id="${ids[0]}"]`).click(); await sleep(30);
+    check('Listas', 'no duplica personajes', zone().querySelectorAll('.item.mini').length === 3);
+    const cp = sec().querySelector('[data-lact="copyall"]');
+    check('Listas', 'botón Copiar todos siempre visible', cp && !cp.hidden);
+    clip = null; cp.click(); await sleep(30);
+    check('Listas', 'copia TODA la lista separada por « - »', clip === `${PFX}K100 - ${PFX}K200 - ${PFX}K300`, JSON.stringify(clip));
+    const mini = zone().querySelectorAll('.item.mini');
+    mini[0].click(); await sleep(20); zone().querySelectorAll('.item.mini')[1].click(); await sleep(20);
+    clip = null; sec().querySelector('[data-lact="copyall"]').click(); await sleep(30);
+    check('Listas', 'con selección sigue copiando todos', clip === `${PFX}K100 - ${PFX}K200 - ${PFX}K300`, JSON.stringify(clip));
+    sec().querySelector('[data-lact="unsel"]').click(); await sleep(40);
+    check('Listas', 'quitar seleccionados', zone().querySelectorAll('.item.mini').length === 1);
+    nextPrompt = PFX + 'Lista B'; sec()?.querySelector('[data-lact="rename"]').click(); await sleep(40);
+    check('Listas', 'renombrar', !![...document.querySelectorAll('#listsBox h3')].find(h => h.textContent.includes(PFX + 'Lista B')));
+    const pillCount = [...document.querySelectorAll('#targetList option')].some(o => o.textContent.includes(PFX + 'Lista B'));
+    check('Listas', 'selector de lista destino actualizado', pillCount);
+    const secB = [...document.querySelectorAll('#listsBox .lcard')].find(s => s.querySelector('h3').textContent.includes(PFX + 'Lista B'));
+    if (!keep) {
+      secB.querySelector('[data-lact="delete"]').click(); await sleep(40);
+      check('Listas', 'eliminar lista', ![...document.querySelectorAll('#listsBox h3')].some(h => h.textContent.includes(PFX + 'Lista B')));
+    } else skipT('Listas', 'eliminar lista', 'conservando pruebas: se deja «Lista B» para que la veas');
+    check('Listas', 'los personajes siguen en la página', !!byName(PFX + 'K100'));
+    await tab('main');
+  });
+
+  // ================= 8. VENTANAS EMERGENTES =================
+  await safe('Ventanas', 'verificar lista', async () => {
+    $('verifyBtn').click(); await sleep(60);
+    check('Ventanas', 'se abre', $('verifyBackdrop').classList.contains('open'));
+    check('Ventanas', 'guía con 3 comandos (sin $sm)', document.querySelectorAll('#verifyBackdrop .vguide li').length === 3 && ![...document.querySelectorAll('#verifyBackdrop .vguide code')].some(c => c.textContent.trim() === '$sm'));
+    check('Ventanas', 'botones Copiar compactos', [...document.querySelectorAll('#verifyBackdrop .vguide .btn')].every(b => b.offsetHeight <= 40), [...document.querySelectorAll('#verifyBackdrop .vguide .btn')].map(b => b.offsetHeight));
+    check('Ventanas', 'detección siempre automática (sin selector)', $('verifyMode').value === 'auto' && $('verifyMode').type === 'hidden');
+    check('Ventanas', 'sin desenfoque (mejor rendimiento)', (cs($('verifyBackdrop')).backdropFilter || 'none') === 'none');
+    check('Ventanas', 'modo ventana abierta activo', document.body.classList.contains('modal-open'));
+    const hot = cards().find(c => /tier-[2-9]/.test(c.className));
+    if (hot && !noAnim) check('Ventanas', 'animaciones pausadas con la ventana abierta', /paused/.test(cs(hot, '::before').animationPlayState), cs(hot, '::before').animationPlayState);
+    $('verifyText') && ($('verifyText').value = `${PFX}Fantasma 100 ka`);
+    esc(); await sleep(40);
+    check('Ventanas', 'Escape la cierra', !$('verifyBackdrop').classList.contains('open'));
+    check('Ventanas', 'animaciones se reanudan', !document.body.classList.contains('modal-open'));
+  });
+  await safe('Ventanas', 'editar orden', async () => {
+    const A = PFX + 'K300', B = PFX + 'K100', C = PFX + 'K200';
+    $('orderBtn').click(); await sleep(40);
+    check('Orden', 'se abre la ventana', $('orderBackdrop').classList.contains('open'));
+    const type = v => { $('orderText').value = v; $('orderText').dispatchEvent(new Event('input', { bubbles: true })); };
+    type('');
+    check('Orden', 'Aplicar desactivado sin texto', $('orderApplyBtn').disabled);
+    type(`#1 - ${A} 300 ka\n#2 - ${B} 100 ka\n${C}\n${PFX}NoExiste`); await sleep(30);
+    check('Orden', 'cuenta coincidencias y no encontrados', /3 coinciden/.test($('orderInfo').textContent) && /1 del texto/.test($('orderInfo').textContent), $('orderInfo').textContent);
+    $('orderApplyBtn').click(); await sleep(60);
+    const names = cards().map(c => c.querySelector('.item-name').title);
+    check('Orden', 'reordena según el texto', names[0] === A && names[1] === B && names[2] === C, names.slice(0, 4).join(' | '));
+    $('orderBtn').click(); await sleep(30);
+    type(`$sm ${C} $${B}`); await sleep(30);
+    $('orderApplyBtn').click(); await sleep(60);
+    const n2 = cards().map(c => c.querySelector('.item-name').title);
+    check('Orden', 'acepta comandos $sm', n2[0] === C && n2[1] === B, n2.slice(0, 3).join(' | '));
+    $('orderText').value = '';
+  });
+  await safe('Ventanas', 'configuración', async () => {
+    const b = $('settingsBtn'); if (!b) return skipT('Ventanas', 'configuración', 'no existe');
+    b.click(); await sleep(40);
+    check('Ventanas', 'configuración se abre', $('settingsBackdrop').classList.contains('open'));
+    esc(); await sleep(40);
+    check('Ventanas', 'configuración se cierra', !$('settingsBackdrop').classList.contains('open'));
+  });
+
+  // ================= 9. TEMA / SLIDER =================
+  await safe('Tema', 'slider sigue el color de acento', async () => {
+    const root = document.documentElement, prev = root.style.getPropertyValue('--accent');
+    root.style.setProperty('--accent', '#00ff00'); await sleep(30);
+    const bg = cs($('sizeRange')).backgroundImage;
+    check('Tema', 'el relleno usa el acento actual', /rgb\(0, 255, 0\)/.test(bg), bg);
+    if (prev) root.style.setProperty('--accent', prev); else root.style.removeProperty('--accent');
+    const old = $('sizeRange').value; $('sizeRange').value = 200; $('sizeRange').dispatchEvent(new Event('input', { bubbles: true }));
+    check('Tema', 'el relleno avanza con el valor', $('sizeRange').style.getPropertyValue('--pct') === '62.5%', $('sizeRange').style.getPropertyValue('--pct'));
+    $('sizeRange').value = old; $('sizeRange').dispatchEvent(new Event('input', { bubbles: true }));
+  });
+
+  // ================= 10. PESTAÑAS SIN SCROLLBAR =================
+  await safe('Pestañas', 'sin scrollbar', async () => {
+    const t = document.querySelector('.tabs'), st = cs(t);
+    check('Pestañas', 'scrollbar oculto', st.scrollbarWidth === 'none', st.scrollbarWidth);
+    check('Pestañas', 'sin desbordamiento vertical', t.scrollHeight <= t.clientHeight, `scrollH=${t.scrollHeight} clientH=${t.clientHeight}`);
+  });
+
+  // ================= 11. EFECTOS EN LISTAS + OPCIÓN DE CONFIGURACIÓN =================
+  const SA = PFX + 'Serie A', SB = PFX + 'Serie B', SC = PFX + 'Serie C';
+  const SDATA = [['SA1', 950, 5, SA], ['SB1', 450, 300, SB], ['SA2', 800, 50, SA], ['SB2', 120, 2000, SB], ['SC1', 300, 90, SC], ['SB3', 650, 700, SB], ['SN', 100, 5000, '']];
+  for (const [n, k, r, ser] of SDATA) await addChar({ name: PFX + n, kakera: String(k), rank: String(r), series: ser });
+  const fxRaw0 = localStorage.getItem('mudae-fx');
+  const where0 = (document.querySelector('#fxWhere .active') || {}).dataset?.fxw || 'both';
+  const sw0 = { shine: $('fxShine').checked, rank: $('fxRank').checked };
+  const setWhere = async w => { $('settingsBtn').click(); await sleep(30); document.querySelector(`#fxWhere [data-fxw="${w}"]`).click(); await sleep(30); esc(); await sleep(30); };
+  const setSw = async (id, on) => { if ($(id).checked !== on) { $('settingsBtn').click(); await sleep(30); $(id).click(); await sleep(30); esc(); await sleep(30); } };
+  const miniOf = (sel, name) => [...document.querySelectorAll(sel + ' .item')].find(c => c.querySelector('.item-name').textContent.trim() === name);
+  const auraOn = c => { const a = cs(c, '::before'); return a.display !== 'none' && (a.animationName || '').includes('kbreathe'); };
+  const rankOn = c => { const b = c.querySelector('.badge.rank'); return cs(b).animationName !== 'none' && cs(b, '::after').display !== 'none'; };
+  await safe('Efectos en listas', 'configuración', async () => {
+    check('Efectos en listas', 'existe el selector «dónde mostrar»', document.querySelectorAll('#fxWhere [data-fxw]').length === 4);
+    await tab('lists');
+    $('newListName').value = PFX + 'Efectos'; $('newListBtn').click(); await sleep(40);
+    const sec = [...document.querySelectorAll('#listsBox .lcard')].find(x => x.querySelector('h3').textContent.includes(PFX + 'Efectos'));
+    if (!sec) return check('Efectos en listas', 'crear lista de prueba', false, 'no se creó');
+    $('targetList').value = sec.dataset.list;
+    for (const n of ['SA1', 'SA2', 'SB1']) { const c = byName(PFX + n) || miniOf('#poolGrid', PFX + n); const id = c && c.dataset.id; const b = id && document.querySelector(`#poolGrid [data-act="add"][data-id="${id}"]`); if (b) { b.click(); await sleep(15); } }
+    await tab('main');
+    if (reduce) return skipT('Efectos en listas', 'animaciones', 'movimiento reducido activado');
+    await setSw('fxShine', true); await setSw('fxRank', true);
+    const exp = { both: [true, true], main: [true, false], lists: [false, true], none: [false, false] };
+    for (const w of ['both', 'main', 'lists', 'none']) {
+      await setWhere(w);
+      await tab('main'); const m = byName(PFX + 'SA1');
+      const mainOn = !!m && auraOn(m) && rankOn(m) && cs(m.querySelector('.sparks')).display !== 'none';
+      await tab('lists');
+      const pool = miniOf('#poolGrid', PFX + 'SA1'), zone = miniOf('.dropzone', PFX + 'SA1');
+      const poolOn = !!pool && auraOn(pool) && rankOn(pool) && cs(pool.querySelector('.sparks')).display !== 'none';
+      const zoneOn = !!zone && auraOn(zone) && rankOn(zone) && cs(zone.querySelector('.sparks')).display !== 'none';
+      check('Efectos en listas', `«${w}»: Principal ${exp[w][0] ? 'con' : 'sin'} efectos`, mainOn === exp[w][0], `mainOn=${mainOn}`);
+      check('Efectos en listas', `«${w}»: panel Personajes ${exp[w][1] ? 'con' : 'sin'} efectos`, poolOn === exp[w][1], `poolOn=${poolOn}`);
+      check('Efectos en listas', `«${w}»: listas ${exp[w][1] ? 'con' : 'sin'} efectos`, zoneOn === exp[w][1], `zoneOn=${zoneOn}`);
+      check('Efectos en listas', `«${w}»: se guarda la preferencia`, (JSON.parse(localStorage.getItem('mudae-fx') || '{}')).where === w, localStorage.getItem('mudae-fx'));
+      await tab('main');
+    }
+    await setWhere('both'); await tab('lists');
+    const z8 = miniOf('.dropzone', PFX + 'SA2'), z9 = miniOf('.dropzone', PFX + 'SA1');
+    if (z8 && z9) {
+      check('Efectos en listas', 'Topacio en lista: solo estrellas', z8.querySelectorAll('.sparks i.star').length === 5 && z8.querySelectorAll('.sparks i:not(.star)').length === 0);
+      check('Efectos en listas', 'Rubí en lista: solo partículas que suben', z9.querySelectorAll('.sparks i:not(.star)').length === 18 && z9.querySelectorAll('.sparks i.star').length === 0);
+      check('Efectos en listas', 'Mítico en lista: chispas en la insignia', z9.querySelectorAll('.badge.rank .rs').length >= 10);
+    }
+    // seleccionada: sin efectos
+    if (z9) { z9.click(); await sleep(30); const zz = miniOf('.dropzone', PFX + 'SA1'); check('Efectos en listas', 'tarjeta seleccionada sin aura', !!zz && cs(zz, '::before').display === 'none'); zz && zz.click(); await sleep(20); }
+    await tab('main');
+  });
+  // restaurar la configuración del usuario
+  await safe('Efectos en listas', 'restaurar configuración', async () => {
+    await setWhere(where0); await setSw('fxShine', sw0.shine); await setSw('fxRank', sw0.rank);
+    if (fxRaw0 === null) localStorage.removeItem('mudae-fx'); else localStorage.setItem('mudae-fx', fxRaw0);
+    check('Efectos en listas', 'configuración restaurada', true);
+  });
+
+  // ================= 12. ORDENAR POR SERIE =================
+  const mine = () => cards().map(c => c.querySelector('.item-name').title).filter(n => n.startsWith(PFX + 'S') && /^🧪TEST S[ABCN]\d?$/.test(n));
+  const undoBtn = () => $('undoBtn') || [...document.querySelectorAll('button')].find(b => /Deshacer/.test(b.textContent));
+  const sortCheck = async (val, expectSeries) => {
+    const before = cards().map(c => c.querySelector('.item-name').title);
+    const pre = mine();
+    $('sortSelect').value = val; $('sortSelect').dispatchEvent(new Event('change', { bubbles: true })); await sleep(60);
+    const got = mine();
+    const seriesOf = n => (SDATA.find(d => PFX + d[0] === n) || [])[3] || '';
+    const order = [...new Set(got.map(seriesOf))];
+    check('Orden por serie', `${val}: orden de series`, JSON.stringify(order) === JSON.stringify(expectSeries), order.join(' | '));
+    const stable = SDATA.every(([n, , , ser]) => { const f = x => x.filter(y => seriesOf(y) === ser); return JSON.stringify(f(got)) === JSON.stringify(f(pre)); });
+    check('Orden por serie', `${val}: dentro de cada serie se conserva el orden`, stable, got.join(','));
+    check('Orden por serie', `${val}: sin serie al final`, seriesOf(got[got.length - 1]) === '', got.join(','));
+    // restaurar tu orden real con «Deshacer»
+    if (cards().map(c => c.querySelector('.item-name').title).join('\u0001') !== before.join('\u0001')) { const u = undoBtn(); if (u) { u.click(); await sleep(60); } }
+    check('Orden por serie', `${val}: tu orden se restaura`, cards().map(c => c.querySelector('.item-name').title).join('\u0001') === before.join('\u0001'));
+  };
+  await safe('Orden por serie', 'opciones', async () => {
+    const vals = [...$('sortSelect').options].map(o => o.value);
+    check('Orden por serie', 'el menú tiene las 4 opciones de serie', ['series-az', 'series-za', 'series-desc', 'series-asc'].every(v => vals.includes(v)), vals.join(','));
+    await sortCheck('series-az', [SA, SB, SC, '']);
+    await sortCheck('series-za', [SC, SB, SA, '']);
+    await sortCheck('series-desc', [SB, SA, SC, '']);
+    await sortCheck('series-asc', [SC, SA, SB, '']);
+    $('sortSelect').value = 'manual';
+  });
+
+  // ================= 13. AGRUPAR SERIES =================
+  const dragCard = async (from, to) => {
+    const dt = new DataTransfer();
+    const ev = (t, el) => el.dispatchEvent(new DragEvent(t, { bubbles: true, cancelable: true, dataTransfer: dt }));
+    ev('dragstart', from); await sleep(20); ev('dragover', to); await sleep(260); ev('drop', from); ev('dragend', from); await sleep(80); // al soltar, el cursor queda sobre la tarjeta ya movida
+  };
+  const gcards = () => [...document.querySelectorAll('#list .item.group')];
+  const gOf = ser => gcards().find(c => (c.querySelector('.item-name').title || '') === ser);
+  await safe('Agrupar series', 'agrupar, mover y abrir', async () => {
+    const btn = $('groupBtn');
+    check('Agrupar series', 'existe el botón', !!btn);
+    if (!btn) return;
+    const orderBefore = cards().map(c => c.querySelector('.item-name').title);
+    btn.click(); await sleep(80);
+    const a = gOf(SA), b = gOf(SB);
+    check('Agrupar series', 'el botón cambia a «Abrir series»', /Abrir/.test(btn.textContent) && btn.classList.contains('on'), btn.textContent);
+    check('Agrupar series', 'una tarjeta por serie con el número de personajes', !!a && !!b && a.dataset.n === '2' && b.dataset.n === '3', `${a && a.dataset.n} / ${b && b.dataset.n}`);
+    const c1 = gOf(SC), ns = gOf('Sin serie');
+    check('Agrupar series', 'la serie de 1 personaje también tiene su tarjeta', !!c1 && c1.dataset.n === '1', c1 && c1.dataset.n);
+    check('Agrupar series', 'los personajes sin serie van juntos en «Sin serie»', !!ns && Number(ns.dataset.n) >= 1, ns && ns.dataset.n);
+    check('Agrupar series', 'todas las tarjetas tienen el mismo diseño (ninguna suelta)', cards().length > 0 && cards().every(c => c.classList.contains('group')), cards().filter(c => !c.classList.contains('group')).length + ' sueltas');
+    check('Agrupar series', 'ya no se ven sueltos los personajes agrupados', !byName(PFX + 'SA1') && !byName(PFX + 'SB1') && !byName(PFX + 'SC1') && !byName(PFX + 'SN'));
+    check('Agrupar series', 'el nombre de la serie se ve en la tarjeta', /Serie A/.test(a.querySelector('.item-name').textContent) && /personaje/.test(a.querySelector('.item-name').textContent));
+    { const m = /(\d+)\s+de\s+(\d+)/.exec($('tierSum').textContent.replace(/\s+/g, ' '));
+      if (cards().some(c => c.hidden)) skipT('Agrupar series', 'el resumen cuenta personajes, no tarjetas', 'hay filtros activos');
+      else check('Agrupar series', 'el resumen cuenta personajes, no tarjetas', !!m && m[1] === m[2], $('tierSum').textContent); }
+    // seleccionar con un clic
+    a.click(); await sleep(30);
+    check('Agrupar series', 'clic en la tarjeta de serie selecciona a sus personajes', gOf(SA).classList.contains('selected') && $('selCount').textContent.trim() === '2', $('selCount').textContent);
+    gOf(SA).click(); await sleep(30);
+    check('Agrupar series', 'segundo clic los deselecciona', !gOf(SA).classList.contains('selected'));
+    // abrir sin mover: vuelve exactamente a donde estaban
+    btn.click(); await sleep(80);
+    check('Agrupar series', 'abrir sin mover no cambia el orden', cards().map(c => c.querySelector('.item-name').title).join('\u0001') === orderBefore.join('\u0001'));
+    // agrupar, mover la serie A después de la B y abrir
+    btn.click(); await sleep(80);
+    const posA = gcards().indexOf(gOf(SA)), posB = gcards().indexOf(gOf(SB));
+    const from = posA < posB ? gOf(SA) : gOf(SB), to = posA < posB ? gOf(SB) : gOf(SA);
+    const firstSer = posA < posB ? SA : SB, secondSer = posA < posB ? SB : SA;
+    await dragCard(from, to);
+    const nowG = gcards().map(c => c.querySelector('.item-name').title).filter(t => t === SA || t === SB);
+    check('Agrupar series', 'la tarjeta de serie se puede mover', nowG[0] === secondSer && nowG[1] === firstSer, nowG.join(' | '));
+    btn.click(); await sleep(80);
+    const seriesOf = n => (SDATA.find(d => PFX + d[0] === n) || [])[3] || '';
+    const seq = cards().map(c => c.querySelector('.item-name').title).filter(n => /^🧪TEST S[AB]\d$/.test(n)).map(seriesOf);
+    check('Agrupar series', 'al abrir, los personajes quedan en la nueva posición de su tarjeta', seq.join('|') === [...Array(seq.filter(x => x === secondSer).length).fill(secondSer), ...Array(seq.filter(x => x === firstSer).length).fill(firstSer)].join('|'), seq.join('|'));
+    check('Agrupar series', 'el botón vuelve a «Agrupar series»', /Agrupar/.test(btn.textContent) && !btn.classList.contains('on'));
+    // restaurar tu orden real
+    let u = undoBtn(); if (u) { u.click(); await sleep(60); }
+    check('Agrupar series', 'tu orden se restaura con Deshacer', cards().map(c => c.querySelector('.item-name').title).join('\u0001') === orderBefore.join('\u0001'));
+    // mover en conjunto a los que no tienen serie
+    btn.click(); await sleep(80);
+    const all = gcards(), nsc = gOf('Sin serie'), nsLast = all[all.length - 1] === nsc;
+    await dragCard(nsc, nsLast ? all[0] : all[all.length - 1]); // al final, o al inicio si ya estaba al final
+    btn.click(); await sleep(80);
+    const nm = cards().map(c => c.querySelector('.item-name').title), iN = nm.indexOf(PFX + 'SN');
+    const others = ['SA1', 'SA2', 'SB1', 'SB2', 'SB3', 'SC1'].map(n => nm.indexOf(PFX + n));
+    check('Agrupar series', 'los personajes sin serie se mueven en conjunto', nsLast ? others.every(i => iN < i) : others.every(i => iN > i), `SN=${iN} otros=${others.join(',')}`);
+    u = undoBtn(); if (u) { u.click(); await sleep(60); }
+    check('Agrupar series', 'tu orden se restaura (2)', cards().map(c => c.querySelector('.item-name').title).join('\u0001') === orderBefore.join('\u0001'));
+  });
+  if ($('groupBtn') && $('groupBtn').classList.contains('on')) { $('groupBtn').click(); await sleep(60); }
+
+  // ================= LIMPIEZA Y RESULTADO =================
+  if (!keep) await cleanup();
+  window.confirm = origConfirm; window.prompt = origPrompt;
+  try { delete navigator.clipboard; if (clipDesc) Object.defineProperty(Navigator.prototype, 'clipboard', clipDesc); } catch (e) {}
+  console.table(rows.filter(r => r.estado !== 'OK'));
+  const msg = `✅ ${ok} correctas   ❌ ${fail} con fallas   ⏭️ ${skip} omitidas   (total ${rows.length})`;
+  console.log('%c' + msg, `font-weight:bold;font-size:14px;color:${fail ? '#ff6b5c' : '#5fe3a1'}`);
+  if (!fail) console.log('Todo en orden 🎉');
+  if (keep) console.log('%c📌 Se conservaron los personajes y listas de prueba (prefijo «🧪TEST »). Míralos en Principal y en la pestaña Listas («Demo brillos» y «Demo rank»). Para borrarlos: await mudaeLimpiarPruebas()', 'color:#ffcb5c;font-weight:bold');
+  window.__mudaeTests = { ok, fail, skip, rows };
+  return window.__mudaeTests;
+};
+
+</script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const store = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+  let mode = store.get('mudae-testmode'); if (!['revert', 'clean', 'keep'].includes(mode)) mode = 'revert';
+  let snap = null, last = null, running = false;
+  const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const syncMode = () => document.querySelectorAll('#testMode [data-tm]').forEach(b => { const on = b.dataset.tm === mode; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on)); });
+  syncMode();
+  $('testMode').addEventListener('click', e => { const b = e.target.closest('[data-tm]'); if (!b) return; mode = b.dataset.tm; store.set('mudae-testmode', mode); syncMode(); });
+
+  function show(res, kept) {
+    last = res;
+    const bad = res.rows.filter(r => r.estado === 'FALLA'), skip = res.rows.filter(r => r.estado === 'OMITIDA');
+    $('testSummary').innerHTML = `<span class="chip good">✅ ${res.ok} correctas</span><span class="chip ${res.fail ? 'bad' : ''}">❌ ${res.fail} con fallas</span><span class="chip">⏭️ ${res.skip} omitidas</span><span class="chip">Total ${res.rows.length}</span>`;
+    const row = r => `<div class="trow ${r.estado === 'FALLA' ? 'fail' : ''}"><span>${r.estado === 'OK' ? '✅' : r.estado === 'FALLA' ? '❌' : '⏭️'}</span><span><span class="g">${esc(r.grupo)}</span> · ${esc(r.prueba)}</span>${r.detalle ? `<span class="d">${esc(r.detalle)}</span>` : ''}</div>`;
+    $('testFails').innerHTML = bad.length ? `<div class="section-title">Fallas (${bad.length})</div>` + bad.map(row).join('') : '<div class="trow"><span>🎉</span><span><b>Todo en orden.</b> Las comprobaciones pasaron.</span></div>'
+      + (skip.length ? `<div class="hint" style="margin-top:6px">${skip.length} omitida${skip.length > 1 ? 's' : ''}: ${esc([...new Set(skip.map(r => r.detalle))].join(' · '))}</div>` : '');
+    $('testAllBox').innerHTML = res.rows.map(row).join('');
+    $('testAll').open = false;
+    $('testRevertBtn').hidden = !kept; $('testCleanBtn').hidden = !kept;
+    $('testNote').textContent = kept ? 'Se conservaron los personajes y listas de prueba (prefijo «🧪TEST »). Míralos en Principal y en Listas. Cuando termines, revierte los cambios o bórralos.'
+      : mode === 'revert' ? 'Tu lista quedó exactamente como estaba antes de la prueba.' : 'Se borraron los personajes y listas de prueba.';
+    $('testBackdrop').classList.add('open');
+  }
+
+  async function run() {
+    if (running) return; running = true;
+    document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+    snap = window.__mudaeState.snapshot();
+    $('testRunning').hidden = false;
+    let res, kept = false;
+    try {
+      res = await window.runMudaeTests({ keep: mode === 'keep' });
+      if (mode === 'revert') window.__mudaeState.restore(snap);
+      kept = mode === 'keep';
+    } catch (e) {
+      try { window.__mudaeState.restore(snap); } catch (e2) {}
+      res = { ok: 0, fail: 1, skip: 0, rows: [{ grupo: 'Script', prueba: 'error inesperado', estado: 'FALLA', detalle: String(e && e.stack || e) }] };
+    } finally { $('testRunning').hidden = true; running = false; }
+    show(res, kept);
+  }
+  $('runTestsBtn').addEventListener('click', run);
+  $('testAgainBtn').addEventListener('click', () => { $('testBackdrop').classList.remove('open'); if (!$('testRevertBtn').hidden && snap) { try { window.__mudaeState.restore(snap); } catch (e) {} } run(); });
+  $('testCloseBtn').addEventListener('click', () => $('testBackdrop').classList.remove('open'));
+  $('testBackdrop').addEventListener('click', e => { if (e.target === $('testBackdrop')) $('testBackdrop').classList.remove('open'); });
+  $('testRevertBtn').addEventListener('click', () => {
+    if (!snap) return;
+    window.__mudaeState.restore(snap);
+    $('testRevertBtn').hidden = true; $('testCleanBtn').hidden = true;
+    $('testNote').textContent = 'Listo: tu lista quedó exactamente como estaba antes de la prueba.';
+    toast('Cambios de la prueba revertidos ↩️');
+  });
+  $('testCleanBtn').addEventListener('click', async () => {
+    $('testBackdrop').classList.remove('open');
+    await window.mudaeLimpiarPruebas();
+    $('testRevertBtn').hidden = true; $('testCleanBtn').hidden = true;
+    $('testNote').textContent = 'Se borraron los personajes y listas de prueba.';
+    $('testBackdrop').classList.add('open');
+  });
+  $('testCopyBtn').addEventListener('click', () => {
+    if (!last) return;
+    copyText(`Pruebas Mudae Arranger: ${last.ok} correctas, ${last.fail} con fallas, ${last.skip} omitidas\n` + last.rows.filter(r => r.estado !== 'OK').map(r => `${r.estado} | ${r.grupo} | ${r.prueba} | ${r.detalle}`).join('\n'));
+  });
 })();
 </script>
 </body>
