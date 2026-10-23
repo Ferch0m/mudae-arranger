@@ -741,7 +741,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
             <li><strong>Seleccionar:</strong> haz clic en una tarjeta. Con <strong>Seleccionar todo</strong> marcas todas y con <strong>Deseleccionar</strong> quitas la selección (el botón aparece cuando hay tarjetas seleccionadas).</li>
             <li><strong>Mover:</strong> arrastra una tarjeta. Si hay varias seleccionadas y arrastras una de ellas, se mueven todas juntas. En celular, mantén presionada la tarjeta.</li>
             <li><strong>Al inicio / Al final:</strong> mueve las seleccionadas de una vez.</li>
-            <li><strong>Orden automático:</strong> el menú ofrece A-Z, kakera, rank o <strong>Serie</strong> (A-Z, Z-A, más o menos personajes primero; los que no tienen serie quedan al final y dentro de cada serie se conserva el orden que ya tenías). Al arrastrar vuelve a «Orden manual».</li>
+            <li><strong>Orden automático:</strong> el menú ofrece A-Z, kakera, rank o <strong>Serie</strong> (A-Z, Z-A, más o menos personajes primero; los que no tienen serie quedan al final y dentro de cada serie se conserva el orden que ya tenías). Al arrastrar vuelve a «Orden manual». Con las series agrupadas, el orden se aplica a las tarjetas de serie (kakera total, mejor rank o nombre de la serie) y al abrirlas los personajes ya quedan en esa posición.</li>
             <li><strong>📚 Agrupar series:</strong> junta en una sola tarjeta a los personajes de cada serie, con el nombre de la serie y cuántos personajes tiene. Las series de un solo personaje también tienen su tarjeta y los personajes sin serie van juntos en una tarjeta <strong>«Sin serie»</strong>, así todas se ven igual. Cada tarjeta se mueve y se selecciona como cualquier otra (un clic selecciona a todos sus personajes). Al pulsar <strong>📂 Abrir series</strong> los personajes reaparecen en la posición donde dejaste la tarjeta; si no moviste nada, vuelven a donde estaban.</li>
             <li><strong>Copiar seleccionados:</strong> copia los nombres separados por « - ». En la pestaña Listas, <strong>📋 Copiar todos</strong> copia toda la lista.</li>
             <li><strong>Borrar seleccionados:</strong> elimina las tarjetas marcadas (pide confirmación).</li>
@@ -1465,6 +1465,30 @@ function escapeHTML(value) {
              default: return 0;
          }
      });
+     
+     // Con las series agrupadas, el orden se aplica a las tarjetas de serie (kakera total, mejor rank, nombre...)
+     // y los personajes quedan guardados en ese orden: al abrir las series ya están en su posición.
+     if (groupMode && !criteria.startsWith('series-')) {
+         groupMap.clear();
+         const slots = buildSlots();
+         const ksum = g => g.members.reduce((a, m) => a + num(m.kakera), 0);
+         const ranks = g => g.members.map(m => num(m.rank)).filter(Boolean);
+         const best = g => { const r = ranks(g); return r.length ? Math.min(...r) : Infinity; };
+         const worst = g => { const r = ranks(g); return r.length ? Math.max(...r) : Infinity; };
+         const n3 = (x, y) => x === y ? 0 : x < y ? -1 : 1;
+         const byName = (a, b) => a.key.localeCompare(b.key, 'es', { sensitivity: 'base' });
+         const noLast = (a, b) => (a.key === '') - (b.key === '');
+         const cmpG = {
+             'az': (a, b) => noLast(a, b) || byName(a, b),
+             'za': (a, b) => noLast(a, b) || byName(b, a),
+             'kakera-desc': (a, b) => n3(ksum(b), ksum(a)),
+             'kakera-asc': (a, b) => n3(ksum(a), ksum(b)),
+             'rank-asc': (a, b) => n3(best(a), best(b)),
+             'rank-desc': (a, b) => { const x = worst(a), y = worst(b); return x === y ? 0 : x === Infinity ? 1 : y === Infinity ? -1 : y - x; }
+         }[criteria];
+         if (cmpG) slots.sort((a, b) => cmpG(a, b) || byName(a, b));
+         items = slots.flatMap(g => g.members);
+     }
      
      render();
      toast('Lista reordenada');
@@ -3265,6 +3289,29 @@ window.runMudaeTests = async function (opts = {}) {
     // restaurar tu orden real
     let u = undoBtn(); if (u) { u.click(); await sleep(60); }
     check('Agrupar series', 'tu orden se restaura con Deshacer', cards().map(c => c.querySelector('.item-name').title).join('\u0001') === orderBefore.join('\u0001'));
+        // ordenar con las series agrupadas (kakera) y abrir: los personajes siguen el orden de sus tarjetas
+    btn.click(); await sleep(80);
+    const sortG = async (val) => { $('sortSelect').value = val; $('sortSelect').dispatchEvent(new Event('change', { bubbles: true })); await sleep(80); };
+    const seriesOf2 = n => (SDATA.find(d => PFX + d[0] === n) || [])[3] || '';
+    const mineSeq = () => cards().map(c => c.querySelector('.item-name').title).filter(n => /^🧪TEST S[ABC]\d$/.test(n));
+    for (const [val, expSeries, expInner] of [
+      ['kakera-desc', [SA, SB, SC], ['SA1', 'SA2', 'SB3', 'SB1', 'SB2', 'SC1']],
+      ['kakera-asc', [SC, SB, SA], ['SC1', 'SB2', 'SB1', 'SB3', 'SA2', 'SA1']]
+    ]) {
+      await sortG(val);
+      const gOrder = gcards().map(c => c.querySelector('.item-name').title).filter(t => [SA, SB, SC].includes(t));
+      check('Agrupar series', `${val} agrupado: las tarjetas se ordenan por kakera total`, JSON.stringify(gOrder) === JSON.stringify(expSeries), gOrder.join(' | '));
+      btn.click(); await sleep(80);
+      const seq = mineSeq().map(n => n.replace(PFX, ''));
+      check('Agrupar series', `${val}: al abrir, los personajes ya están en su posición sin mover nada`, JSON.stringify(seq) === JSON.stringify(expInner), seq.join(','));
+      const ser = mineSeq().map(seriesOf2), contiguous = [...new Set(ser)].every(x => ser.indexOf(x) === ser.lastIndexOf(x) - (ser.filter(y => y === x).length - 1));
+      check('Agrupar series', `${val}: cada serie queda junta`, contiguous, ser.join('|'));
+      u = undoBtn(); if (u) { u.click(); await sleep(60); }
+      btn.click(); await sleep(80);
+    }
+    btn.click(); await sleep(80); // vuelve a la vista normal
+    u = undoBtn(); if (cards().map(c => c.querySelector('.item-name').title).join('\u0001') !== orderBefore.join('\u0001') && u) { u.click(); await sleep(60); }
+    check('Agrupar series', 'tu orden se restaura (3)', cards().map(c => c.querySelector('.item-name').title).join('\u0001') === orderBefore.join('\u0001'));
     // mover en conjunto a los que no tienen serie
     btn.click(); await sleep(80);
     const all = gcards(), nsc = gOf('Sin serie'), nsLast = all[all.length - 1] === nsc;
