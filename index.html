@@ -4,7 +4,7 @@ f<!DOCTYPE html>
 <meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lista visual arrastrable - Mudae Arranger</title>
+<title>Mudae Arranger</title>
 <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -541,7 +541,7 @@ body.modal-open :is(#list,#viewLists) .item{transition:none!important}
         <button class="btn" id="addBtn">➕ Añadir manual</button>
         <button class="btn primary" id="toggleExportBtn">📝 Comandos $sm</button>
         <button class="btn" id="verifyBtn">🔍 Verificar lista</button>
-        <button class="btn" id="orderBtn">↕️ Editar orden con texto</button>
+        <button class="btn" id="orderBtn">↕️ Editar orden</button>
         <button class="btn" id="importProjectBtn">📂 Cargar proyecto</button>
         <button class="btn" id="exportProjectBtn">💾 Guardar proyecto</button>
         <button class="btn danger" id="clearBtn">🗑️ Borrar todo</button>
@@ -2009,7 +2009,7 @@ function escapeHTML(value) {
     if (!l) return;
     if (lb.dataset.lact === 'copyall') {
       const names = l.members.map(getItem).filter(Boolean).map(i => i.text);
-      names.length ? copyText(names.join(' - ')) : toast('La lista está vacía.');
+      names.length ? copyText(names.join(' $ ')) : toast('La lista está vacía.');
       return;
     }
     if (lb.dataset.lact === 'selall') {
@@ -2641,7 +2641,7 @@ function escapeHTML(value) {
   });
   $('filterInput').addEventListener('input', applyFilter);
 
-  $('selCopyBtn').addEventListener('click', () => copyText(items.filter(i => i.selected).map(i => i.text).join(' - ')));
+  $('selCopyBtn').addEventListener('click', () => copyText(items.filter(i => i.selected).map(i => i.text).join(' $ ')));
   // --- EDITAR ORDEN CON TEXTO DE MUDAE ---
   function orderPlan() {
     const raw = $('orderText').value.trim();
