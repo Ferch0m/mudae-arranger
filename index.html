@@ -954,7 +954,7 @@ body.sel-on .export-editor{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
               </ul></li>
             <li>El <strong>tamaño</strong> de las tarjetas se ajusta con el control de la barra de herramientas.</li>
             <li>El número de personajes y la kakera total aparecen en los chips encima de las tarjetas.</li>
-            <li><strong>🎲 Personaje random</strong> (en cada lista, pestaña Listas) muestra un personaje al azar de esa lista y te deja añadirlo a otra lista con <strong>➕ Añadir a lista</strong>.</li>
+            <li><strong>🎲 Personaje random</strong> (en cada lista, pestaña Listas) saca un personaje al azar de los que todavía no están en esa lista y te deja añadirlo a ella con <strong>➕ Añadir</strong>.</li>
             <li><strong>Atajos:</strong> <code>/</code> enfoca el buscador, <code>Ctrl+Z</code> deshace y <code>Esc</code> cierra ventanas.</li>
             <li><strong>Privacidad:</strong> tus datos se guardan solo en tu navegador. Si limpias los datos del sitio los perderás, así que guarda un proyecto de vez en cuando.</li>
           </ul>
@@ -1101,8 +1101,7 @@ body.sel-on .export-editor{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
   <div class="modal spot" style="width:min(100%,360px);text-align:center">
     <div id="spotCard"></div>
     <div class="spot-add" id="spotAddRow" hidden>
-      <select id="spotListSel" class="sort-select" aria-label="Lista destino"></select>
-      <button class="btn" id="spotAddBtn" type="button">➕ Añadir a lista</button>
+      <button class="btn primary" id="spotAddBtn" type="button" style="width:100%"></button>
     </div>
     <div class="modal-actions" style="justify-content:center">
       <button class="btn" id="spotCloseBtn">Cerrar</button>
@@ -2140,7 +2139,7 @@ function escapeHTML(value) {
             <button class="btn small" data-lact="selall" data-list="${l.id}">${nsel && nsel === mem.length ? 'Deseleccionar' : 'Seleccionar todo'}</button>
             <button class="btn small" data-lact="copyall" data-list="${l.id}" title="Copia los nombres de toda la lista separados por ' - '">📋 Copiar todos</button>
             <button class="btn small danger" data-lact="unsel" data-list="${l.id}" ${nsel ? '' : 'hidden'}>Quitar seleccionados (${nsel})</button>
-            <button class="btn small" data-lact="random" data-list="${l.id}" title="Muestra un personaje al azar de esta lista">🎲 Personaje random</button>
+            <button class="btn small" data-lact="random" data-list="${l.id}" title="Saca un personaje al azar de los disponibles (que aún no están en esta lista)">🎲 Personaje random</button>
             <button class="btn small" data-lact="export" data-list="${l.id}" title="Exportar esta lista como PDF o imagen">📥 Exportar</button>
             <button class="btn small" data-lact="rename" data-list="${l.id}">Renombrar</button>
             <button class="btn small danger" data-lact="delete" data-list="${l.id}">Eliminar lista</button>
@@ -2208,15 +2207,11 @@ function escapeHTML(value) {
       ids.forEach(m => lSel.delete(l.id + ':' + m));
       saveItems(); toast(`${ids.length} quitados de "${l.name}"`); return;
     }
-    if (lb.dataset.lact === 'random') {
-      const pool = l.members.map(getItem).filter(Boolean);
-      if (!pool.length) return toast('Esta lista está vacía.');
-      spotlight(pool, l.id); return;
-    }
+    if (lb.dataset.lact === 'random') { spotlight(null, l.id); return; }
     if (lb.dataset.lact === 'rename') {
       const name = (prompt('Nuevo nombre de la lista:', l.name) || '').trim();
       if (name) { l.name = name; saveItems(); }
-    } else if (ask(`¿Eliminar la lista "${l.name}"? Los personajes no se borran.`)) {
+    } else if (lb.dataset.lact === 'delete' && ask(`¿Eliminar la lista "${l.name}"? Los personajes no se borran.`)) {
       lists = lists.filter(x => x.id !== l.id);
       saveItems();
     }
@@ -2905,35 +2900,36 @@ function escapeHTML(value) {
     render(); toast('Mezclado 🔀 (Ctrl+Z para deshacer)');
   });
 
-  let spotPool = null;
   let spotSrc = null;
-  function fillSpotLists() {
-    const row = $('spotAddRow'), sel = $('spotListSel');
-    const dest = lists.filter(l => l.id !== spotSrc);
-    row.hidden = !spotSrc || !dest.length;
-    if (row.hidden) return;
-    const prev = sel.value, tgt = document.getElementById('targetList').value;
-    sel.innerHTML = dest.map(l => `<option value="${l.id}">${escapeHTML(l.name)}</option>`).join('');
-    const want = [prev, tgt].find(v => v && dest.some(l => String(l.id) === String(v)));
-    if (want) sel.value = want;
+  // Personajes disponibles para una lista: todos los que todavía no están en ella
+  const availableFor = l => items.filter(i => !l.members.includes(i.id));
+  function updateSpotAdd() {
+    const row = $('spotAddRow'), btn = $('spotAddBtn'), l = spotSrc && getList(spotSrc);
+    row.hidden = !l;
+    if (!l) return;
+    const added = l.members.includes(spotId);
+    btn.disabled = added;
+    btn.textContent = added ? `✓ Añadido a «${l.name}»` : `➕ Añadir a «${l.name}»`;
   }
-  function spotlight(pool, srcListId) {
-    // pool: arreglo de personajes (lista elegida). Sin argumento (botón «Otro») repite sobre la misma lista.
-    if (Array.isArray(pool)) { spotPool = pool; spotSrc = srcListId || null; }
-    const arr = spotPool || items;
-    if (!arr.length) return toast('Esta lista está vacía.');
+  function spotlight(_pool, srcListId) {
+    // Con lista: sortea entre los personajes que NO están en esa lista. «Otro» repite sobre la misma lista.
+    if (srcListId) spotSrc = srcListId;
+    const l = spotSrc && getList(spotSrc);
+    if (spotSrc && !l) { spotSrc = null; return toast('Esa lista ya no existe.'); }
+    const arr = l ? availableFor(l) : items;
+    if (!arr.length) return toast(l ? `No hay personajes disponibles: todos están en «${l.name}».` : 'No hay personajes.');
     let it; do { it = arr[Math.floor(Math.random() * arr.length)]; } while (arr.length > 1 && it.id === spotId);
     spotId = it.id;
     $('spotCard').innerHTML = `${it.image ? `<img referrerpolicy="no-referrer" src="${escapeHTML(it.image)}" alt="">` : ''}<h3>${escapeHTML(it.text)}</h3>
       <div class="hint">${it.rank ? '🏆 #' + escapeHTML(it.rank) + ' · ' + escapeHTML(rankTitle(it)) + '  ' : ''}${it.kakera ? '💎 ' + escapeHTML(fmtNum(it.kakera)) : ''}${it.series ? '<br>📚 ' + escapeHTML(it.series) : ''}</div>`;
-    fillSpotLists();
+    updateSpotAdd();
     $('spotBackdrop').classList.add('open');
   }
   $('spotAddBtn').addEventListener('click', () => {
-    const l = getList($('spotListSel').value), it = getItem(spotId);
-    if (!l || !it) return toast('Crea otra lista primero.');
-    if (l.members.includes(it.id)) return toast(`Ya está en "${l.name}".`);
-    l.members.push(it.id); saveItems(); toast(`Añadido a "${l.name}"`);
+    const l = spotSrc && getList(spotSrc), it = getItem(spotId);
+    if (!l || !it) return;
+    if (l.members.includes(it.id)) return toast(`Ya está en «${l.name}».`);
+    l.members.push(it.id); saveItems(); updateSpotAdd(); toast(`Añadido a «${l.name}»`);
   });
   $('spotNextBtn').addEventListener('click', () => spotlight());
   $('spotCopyBtn').addEventListener('click', () => { const it = getItem(spotId); if (it) copyText(it.text); });
